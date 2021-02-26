@@ -1,0 +1,640 @@
+body{
+    padding: 0px;
+    margin: 0px;
+    background-color: #fcfcfc;
+}
+
+/* login */
+.img-box{
+    position: relative;
+    right: 35%;
+    width: 15%;
+    padding: 0px;
+}
+
+.corner-img{
+    position: relative;
+    left: 10%;
+    width: 40%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.page-title{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 70px;
+    color: #000000;
+    transform: translateX(-40%);
+}
+
+.div-login-title{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-header{
+    display: flex;
+    margin-bottom: 40px;
+    border-bottom: 1px solid gray;
+    box-shadow: 1px 2px 5px lightgray ;
+}
+
+.login-box{
+    margin-top: 60px;
+}
+
+.login-inputs-area{
+    border: 1px solid gray;
+}
+
+.head-login{
+    position: relative;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.head-alertas{
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: red;
+}
+.esqueceuSenha{
+    display: flex;
+}
+.esqueceuSenha{
+    position: relative;
+    margin-left: 2%;
+}
+
+.container-noticias{
+    position: relative;
+    left: 5%;
+    overflow-y: scroll;
+    height: 400px;
+    width: 90%;
+    text-align: left;
+    border: 1px solid black;
+}
+
+/* header */
+.img-perfil{
+    width: 30px;
+}
+
+.esqueceuSenha-header{
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid gray;
+    box-shadow: 1px 2px 5px lightgray ;
+}
+
+.esqueceusenha-header-title{
+    flex: 1;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* geral */
+.positioning{
+    width: 70%;
+    padding: 0px;
+}
+
+.campo_cadastro{
+    padding: 15px 0px 15px 0px;
+    margin: 0px;
+}
+
+.box{
+    background-color: white;
+    font-size: 14px;
+    color: black;
+    padding: 5px 15px 5px 15px;
+    margin: 0px 10px 10px 10px;
+    text-align: left;
+    width: 100%;
+}
+
+.box p{
+    margin: 0px;
+    padding: 10px 0px 10px 0px;
+}
+
+.input-group{
+    padding: 10px;
+    width: 100%;
+}
+
+.form-control{
+    width: 100%;
+}
+
+.btn{
+    position: relative;
+    top: 10px;
+    font-size: 15px;
+    padding: 10px;
+}
+.btn-cadastrar{
+    font-size: 15px;
+    padding: 10px;
+}
+.div-btn-cadastrar{
+    display: flex;
+    justify-content: center;
+}
+
+.div-btn-desinterdicao{
+    display: flex;
+    justify-content: center;
+}
+
+.btn.btn-login{
+    left: 0;
+}
+
+.email_esqueceu_senha{
+    position: relative;
+    top: -40px;
+}
+
+.inline{
+    display: inline-block;
+}
+
+.hide{
+    display: none;
+}
+
+.alertErro{
+    color:#f22a1f;
+    font-size:14px;
+}
+
+.box-search{
+    position: relative;
+    top: -30px;
+}
+
+.none{
+    display: none;
+}
+
+.autocomplete{
+    width: 100%;
+}
+
+.autocompleteBtn{
+    border: 1px solid #A5ACB2;
+    width: 100%;
+}
+
+.btn-ocorrencia{
+    display: inline;
+    margin: 10px;
+}
+
+.titulo{
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0px 5px 0px 20px;
+}
+
+.texto-cabecalho{
+    font-size: 16px;
+}
+
+.img-cabecalho{
+    float: right;
+    width: 60%;
+}
+
+.img-perfil-expandida{
+    width: 100%;
+}
+
+.readtextarea{
+    width: 90%;
+    position: relative;
+    left: 5%;
+    resize: none;
+}
+
+/* especificos */
+.cobrade{
+    position: relative;
+    left: 50px;
+}
+
+.btn-default1{
+    width: 30%;
+}
+
+.edit{
+    float: right;
+}
+
+.btn-sm{
+    position: relative;
+    top: 0px;
+    left: 10px;
+    font-size: 10px;
+    padding: 5px;
+    margin: 0px;
+}
+
+.char-count{
+    color:#ccc;
+    font-size:12px;
+    position: relative;
+    bottom:20px;
+    left:90%;
+}
+
+.sort-icon{
+    font-size: 10px;
+    float: right;
+}
+
+.ocorrencias_encerradas{
+    margin-left: 20px;
+}
+
+.endereco-principal{
+    width:30%;
+    display:inline;
+}
+
+.lat-lgn{
+    width:30%;
+    display:inline;
+}
+
+.data{
+    width:30%;
+    display:inline;
+}
+
+.cobrade-sub{
+    width: 50%;
+}
+
+.btn-interdicao{
+    position:relative;
+    left:65%;
+    top:-33px;
+}
+
+.btn-interdicao-g{
+    position:relative;
+    left:50%;
+    top:-33px;
+}
+
+.btn-salvar-editarOcorrencia,
+.btn-salvar-editarPerfil{
+    display: flex;
+    justify-content: center;
+}
+
+.map-information{
+    max-width: 230px;
+}
+
+.map-dot{
+    position: absolute;
+    top: 7px;
+    left: -20px;
+    height: 20px;
+    width: 20px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+    border-radius: 50%;
+}
+
+.quadro-informacao{
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+    border-radius: 10px;
+    background-color: white;
+    padding: 5px;
+}
+
+i{
+    display: inline-block;
+    padding: 3px;
+    margin: 0px 0px 5px 10px;
+}
+
+.arrow-up{
+    position: relative;
+    top: 5px;
+    right: 5px;
+    border: solid red;
+    border-width: 0 3px 3px 0;
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+  
+.arrow-down{
+    position: relative;
+    top: 2px;
+    right: 5px;
+    border: solid rgb(24,240,78);
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.estavel{
+    position: relative;
+    right: 5px; 
+    border: solid blue;
+    border-width: 0 0px 3px 0;
+}
+
+.legenda{
+    font-size: 16px;
+    position: relative;
+    top:5px;
+}
+
+.legenda-celulares{
+    display: none;
+}
+
+/* footer */
+.footer{
+    display: inline;
+    padding: 0px 150px 0px 0px;
+    position: relative;
+    top: 50px;
+}
+
+
+.footer-area{
+    display: flex;
+    background-color: #000000;
+    justify-content: space-between;
+    font-family: 'Open-Sans', sans-serif;
+    color: #FFFFFF;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.footer-area img{
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
+.footer-left-area{
+    flex: 1;
+    margin: 30px;
+}
+.footer-right-area{
+    margin: 30px;
+    color: rgb(255, 166, 0);
+}
+
+.printShow,
+.printShoww{
+    display: none;
+}
+
+.printShowImg{
+    display: none;
+}
+
+.perfil-btn{
+    display: flex;
+    justify-content: center;
+}
+
+/* ajustes pra telas pequenas */
+@media only screen and (max-width: 1200px){
+    .map-information{
+        position: relative;
+        top: -290px;
+        left: 74%;
+        max-width: 180px;
+    }
+}
+
+/* ajustes pra telas pequenas */
+@media only screen and (max-width: 1000px){
+    .corner-img{
+        display: none; 
+    }
+    
+    .page-title{
+        font-size: 40px;
+        left: 20%;
+        margin: 0px;
+    }
+
+    .footer{
+        display: block; padding: 0px 0px 0px 0px;
+    
+    }
+
+    .cabecalho{
+        display: none;
+    }
+
+    .esqueceuSenha{
+        left: 30%;
+    }
+    
+    .container{
+        width: 100%;
+        padding: 0px;
+    }
+
+    .jumbotron{
+        width: 100%;
+        padding: 5px;
+    }
+
+    .box{
+        width: 100%;
+        padding: 5px;
+        margin: 0px;
+    }
+
+    .ocorrencias_encerradas{
+        display: block;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .elimina-tabela{
+        display: none;
+    }
+
+    .endereco-principal{
+        width:50%;
+    }
+
+    .data{
+        width:40%;
+    }
+
+    .cobrade-sub{
+        width: 70%;
+    }
+
+    .btn, .btn-default, .btn-md{
+        left:0;
+        margin: 10px;
+    }
+
+    .btn-interdicao{
+        display: block;
+        left: 0%;
+        top: 0%;
+    }
+
+    .btn-interdicao-g{
+        display: block;
+        left: 25%;
+        top: 0%;
+    }
+
+    .btn-desinterdicao{
+        display: block;
+        left: 25%;
+        top: 0%;
+    }
+
+    
+
+    .img-user{
+        position: relative;
+        left: 10%;
+    }
+
+    .img-mapa{
+        width: 100%;
+    }
+
+    .map-information{
+        position: relative;
+        top: -290px;
+        left: 77%;
+        max-width: 180px;
+    }
+}
+
+#descricao,
+.titulobox{
+    resize: none;
+}
+
+/* ajustes pra telas pequenas */
+@media only screen and (max-width: 820px){
+    .map-information{
+        position: relative;
+        top: -270px;
+        left: 77%;
+        max-width: 180px;
+    }
+
+    .quadro-informacao{
+        display: none;
+    }
+
+    .legenda-celulares{
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 768px){
+    .btn-cancelar-chamado{
+        margin-left: 0px !important;
+    }
+
+}
+
+@media print{
+
+    *{
+        margin: none !important;
+        padding: 0;
+    }
+    .box{
+        margin: 0 !important;
+        padding: 0;
+    }
+    div{
+        margin: 0;
+        padding: 0;
+    }
+    .printCabecalho{
+        display: flex;
+        justify-content: flex-start;
+        margin: 0;
+        padding: 0;
+    }
+
+    .printTitle{
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 20px;
+        flex: 1;
+        text-align:right;
+    }
+
+    .print-interdicao-img{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .print-chamado-img{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .printHide{
+        display:none;
+        position: absolute;
+    }
+    .img-cabecalho{
+        position: relative;
+        left: 20px;
+    }
+
+    .printShow{
+        display: block;
+        position: relative;
+    }
+    .printShoww{
+        display: inline;
+    }
+    .printShowImg{
+    display: inline;
+    }
+
+    .row,
+    .printWrap{
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    h4{
+        margin: 0;
+    }
+
+    .printMargin{
+        margin-top: 10px !important;
+    }
+
+}

@@ -1,0 +1,18 @@
+From dfuser@srvdfc001 Mon Apr 27 16:26:31 2020
+Return-path: <dfuser@srvdfc001>
+Envelope-to: root@srvdfc001
+Delivery-date: Mon, 27 Apr 2020 16:26:31 -0300
+Received: from dfuser by srvdfc001 with local (Exim 4.89)
+	(envelope-from <dfuser@srvdfc001>)
+	id 1jT9Og-0007dx-Vy
+	for root@srvdfc001; Mon, 27 Apr 2020 16:26:31 -0300
+To: root@srvdfc001
+Auto-Submitted: auto-generated
+Subject: *** SECURITY information for srvdfc001 ***
+From: DefesaCivil <dfuser@srvdfc001>
+Message-Id: <E1jT9Og-0007dx-Vy@srvdfc001>
+Date: Mon, 27 Apr 2020 16:26:31 -0300
+
+srvdfc001 : Apr 27 16:26:30 : dfuser : 2 incorrect password attempts ; TTY=pts/1 ; PWD=/ ; USER=root ; COMMAND=/bin/su - df_user
+
+
