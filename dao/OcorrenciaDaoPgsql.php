@@ -46,6 +46,7 @@
                 $o->setPessoa1($linha['nome_pessoa1']);
                 $o->setPessoa2($linha['nome_pessoa2']);
                 $o->setAtivo($linha['ativo']);
+                $o->setUsuarioEditor($linha['usuario_editor']);
 
                 return $o;
             }else{
@@ -64,15 +65,14 @@
             ocorr_logradouro_id,agente_principal,agente_apoio_1,agente_apoio_2,
             data_ocorrencia,ocorr_titulo,ocorr_descricao,ocorr_origem,atendido_1,atendido_2,ocorr_cobrade,
             ocorr_fotos,ocorr_prioridade,ocorr_analisado,ocorr_congelado,ocorr_encerrado,
-            usuario_criador,data_alteracao,ocorr_referencia, fotos, nome_pessoa1, nome_pessoa2)
+            usuario_criador,data_alteracao,ocorr_referencia, fotos, nome_pessoa1, nome_pessoa2, usuario_editor)
             VALUES (:chamado_id, :ocorr_endereco_principal, :latitude, :longitude, :logradouro_id, :agente_principal,
             :agente_apoio_1,:agente_apoio_2, :data_ocorrencia, :titulo, :descricao, :origem, :atendido_1, :atendido_2,
             :cobrade, :possui_fotos, :prioridade, :analisado, :congelado, :encerrado, :criador, :data_alteracao, :referencia,
-            :fotos,:nome_pessoa1,:nome_pessoa2)");
+            :fotos,:nome_pessoa1,:nome_pessoa2,:usuario_editor)");
+            die;
             if($o->getChamadoId() != null){
                 $sql->bindValue(":chamado_id", $o->getChamadoId(), PDO::PARAM_INT);
-                var_dump($o->getChamadoId());
-                die;
             }else{
                 $sql->bindValue(":chamado_id", null, PDO::PARAM_NULL);
             }
@@ -125,6 +125,7 @@
             $sql->bindValue(":fotos", $o->getFotos());
             $sql->bindValue(":nome_pessoa1", $o->getPessoa1());
             $sql->bindValue(":nome_pessoa2", $o->getPessoa2());
+            $sql->bindValue(":usuario_editor", $o->getUsuarioEditor());
 
             $sql->execute();
 
@@ -190,8 +191,7 @@
 
             $linha = $sql->fetch(PDO::FETCH_ASSOC);
 
-            
-            return $linha;
+            return $linha['id_logradouro'];
         }
 
         public function adicionarLogEndereco($l, $i, $d){

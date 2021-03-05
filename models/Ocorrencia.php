@@ -34,6 +34,7 @@ class Ocorrencia{
     private $possui_fotos;
     private $fotos;
     private $ativo;
+    private $usuario_editor;
 
     public function getChamadoId(){
         return $this->chamado_id;
@@ -258,8 +259,14 @@ class Ocorrencia{
     public function setAtivo($a){
         $this->ativo = $a;
     }
+    
+    public function getUsuarioEditor(){
+        return $this->usuario_editor;
+    }
+    public function setUsuarioEditor($u){
+        $this->usuario_editor = $u;
+    }
 }
-
 
 interface OcorrenciaDAO{
 

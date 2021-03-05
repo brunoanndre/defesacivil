@@ -98,8 +98,7 @@ if ($cobrade_categoria == 0) {
 $logradouro_id = NULL;
 if ($endereco_principal == "Logradouro") {
 	$cep = str_replace("-", "", $cep);
-	
-	$ocorrenciadao->buscaEndereco($logradouro,$numero);
+
 
 	if ($ocorrenciadao->buscaEndereco($logradouro,$numero) === false) {
 		$novoEndereco = New Ocorrencia();
@@ -117,8 +116,6 @@ if ($endereco_principal == "Logradouro") {
 	}
 
 	//INSERIR NO LOG DE ENDEREÇO
-var_dump($logradouro_id);//TEM QUE RECEBER O ID DDA INSERÇÃO NO BD
-die;
 	$ocorrenciadao->adicionarLogEndereco($logradouro_id, $id_criador,$dataAtual);
 	
 	$longitude = NULL;
@@ -135,7 +132,6 @@ if ($ocorr_retorno == "true") { //caso seja retorno de ocorrencia, verifica se n
 $ocorrenciadao->buscaAgente($agente_principal);
 
 if (strlen($agente_apoio_1) > 0 && $agente_apoio_1 != null) { //se o agente foi informado, busca o mesmo no BD
-	$ocorrenciadao->buscaAgente($agente_apoio_1);
 
 	if ($ocorrenciadao->buscaAgente($agente_apoio_1) == false) {
 			$erros = $erros . '&agente_apoio_1';
@@ -214,15 +210,13 @@ if (strlen($erros) > 0) {
 	$novaOcorrencia->setFotos($pg_array);
 	$novaOcorrencia->setPessoa1($pessoa_atendida_1);
 	$novaOcorrencia->setPessoa2($pessoa_atendida_2);
-
-	$ocorrenciadao->adicionar($novaOcorrencia);
+	$novaOcorrencia->setUsuarioEditor($id_criador);
 
 	if($ocorrenciadao->adicionar($novaOcorrencia) == false) {
 		header('location:index.php?pagina=cadastrarOcorrencia&erroDB');
 	} else {
 		if ($chamado_id != NULL) {
-			$ocorrenciadao->encerraChamadoAtivo($chamado_id);
-			if ($$ocorrenciadao->encerraChamadoAtivo($chamado_id) == false) {
+			if ($ocorrenciadao->encerraChamadoAtivo($chamado_id) == false) {
 				header('location:index.php?pagina=cadastrarOcorrencia&erroDB');
 			} else {
 				header('location:index.php?pagina=cadastrarOcorrencia&sucesso');
