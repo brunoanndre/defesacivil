@@ -14,12 +14,44 @@
             $sql->bindValue(":id_ocorrencia", $id);
             $sql->execute();
 
-            $linha = $sql->fetch(PDO::FETCH_ASSOC);   
             if($sql->rowCount() > 0){
-                return $linha;
+                $linha = $sql->fetch(PDO::FETCH_ASSOC);   
+
+                $o = New Ocorrencia();
+                $o->setId($linha['id_ocorrencia']);
+                $o->setChamadoId($linha['chamado_id']);
+                $o->setEnderecoPrincipal($linha['ocorr_endereco_principal']);
+                $o->setLatitude($linha['ocorr_coordenada_latitude']);
+                $o->setLongitude($linha['ocorr_coordenada_longitude']);
+                $o->setLogradouroId($linha['ocorr_logradouro_id']);
+                $o->setIdCriador($linha['agente_principal']);
+                $o->setApoio1($linha['agente_apoio_1']);
+                $o->setApoio2($linha['agente_apoio_2']);
+                $o->setData($linha['data_ocorrencia']);
+                $o->setTitulo($linha['ocorr_titulo']);
+                $o->setDescricao($linha['ocorr_descricao']);
+                $o->setOrigem($linha['ocorr_origem']);
+                $o->setIdPessoa1($linha['atendido_1']);
+                $o->setIdPessoa2($linha['atendido_2']);
+                $o->setCobrade($linha['ocorr_cobrade']);
+                $o->setPossuiFotos($linha['ocorr_fotos']);
+                $o->setPrioridade($linha['ocorr_prioridade']);
+                $o->setAnalisado($linha['ocorr_analisado']);
+                $o->setCongelado($linha['ocorr_congelado']);
+                $o->setEncerrado($linha['ocorr_encerrado']);
+                $o->setIdCriador($linha['usuario_criador']);
+                $o->setDataAlteracao($linha['data_alteracao']);
+                $o->setReferencia($linha['ocorr_referencia']);
+                $o->setFotos($linha['fotos']);
+                $o->setPessoa1($linha['nome_pessoa1']);
+                $o->setPessoa2($linha['nome_pessoa2']);
+                $o->setAtivo($linha['ativo']);
+
+                return $o;
             }else{
                 return false;
             }
+
         }
 
         public function buscarTodos(){
@@ -88,7 +120,7 @@
             $sql->bindValue(":congelado", $o->getCongelado());
             $sql->bindValue(":encerrado", $o->getEncerrado());
             $sql->bindValue(":criador", $o->getIdCriador());
-            $sql->bindValue(":data_alteracao", $o->getDataAtual());
+            $sql->bindValue(":data_alteracao", $o->getDataAlteracao());
             $sql->bindValue(":referencia", $o->getReferencia());
             $sql->bindValue(":fotos", $o->getFotos());
             $sql->bindValue(":nome_pessoa1", $o->getPessoa1());
@@ -126,8 +158,23 @@
             $sql->bindValue(":id_logradouro", $id);
             $sql->execute();
 
-            $linha = $sql->fetch(PDO::FETCH_ASSOC);
-            return $linha;
+            if($sql->rowCount() > 0 ){
+                $linha = $sql->fetch(PDO::FETCH_ASSOC);
+
+                $o = New Ocorrencia();
+                $o->setLogradouroId($linha['id_logradouro']);
+                $o->setCep($linha['cep']);
+                $o->setCidade($linha['cidade']);
+                $o->setBairro($linha['bairro']);
+                $o->setLogradouro($linha['logradouro']);
+                $o->setNumero($linha['numero']);
+                $o->setReferencia($linha['referencia']);
+
+                return $o;
+                
+            }else{
+                return false;
+            }
         }
 
         public function adicionarEndereco(Ocorrencia $o){
@@ -142,8 +189,9 @@
             $sql->execute();
 
             $linha = $sql->fetch(PDO::FETCH_ASSOC);
+
             
-            return $linha['id_logradouro'];
+            return $linha;
         }
 
         public function adicionarLogEndereco($l, $i, $d){

@@ -117,6 +117,8 @@ if ($endereco_principal == "Logradouro") {
 	}
 
 	//INSERIR NO LOG DE ENDEREÇO
+var_dump($logradouro_id);//TEM QUE RECEBER O ID DDA INSERÇÃO NO BD
+die;
 	$ocorrenciadao->adicionarLogEndereco($logradouro_id, $id_criador,$dataAtual);
 	
 	$longitude = NULL;
@@ -208,7 +210,7 @@ if (strlen($erros) > 0) {
 	$novaOcorrencia->setAnalisado($analisado);
 	$novaOcorrencia->setCongelado($congelado);
 	$novaOcorrencia->setEncerrado($encerrado);
-	$novaOcorrencia->setDataAtual($dataAtual);
+	$novaOcorrencia->setDataAlteracao($dataAtual);
 	$novaOcorrencia->setFotos($pg_array);
 	$novaOcorrencia->setPessoa1($pessoa_atendida_1);
 	$novaOcorrencia->setPessoa2($pessoa_atendida_2);

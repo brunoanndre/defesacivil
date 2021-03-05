@@ -33,6 +33,7 @@ class Ocorrencia{
     private $encerrado;
     private $possui_fotos;
     private $fotos;
+    private $ativo;
 
     public function getChamadoId(){
         return $this->chamado_id;
@@ -153,10 +154,10 @@ class Ocorrencia{
         $this->data_ocorrencia = trim($d);
     }
 
-    public function getDataAtual(){
+    public function getDataAlteracao(){
         return $this->dataAtual;
     }
-    public function setDataAtual($da){
+    public function setDataAlteracao($da){
         $this->dataAtual = trim($da);
     }
 
@@ -249,6 +250,13 @@ class Ocorrencia{
     }
     public function setFotos($f){
         $this->fotos = trim($f);
+    }
+
+    public function getAtivo(){
+        return $this->ativo;
+    }
+    public function setAtivo($a){
+        $this->ativo = $a;
     }
 }
 

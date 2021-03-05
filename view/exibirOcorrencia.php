@@ -10,52 +10,53 @@
     $linhaOcorrencia = $ocorrenciadao->buscarPeloId($id_ocorrencia);
 
     //BUSCA O ENDEREÇO NO BD
-    if($linhaOcorrencia['ocorr_endereco_principal'] == "Logradouro"){
-        $id_logradouro = $linhaOcorrencia['ocorr_logradouro_id'];
+    if($linhaOcorrencia->getEnderecoPrincipal() == "Logradouro"){
+        $id_logradouro = $linhaOcorrencia->getLogradouroid();
         $linhaLogradouro = $ocorrenciadao->buscaEnderecoPeloId($id_logradouro);
     }
 
-    $id_agente = $linhaOcorrencia['agente_principal'];
+    $id_agente = $linhaOcorrencia->getIdCriador();
+
     //BUSCA O NOME DO USUARIO NO BD
     $linhaAgentePrincipal = $usuariodao->findById($id_agente);
 
+
     //BUSCA O NOME DO USUARIO CRIADOR NO BD
-    $id_usuario_criador = $linhaOcorrencia['usuario_criador'];
+    $id_usuario_criador = $linhaOcorrencia->getIdCriador();
     $linhaUsuarioCriador = $usuariodao->findById($id_usuario);
 
-    if($linhaOcorrencia['agente_apoio_1']){
-        $id_agente = $linhaOcorrencia['agente_apoio_1'];
+    if($linhaOcorrencia->getApoio1()){
+        $id_agente = $linhaOcorrencia->getApoio1();
         $linhaAgente1 = $usuariodao->findById($id_agente);
     }
-    if($linhaOcorrencia['agente_apoio_2']){
-        $id_agente = $linhaOcorrencia['agente_apoio_2'];
+    if($linhaOcorrencia->getApoio2()){
+        $id_agente = $linhaOcorrencia->getApoio2();
         $linhaAgente2 = $usuariodao->findById($id_agente);
     }
  
-    if($linhaOcorrencia['atendido_1']){
-       $id_pessoa = $linhaOcorrencia['atendido_1'];
+    if($linhaOcorrencia->getIdPessoa1()){
+       $id_pessoa = $linhaOcorrencia->getIdPessoa1();
        $linhaPessoa1 = $ocorrenciadao->buscaPessoaPeloId($id_pessoa);
      }
-    if($linhaOcorrencia['atendido_2']){
-        $id_pessoa = $linhaOcorrencia['atendido_2'];
+    if($linhaOcorrencia->getIdPessoa2()){
+        $id_pessoa = $linhaOcorrencia->getIdPessoa2();
         $linhaPessoa2 = $ocorrenciadao->buscaPessoaPeloId($id_pessoa);
     }
     //BUSCAR COBRADE NO BD
-    $cobrade = $linhaOcorrencia['ocorr_cobrade'];
+    $cobrade = $linhaOcorrencia->getCobrade();
     $linhaCobrade = $ocorrenciadao->buscaCobrade($cobrade);
 
     //BUSCAR ID DA INTERDIÇÃO NO BD
     $id_interdicao = $ocorrenciadao->buscaInterdicao($id_ocorrencia);
 
-    $string = $linhaOcorrencia['fotos'];
+    $string = $linhaOcorrencia->getFotos();
 
     $string = str_replace('{','',$string);
     $string = str_replace('}','',$string);
 
     $fotos = explode(',', $string);
-        echo "<pre>";
-    var_dump($linhaOcorrencia);
-    die;
+
+
 ?>
 
 <div class="container positioning">
@@ -93,36 +94,37 @@
     <div class="box">
         <h4>Endereço</h4>
         <hr>
-        <span class="titulo printHide">Endereço principal: </span><span class="printHide" id="coordenada_principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaOcorrencia['ocorr_endereco_principal']; ?>'"><?php echo $linhaOcorrencia['ocorr_endereco_principal']; ?></span>
+        <span class="titulo printHide">Endereço principal: </span><span class="printHide" id="coordenada_principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?>'"><?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?></span>
         <div ng-show="sel_endereco == 'Logradouro'">
             <div class="row">
-                <div class="col-sm-7"><span class="titulo">CEP: </span><?php echo $linhaLogradouro['cep']; ?></div>
-                <div class="col-sm-7"><span class="titulo">Logradouro: </span><?php echo $linhaLogradouro['logradouro']; ?></div>
-                <div class="col-sm-3"><span class="titulo">Número: </span><?php echo $linhaLogradouro['numero']; ?></div>
-
-                <div class="col-sm-7"><span class="titulo">Bairro: </span><?php echo $linhaLogradouro['bairro']; ?></div>
-                <div class="col-sm-7"><span class="titulo">Cidade: </span><?php echo $linhaLogradouro['cidade']; ?></div>
-                <div class="col-sm-7"><span class="titulo">Referência:</span><?php echo $linhaLogradouro['referencia']; ?></div>
+                <div class="col-sm-7"><span class="titulo">CEP: </span><?php echo $linhaLogradouro->getCep(); ?></div>
+                <div class="col-sm-7"><span class="titulo">Logradouro: </span><?php echo $linhaLogradouro->getLogradouro(); ?></div>
+                <div class="col-sm-3"><span class="titulo">Número: </span><?php echo $linhaLogradouro->getNumero(); ?></div>
+                <div class="col-sm-7"><span class="titulo">Bairro: </span><?php echo $linhaLogradouro->getBairro(); ?></div>
+                <div class="col-sm-7"><span class="titulo">Cidade: </span><?php echo $linhaLogradouro->getCidade(); ?></div>
+                <div class="col-sm-7"><span class="titulo">Referência:</span><?php echo $linhaLogradouro->getReferencia(); ?></div>
             </div>
         </div>
+        <?php if($linhaOcorrencia->getEnderecoPrincipal() == "Coordenada"){  ?>
         <div ng-show="sel_endereco == 'Coordenada'">
             <nav>
-                <span class="titulo">Latitude: </span><span id="latitude" ><?php echo $linhaOcorrencia['ocorr_coordenada_latitude']; ?></span>
+                <span class="titulo">Latitude: </span><span id="latitude" ><?php echo $linhaOcorrencia->getLatitude(); ?></span>
             </nav>
             <nav class="inline">
-                <span class="titulo">Longitude: </span><span id="longitude" ><?php echo $linhaOcorrencia['ocorr_coordenada_longitude']; ?></span>
+                <span class="titulo">Longitude: </span><span id="longitude" ><?php echo $linhaOcorrencia->getLongitude(); ?></span>
             </nav>
             <button type="button" class="btn-default btn-small inline open-AddBookDialog" style="position:relative;left:5%" data-toggle="modal" data-id="map"><span class="glyphicon glyphicon-map-marker"></span></button>
         </div>
+        <?php }?>
     </div>
     <div class="box">
         <h4>Agentes</h4>
         <hr>
-        <span class="titulo">Agente principal:</span><span class="printShoww"> <?php echo $linhaAgentePrincipal['nome']; ?></span></span><a id="agente_principal" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaOcorrencia['agente_principal']; ?>"><?php echo $linhaAgentePrincipal['nome']; ?></a><br>
-        <?php if($linhaOcorrencia['agente_apoio_1']){ ?>
-            <span class="titulo">Agente de apoio 1: </span><span class="printShoww"><?php echo $linhaAgente1['nome']; ?></span><a id="agente_principal" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaOcorrencia['agente_apoio_1']; ?>"><?php echo $linhaAgente1['nome']; ?></a><br>
-        <?php } if($linhaOcorrencia['agente_apoio_2']){ ?>
-            <span class="titulo">Agente de apoio 2: </span><span class="printShoww"><?php echo $linhaAgente2['nome']; ?></span><a id="agente_principal" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaOcorrencia['agente_apoio_2']; ?>"><?php echo $linhaAgente2['nome']; ?></a><br>
+        <span class="titulo">Agente principal:</span><span class="printShoww"> <?php echo $linhaAgentePrincipal->getNome(); ?></span></span><a id="agente_principal" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaOcorrencia->getIdCriador(); ?>"><?php echo $linhaAgentePrincipal->getNome(); ?></a><br>
+        <?php if($linhaOcorrencia->getApoio1()){ ?>
+            <span class="titulo">Agente de apoio 1: </span><span class="printShoww"><?php echo $linhaAgente1->getNome(); ?></span><a id="agente_principal" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaOcorrencia->getApoio1(); ?>"><?php echo $linhaAgente1->getNome(); ?></a><br>
+        <?php } if($linhaOcorrencia->getApoio2){ ?>
+            <span class="titulo">Agente de apoio 2: </span><span class="printShoww"><?php echo $linhaAgente2->getNome(); ?></span><a id="agente_principal" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaOcorrencia->getApoio2(); ?>"><?php echo $linhaAgente2->getNome(); ?></a><br>
         <?php } ?>
         <br>
     </div>
@@ -130,29 +132,29 @@
         <h4>Ocorrencia</h4>
         <hr>
         <div class="printWrap">
-            <span class="titulo">Data de ocorrência: </span><span id="data_ocorrencia"><?php echo date("d/m/Y", strtotime($linhaOcorrencia['data_ocorrencia'])); ?></span><br>
-            <span class="titulo">Titulo: </span><span id="ocorr_titulo"><?php echo $linhaOcorrencia['ocorr_titulo']; ?></span><br>
-            <span class="titulo">Origem: </span><span id="ocorr_origem"><?php echo $linhaOcorrencia['ocorr_origem']; ?></span><br>
+            <span class="titulo">Data de ocorrência: </span><span id="data_ocorrencia"><?php echo date("d/m/Y", strtotime($linhaOcorrencia->getData())); ?></span><br>
+            <span class="titulo">Titulo: </span><span id="ocorr_titulo"><?php echo $linhaOcorrencia->getTitulo(); ?></span><br>
+            <span class="titulo">Origem: </span><span id="ocorr_origem"><?php echo $linhaOcorrencia->getOrigem(); ?></span><br>
         </div>
             <span class="titulo">Descrição: </span><br>
-            <textarea id="ocorr_descricao" rows="5" readonly class="readtextarea"><?php echo $linhaOcorrencia['ocorr_descricao']; ?></textarea><br>
+            <textarea id="ocorr_descricao" rows="5" readonly class="readtextarea"><?php echo $linhaOcorrencia->getDescricao(); ?></textarea><br>
 
         <br>
     </div>
     <div class="box">
-       <?php if($linhaOcorrencia['atendido_1'] || $linhaOcorrencia['atendido_2']){?>
+       <?php if($linhaOcorrencia->getIdPessoa1() || $linhaOcorrencia->getIdPessoa2()){?>
           <h4 >Solicitantes</h4> 
           <hr> 
       <?php  } else{ ?>
         <h4 class="printHide">Solicitantes</h4>
         <hr class="printHide">
         <?php } ?>
-        <?php if(!$linhaOcorrencia['atendido_1'] && !$linhaOcorrencia['atendido_2']){ ?>
+        <?php if(!$linhaOcorrencia->getIdPessoa1() && !$linhaOcorrencia->getIdPessoa2()){ ?>
             <span class="titulo printHide">Nenhuma pessoa foi cadastrada</span><br>
         <?php }else{ ?>
             <span class="titulo">Solicitante 1: </span><span><?php echo $linhaPessoa1['nome']; ?></span>
             <!--<a id="atendido_1" href="?pagina=exibirPessoa&id=<?php //echo $linhaOcorrencia['atendido_1']; ?>"><?php //echo $linhaPessoa1['nome']; ?></a><br>-->
-            <?php if($linhaOcorrencia['nome_pessoa2'] != ""){ ?>
+            <?php if($linhaOcorrencia->getPessoa2() != ""){ ?>
                 <span class="titulo">Solicitante 2: </span><span><?php echo $linhaPessoa2['nome']; ?></span>
                 <!--<a id="atendido_2" href="?pagina=exibirPessoa&id=<?php //echo $linhaOcorrencia['atendido_2']; ?>"><?php //echo $linhaPessoa2['nome']; ?></a><br>-->
             <?php } 
@@ -164,23 +166,23 @@
         <hr>
         <div class="printWrap">
         <span class="titulo">Cobrade: </span><span id="ocorr_cobrade"><?php echo $linhaCobrade['subgrupo']; ?></span><br>
-        <span class="titulo">Possui fotos: </span><span id="fotos"><?php echo ($linhaOcorrencia['ocorr_fotos'] == 't') ? 'Sim':'Não'; ?></span>
+        <span class="titulo">Possui fotos: </span><span id="fotos"><?php echo ($linhaOcorrencia->getPossuiFotos() == 't') ? 'Sim':'Não'; ?></span>
         </div>
     </div>
     <div class="box printMargin">
         <h4>Status</h4>
         <hr>
-        <span class="titulo">Prioridade: </span><span id="ocorr_prioridade"><?php echo $linhaOcorrencia['ocorr_prioridade']; ?></span>
-        <span class="titulo">Analisado: </span><span id="ocorr_analisado"><?php echo ($linhaOcorrencia['ocorr_analisado'] == 't') ? 'Sim':'Não'; ?></span>
-        <span class="titulo">Congelado: </span><span id="ocorr_congelado"><?php echo ($linhaOcorrencia['ocorr_congelado']== 't') ? 'Sim':'Não'; ?></span>
-        <span class="titulo">Encerrado: </span><span id="ocorr_encerrado"><?php echo ($linhaOcorrencia['ocorr_encerrado']== 't') ? 'Sim':'Não'; ?></span>
+        <span class="titulo">Prioridade: </span><span id="ocorr_prioridade"><?php echo $linhaOcorrencia->getPrioridade(); ?></span>
+        <span class="titulo">Analisado: </span><span id="ocorr_analisado"><?php echo ($linhaOcorrencia->getAnalisado() == 't') ? 'Sim':'Não'; ?></span>
+        <span class="titulo">Congelado: </span><span id="ocorr_congelado"><?php echo ($linhaOcorrencia->getCongelado()== 't') ? 'Sim':'Não'; ?></span>
+        <span class="titulo">Encerrado: </span><span id="ocorr_encerrado"><?php echo ($linhaOcorrencia->getEncerrado()== 't') ? 'Sim':'Não'; ?></span>
         <br><br>
     </div>
     <div class="box">
         <h4>Informações</h4>
         <hr>
-        <span class="titulo">Ativa: </span><span id="ativa"><?php echo ($linhaOcorrencia['ativo']== 't') ? 'Sim':'Não'; ?></span><br>
-        <span class="titulo">Data de alteração: </span><span id="data_alteracao"><?php echo date("d/m/Y", strtotime($linhaOcorrencia['data_ocorrencia'])); ?></span><br>
+        <span class="titulo">Ativa: </span><span id="ativa"><?php echo ($linhaOcorrencia->getAtivo() == 't') ? 'Sim':'Não'; ?></span><br>
+        <span class="titulo">Data de alteração: </span><span id="data_alteracao"><?php echo date("d/m/Y", strtotime($linhaOcorrencia->getDataAlteracao())); ?></span><br>
         <span class="titulo">Usuário que realizou a alteração: </span><span class="printShoww"><?php echo $linhaUsuarioCriador['nome']; ?></span><a id="usuario_criador" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaOcorrencia['usuario_criador']; ?>"><?php echo $linhaUsuarioCriador['nome']; ?></a><br>
         <span class="titulo">Ocorrência de referência: </span>
             <?php if($linhaOcorrencia['ocorr_referencia'] == null){ ?>
