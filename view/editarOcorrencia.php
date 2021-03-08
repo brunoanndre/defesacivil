@@ -1,56 +1,44 @@
 <?php
 include('database.php');
+require_once 'dao/OcorrenciaDaoPgsql.php';
+require_once 'dao/UsuarioDaoPgsql.php';
 
-
+$ocorrenciadao = new OcorrenciaDaoPgsql($pdo);
+$usuariodao = new UsuarioDaoPgsql($pdo);
 
 //PEGAR OS DADOS PRA IMPRIMIR NA TELA QUANDO DER ERROS NA EDIÇÃO DA OCORRENCIA
 if(isset($_GET['cobrade']) || isset($_GET['agente_principal']) || isset($_GET['agente_apoio_1']) || isset($_GET['agente_apoio_2']) || isset($_GET['logradouro']) || isset($_GET['pessoa_atendida_1']) || isset($_GET['pessoa_atendida_2']) || isset($_GET['erroDB'])){
 
-    $sql = "SELECT * FROM ocorrencia o INNER JOIN 
-    usuario u ON o.agente_principal = u.id_usuario
-    INNER JOIN endereco_logradouro el ON o.ocorr_logradouro_id = el.id_logradouro
-    WHERE id_ocorrencia = ". $_GET['id'];
-    $query = pg_query($connection,$sql);
-    $linha = pg_fetch_array($query,0);
-
+    $linha = $ocorrenciadao->buscaOcorrenciaUsuarioEndereco($_GET['id']);
 
     //verifica se o agente de apoio e as pessoas estão na ocorrencia 
-    $queryagt1 = pg_query($connection,"SELECT nome FROM usuario WHERE id_usuario =".$linha['agente_apoio_1']);
-    if($queryagt1){
-        if(pg_num_rows($queryagt1) > 0){
-            $agente_apoio_1 = pg_fetch_array($queryagt1,0);
-        }
+    $queryagt1 = $usuariodao->findById($linha['agente_apoio_1']);
+
+    if($queryagt1 !== false){
+        $agente_apoio_1 = $queryagt1;
     }
 
 
-    $queryagt2 = pg_query($connection,"SELECT nome FROM usuario WHERE id_usuario =".$linha['agente_apoio_2']);
-    if($queryagt2){
-        if(pg_num_rows($queryagt2) > 0){
-        $agente_apoio_2 = pg_fetch_array($queryagt2,0);
-        }
+    $queryagt2 = $usuariodao->findById($linha['agente_apoio_2']);
+    if($queryagt2 !== false){
+        $agente_apoio_2 = $queryagt2;
     }
 
-    $querypessoa1 = pg_query($connection, "SELECT nome FROM pessoa WHERE id_pessoa = ".$linha['atendido_1']);
-    if($querypessoa1){
-        if(pg_num_rows($querypessoa1) > 0){
-        $pessoa_atendida_1 = pg_fetch_array($querypessoa1,0);
-        }
+    $queryopessoa1 = $ocorrenciadao->buscaPessoaPeloId($linha['atendido_1']);
+    if($querypessoa1 !== false){
+        $pessoa_atendida_1 = $querypessoa1;
     }
     
-    $querypessoa2 = pg_query($connection,"SELECT nome FROM pessoa WHERE id_pessoa =".$linha['atendido_2']);
-    if($querypessoa2){
-        $pessoa_atendida_2 = pg_fetch_array($querypessoa2,0);
+    $querypessoa2 = $ocorrenciadao->buscaPessoaPeloId($linha['atendido_2']);
+    if($querypessoa2 !== false){
+        $pessoa_atendida_2 = $querypessoa2;
     }
     $cobrade = str_split($linha['ocorr_cobrade']);
 }else{
     $id_logradouro = $_POST['id_logradouro'];
 
 }
-
-
-
 ?>
-
 
 <div class="container positioning">
 <div class="jumbotron campo_cadastro">

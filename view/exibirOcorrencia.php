@@ -188,7 +188,11 @@
     <div class="box">
         <h4>Informações</h4>
         <hr>
-        
+        <?php  
+        if($usuario_editor == false){
+            $usuario_editor = $linhaAgentePrincipal;
+        };
+        ?>
         <span class="titulo">Ativa: </span><span id="ativa"><?php echo ($linhaOcorrencia->getAtivo() == 't') ? 'Sim':'Não'; ?></span><br>
         <span class="titulo">Data de alteração: </span><span id="data_alteracao"><?php echo date("d/m/Y", strtotime($linhaOcorrencia->getDataAlteracao())); ?></span><br>
         <span class="titulo">Usuário que realizou a alteração: </span><span class="printShoww"><?php echo $usuario_editor->getNome(); ?></span><a id="usuario_criador" class="printHide" href="?pagina=exibirUsuario&id=<?php echo  $usuario_editor->getId(); ?>"><?php echo $usuario_editor->getNome(); ?></a><br>
@@ -266,7 +270,7 @@
             <?php if($linhaAgente1 !== NULL){ ?>
             <input name="agente_apoio1" type="hidden" value="<?php echo $linhaAgente1->getNome(); ?>">
             <?php }?>
-            <?php if($linhaAgente1 !== NULL){ ?>
+            <?php if($linhaAgente2 !== NULL){ ?>
             <input name="agente_apoio2" type="hidden" value="<?php echo $linhaAgente2->getNome(); ?>">
             <?php }?>
             <input name="data_lancamento" type="hidden" value="<?php echo $linhaOcorrencia->getDataAlteracao(); ?>">

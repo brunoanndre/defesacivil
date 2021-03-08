@@ -70,7 +70,6 @@
             :agente_apoio_1,:agente_apoio_2, :data_ocorrencia, :titulo, :descricao, :origem, :atendido_1, :atendido_2,
             :cobrade, :possui_fotos, :prioridade, :analisado, :congelado, :encerrado, :criador, :data_alteracao, :referencia,
             :fotos,:nome_pessoa1,:nome_pessoa2,:usuario_editor)");
-            die;
             if($o->getChamadoId() != null){
                 $sql->bindValue(":chamado_id", $o->getChamadoId(), PDO::PARAM_INT);
             }else{
@@ -264,5 +263,18 @@
             $sql->execute();
 
             return $sql->fetch(PDO::FETCH_ASSOC)['id_interdicao'];
+        }
+
+        public function buscaOcorrenciaUsuarioEndereco($i){
+            $sql = $this->pdo->prepare("SELECT * FROM ocorrencia o INNER JOIN 
+            usuario u ON o.agente_principal = u.id_usuario
+            INNER JOIN endereco_logradouro el ON o.ocorr_logradouro_id = el.id_logradouro
+            WHERE id_ocorrencia = :id");
+            $sql->bindValue(":id", $i);
+            $sql->execute();
+
+            $linha = $sql->fetch(PDO::FETCH_ASSOC);
+
+            return $linha;
         }
     }

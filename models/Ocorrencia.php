@@ -284,4 +284,5 @@ interface OcorrenciaDAO{
     public function buscaInterdicao($i);
     public function buscaPessoaPeloId($i);
     public function encerraChamadoAtivo($id);
+    public function buscaOcorrenciaUsuarioEndereco($i);
 }
