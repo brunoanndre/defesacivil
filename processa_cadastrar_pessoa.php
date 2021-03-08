@@ -1,5 +1,8 @@
 <?php
     include 'database.php';
+    require_once 'dao/PessoaDaoPgsql.php';
+
+    $pessoadao = new PessoaDaoPgsql($pdo);
 
     $nome = addslashes($_GET['nome_pessoa']);
     $cpf = addslashes($_GET['cpf_pessoa']);
@@ -11,20 +14,24 @@
     if($nome != null){
         $response = 'Pessoa cadastrado com sucesso';
         if(strlen($erros) == 0){
-            $query = "INSERT INTO pessoa (nome,cpf,outros_documentos,telefone,celular,email) 
-                      VALUES ('$nome','$cpf','$outros_documentos','$telefone', '$celular','$email') RETURNING id_pessoa";
-            $result = pg_query($connection, $query) or die(pg_last_error());
-            if(!$result)
+            $novapessoa = new Pessoa();
+            $novapessoa->setNome($nome);
+            $novapessoa->setCPF($cpf);
+            $novapessoa->setOutrosDocumentos($outros_documentos);
+            $novapessoa->setTelefone($telefone);
+            $novapessoa->setCelular($celular);
+            $novapessoa->setEmail($email);
+
+            $id_pessoa = $pessoadao->adicionar($novapessoa);
+            if($id_pessoa == null){
                 $response = 'Ocorreu um erro com o banco de dados';//'Erro ao cadastrar pessoa';
-            else{
+            }else{
                 session_start();
                 $id_usuario = $_SESSION['id_usuario'];
                 $id_pessoa = pg_fetch_array($result, 0)['id_pessoa'];
                 $data = date('Y-m-d H:i:s');
 
-                $query = "INSERT INTO log_pessoa (id_pessoa_cadastrada, id_usuario_criador, data_hora)
-                          VALUES ($id_pessoa, $id_usuario, '$data')";
-                $result = pg_query($connection, $query) or die(pg_last_error());
+                $pessoadao->adicionarLogPessoa($id_pessoa,$id_usuario,$data);
             }
         }else
             $response = $erros;//'Erro ao cadastrar pessoa';

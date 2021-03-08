@@ -269,7 +269,6 @@ class Ocorrencia{
 }
 
 interface OcorrenciaDAO{
-
     public function buscarPeloId($id);
     public function buscarTodos();
     public function adicionar(Ocorrencia $o);
@@ -282,7 +281,6 @@ interface OcorrenciaDAO{
     public function buscaPessoa($p);
     public function buscaCobrade($c);
     public function buscaInterdicao($i);
-    public function buscaPessoaPeloId($i);
     public function encerraChamadoAtivo($id);
     public function buscaOcorrenciaUsuarioEndereco($i);
 }
