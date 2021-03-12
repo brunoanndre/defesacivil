@@ -64,28 +64,24 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Chamados <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Cadastrar <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                        <li><a href="?pagina=cadastrarChamado">Cadastrar</a></li>
-                        <li><a href="?pagina=consultarChamado">Consultar</a></li>
+                        <li><a href="?pagina=cadastrarChamado">Chamado</a></li>
+                        <li><a href="?pagina=cadastrarOcorrencia">Ocorrência</a></li>
+                        <li><a href="?pagina=cadastrarUsuario">Usuários</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Ocorrências <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Consultar <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                        <li><a href="?pagina=cadastrarOcorrencia">Cadastrar</a></li>
-                        <li><a href="?pagina=consultarOcorrencia">Consultar</a></li>
+                        <li><a href="?pagina=consultarChamado">Chamado</a></li>
+                        <li><a href="?pagina=consultarOcorrencia">Ocorrência</a></li>
+                        <?php if($_SESSION['nivel_acesso'] == 1){ ?>
+                        <li><a href="?pagina=consultarUsuario">Usuários</a></li>
+                        <?php } ?>
                         </ul>
                     </li>
-                    <?php if($_SESSION['nivel_acesso'] == 1){ ?>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Usuários <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                        <li><a href="?pagina=cadastrarUsuario">Cadastrar</a></li>
-                        <li><a href="?pagina=consultarUsuario">Consultar</a></li>
-                        </ul>
-                    </li>
-                    <?php } ?>
+ 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <img src="data:image/png;base64,<?php echo $linha['foto']; ?>" alt="fotoperfil" class="img-circle img-perfil">
