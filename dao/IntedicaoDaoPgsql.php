@@ -28,6 +28,17 @@ class IntedicaoDaoPgsql implements InterdicaoDAO{
         }
     }
 
+    public function interditar($i){
+        $sql = $this->pdo->prepare("UPDATE interdicao SET interdicao_ativa = true WHERE id_interdicao = :id");
+        $sql->bindValue(":id", $i);
+        
+        if($sql->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function editar(Interdicao $i){
        $sql = $this->pdo->prepare("UPDATE interdicao set data_hora = :data, tipo = :tipo, 
        motivo = :motivo, descricao_interdicao = :descricao,danos_aparentes = :danos ,bens_afetados = :bens WHERE id_interdicao = :id");
@@ -44,6 +55,30 @@ class IntedicaoDaoPgsql implements InterdicaoDAO{
        }else{
            return false;
        }
+    }
+
+    public function buscarTodas(){
+        $sql = $this->pdo->prepare("SELECT * FROM interdicao WHERE interdicao_ativa = true");
+        $sql->execute();
+
+        if($sql->rowCount() > 0 ){
+            $linha = $sql->fetchAll(PDO::FETCH_ASSOC);
+        
+            foreach($linha as $item){
+                $i = new Interdicao();
+                $i->setId($item['id_interdicao']);
+                $i->setData($item['data_hora']);
+                $i->setMotivo($item['motivo']);
+                $i->setTipo($item['tipo']);
+                $i->setIdOcorrencia($item['id_ocorrencia']);
+                $i->setDescricao($item['descricao_interdicao']);
+                $i->setBensAfetados($item['bens_afetados']);
+                
+                return $i;
+            }
+        }else{
+            return false;
+        }
     }
 
     public function adicionarLog($d, $iu,$a, $i){

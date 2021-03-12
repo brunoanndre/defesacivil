@@ -583,5 +583,3 @@ function formatarDataInterdicao(){
         return true;
     }
 }
-
-

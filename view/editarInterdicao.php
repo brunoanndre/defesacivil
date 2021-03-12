@@ -19,9 +19,6 @@ if($linha['ocorr_endereco_principal'] == 'Logradouro'){
 $data = date("d/m/Y", strtotime($linha['data_hora']));
 
 ?>
-<script src="../main.js"></script>
-<script src="main.js"></script>
-
 <div class="container positioning">
 <div class="jumbotron campo_cadastro">
     <?php if(isset($_GET['erroDB'])){ ?>

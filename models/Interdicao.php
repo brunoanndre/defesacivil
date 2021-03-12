@@ -82,4 +82,6 @@ class Interdicao{
         public function buscarPeloId($id);
         public function buscarInterdicaoEOcorrencia($id);
         public function editar(Interdicao $i);
+        public function buscarTodas();
+        public function interditar($i);
     }

@@ -23,6 +23,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    <link rel="stylesheet" type="text/css" href="cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <link rel= "stylesheet" type="text/css" href="css/main.css">
     <link rel="icon" type="image/png" href="images/icone.png"/>
     <title>Defesa Civil</title>
@@ -76,12 +78,13 @@
                         <ul class="dropdown-menu">
                         <li><a href="?pagina=consultarChamado">Chamado</a></li>
                         <li><a href="?pagina=consultarOcorrencia">Ocorrência</a></li>
+                        <li><a href="?pagina=consultarInterdicao">Interdição</a></li>
                         <?php if($_SESSION['nivel_acesso'] == 1){ ?>
                         <li><a href="?pagina=consultarUsuario">Usuários</a></li>
                         <?php } ?>
                         </ul>
                     </li>
- 
+
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <img src="data:image/png;base64,<?php echo $linha['foto']; ?>" alt="fotoperfil" class="img-circle img-perfil">
