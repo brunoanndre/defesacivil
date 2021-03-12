@@ -7,22 +7,28 @@ require_once 'dao/OcorrenciaDaoPgsql.php';
 $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
 $interdicaodao = New IntedicaoDaoPgsql($pdo);
 
+$id_interdicao = $_GET['id'];
+
 $linha = $interdicaodao->buscarInterdicaoEOcorrencia($id_interdicao);
 
 if($linha['ocorr_endereco_principal'] == 'Logradouro'){
     $id_logradouro = $linha['ocorr_logradouro_id'];
     $linhaLogradouro = $ocorrenciadao->buscaEnderecoPeloId($id_logradouro);
 }
-?>
 
+$data = date("d/m/Y", strtotime($linha['data_hora']));
+
+?>
+<script src="../main.js"></script>
+<script src="main.js"></script>
 
 <div class="container positioning">
 <div class="jumbotron campo_cadastro">
-<?php if(isset($_GET['sucesso'])){ ?>
-            <div class="alert alert-success" role="alert">
-                Interdição cadastrada com sucesso.
+    <?php if(isset($_GET['erroDB'])){ ?>
+            <div class="alert alert-danger" role="alert">
+                Falha ao alterar a interdição.
             </div>
-    <?php } ?>
+            <?php } ?>   
     <div class="box">
             <div class="row cabecalho">
                 <div class="col-sm-6 printHide">
@@ -85,52 +91,61 @@ if($linha['ocorr_endereco_principal'] == 'Logradouro'){
         <div>
             <span class="titulo">Nº interdição: </span><span><?php echo $linha['id_interdicao']; ?></span>
         </div><hr>
-        <div>
-            <span class="titulo">Data e hora: </span>
-            <span><?php echo date("d/m/Y H:i", strtotime($linha['data_hora'])); ?></span><br>
-            <span class="titulo">Motivo: </span><span><?php echo $linha['motivo']; ?></span><br>
-            <span class="titulo">Descrição da interdição: </span><br>
-            <textarea name="descricao" rows="5" readonly class="readtextarea"><?php echo $linha['descricao_interdicao']; ?></textarea><br>
-            <span class="titulo">Danos aparentes: </span><br>
-            <textarea name="descricao" rows="5" readonly class="readtextarea"><?php echo $linha['danos_aparentes']; ?></textarea><br>
-            <span class="titulo">Bens afetados: </span><span><?php echo $linha['bens_afetados']; ?></span><br>
-            <span class="titulo">Tipo de interdição: </span><span><?php echo $linha['tipo']; ?></span><br>
-        </div><hr>
-        <div>
-            <span class="titulo">Status: </span><span><?php echo ($linha['interdicao_ativa'] == 't') ? 'Interditado':'Desinterditado'; ?></span>
-        </div>
-        <br>
-    </div>
-    <div class="modal fade" id="map" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 class="modal-title">Mapa</h5>
+        <form method="post" action="processa_editar_interdicao.php" onsubmit="return validarFormCadastroInterdicao()">
+        <div class="box">
+        <input type="hidden" name="id_interdicao" value="<?php echo $linha['id_interdicao']; ?>">
+            <div class="row">
+                <div class="col-sm-4">
+                    <span>Data: <span style="color:red;">*</span></span>
+                    <input  name="data" id="data_interdicao" class="form-control" value="<?php echo date("d/m/Y", strtotime($linha['data_hora']))?>" maxlength="10" required onkeydown ="formatarDataInterdicao()">  
                 </div>
-                <div class="modal-body">
-                    <div id="googleMap" style="width:100%;height:400px;"></div>
+                <div class="col-sm-4">
+                    <span>Horário: <span style="color:red;">*</span></span> 
+                    <input type="time" name="horario" class="form-control" value="<?php echo date("H:i", strtotime($linha['data_hora'])); ?>" required>
                 </div>
             </div>
         </div>
-    </div>
-    <?php if($linha['interdicao_ativa'] == 't'){ ?>
-        <form action="desinterdicao.php" method="post">
-            <input type="hidden" name="id_ocorrencia" value="<?php echo $linha['id_ocorrencia']; ?>">
-            <input type="hidden" name="id_interdicao" value="<?php echo $linha['id_interdicao']; ?>">
-            <div class="div-btn-desinterdicao">
-            <?php echo '<a class="printHide href="index.php?pagina=exibirOcorrencia&id='. $linha['id_ocorrencia'] . '"><input class="btn btn-default btn-md printHide" value="Voltar"></a>'?>
-            <?php echo '<a class="printHide" href= "index.php?pagina=editarInterdicao&id='. $linha['id_interdicao'] . '"><input class=" btn btn-default printHide" value="Editar Interdição"></a>'?>
-                <input type="submit" class="btn btn-default btn-md btn-desinterdicao printHide" value="Constatar Desinterdição">
+        <div class="box">
+            <div>
+                Motivo: <span style="color:red;">*</span>
+                <label for="motivo"></label>
+                <select name="motivo" class="form-control endereco-principal" required>
+                    <option <?php if($linha['motivo'] == 'Colapso de edificação'){ echo "selected";}?> value="Colapso de edificação">Colapso de edificação</option>
+                    <option <?php if($linha['motivo'] == 'Incêndio/Explosão'){ echo "selected";}?> value="Incêndio/Explosão">Incêndio/Explosão</option>
+                    <option <?php if($linha['motivo'] == 'Deslizamento de solo e/ou rocha'){ echo "selected";}?> value="Deslizamento de solo e/ou rocha">Deslizamento de solo e/ou rocha</option>
+                    <option value="Inundação">Inundação</option>
+                    <option value="Outro">Outro</option>
+                </select>
             </div>
-        </form>
-    <?php }?>
-    <div class="btn_interdicao" style="padding-left: 30px;">
-    <?php if($linha['interdicao_ativa'] == false){ ?>
-     <?php echo '<a class="printHide href="index.php?pagina=exibirOcorrencia&id='. $linha['id_ocorrencia'] . '"><input class="btn btn-default btn-md printHide" value="Voltar"></a>'?>
-     <?php echo '<a class="printHide href= "index.php?pagina=editarInterdicao&id='. $linha['id_interdicao'] . '"><input class=" btn btn-default printHide" value="Editar Interdição"></a>'?>
-        <input class="btn btn-default" value="Interditar">
-        <?php };?>
-    </div>
-</div>
+            <div>
+                Descrição da interdição: <span style="color:red;">*</span>
+                <textarea name="descricao_interdicao" class="form-control" cols="30" rows="2" maxlength="120" style="resize:none;" required><?php echo $linha['descricao_interdicao']; ?></textarea>
+            </div>
+            <div>
+                Danos aparentes: <span style="color:red;">*</span>
+                <textarea name="danos_aparentes" class="form-control" cols="30" rows="2" maxlength="120" required style="resize:none;"><?php echo $linha['danos_aparentes']; ?></textarea>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    Bens afetados: <span style="color:red;">*</span>
+                    <label for="bens_afetados"></label>
+                    <select name="bens_afetados" class="form-control" required>
+                        <option <?php if($linha['bens_afetados'] == 'Particular'){ echo "selected";}?>>Particular</option>
+                        <option <?php if($linha['bens_afetados'] == 'Público'){ echo "selected"; }?>>Público</option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <span>Tipo de interdição: <span style="color:red;">*</span></span>
+                    <label for="tipo"></label>
+                    <select name="tipo" class="form-control" required>
+                        <option <?php if($linha['tipo'] == 'Parcial'){ echo "selected";}?> value="Parcial">Parcial</option>
+                        <option <?php if($linha['tipo'] == 'Total'){ echo "selected";}?> value="Total">Total</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="div-btn-cadastrar">
+        <input type="submit" class="btn-cadastrar btn-default btn-md" value="Salvar">
+        </div>
+    </form>
 </div>

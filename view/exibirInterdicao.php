@@ -22,6 +22,11 @@
                 Interdição cadastrada com sucesso.
             </div>
     <?php } ?>
+    <?php if(isset($_GET['sucessoalt'])){ ?>
+            <div class="alert alert-success" role="alert">
+                Interdição alterada com sucesso.
+            </div>
+    <?php } ?>
     <div class="box">
             <div class="row cabecalho">
                 <div class="col-sm-6 printHide">
@@ -118,7 +123,7 @@
         <input type="hidden" name="id" value="<?php $linha['id_interdicao'];?>">
         <input type="submit" class="btn btn-default" value="Editar Interdição">
     </form>
-        <?php echo '<a class="printHide href="index.php?pagina=exibirOcorrencia&id='. $linha['id_ocorrencia'] . '"><input type="button" class="btn btn-default btn-md printHide" value="Voltar"></a>'?>
+        <?php echo '<a class="printHide href="index.php?pagina=exibirOcorrencia&id='. $linha['id_ocorrencia'] . '"><input type="button" class="btn btn-default btn-md printHide" style="margin-left:90px" value="Voltar"></a>'?>
         <?php echo '<a class="printHide" href= "index.php?pagina=editarInterdicao&id='. $linha['id_interdicao'] . '"><input class=" btn btn-default printHide" value="Editar Interdição"></a>'?>
         <form action="desinterdicao.php" method="post">
             <input type="hidden" name="id_ocorrencia" value="<?php echo $linha['id_ocorrencia']; ?>">
@@ -130,12 +135,8 @@
     <?php }?>
     <div class="btn_interdicao" style="padding-left: 30px;">
     <?php if($linha['interdicao_ativa'] == false){ ?>
-     <?php echo '<a class="printHide href="index.php?pagina=exibirOcorrencia&id='. $linha['id_ocorrencia'] . '"><input class="btn btn-default btn-md printHide" value="Voltar"></a>'?>
-
-     <form action="index.php/pagina=editarInterdicao.php" method="GET">
-        <input type="hidden" name="id" value="<?php echo $linha['id_interdicao'];?>">
-        <input type="submit" class="btn btn-default" value="Editar Interdição">
-    </form>
+     <?php echo '<a class="printHide href="index.php?pagina=exibirOcorrencia&id='. $linha['id_ocorrencia'] . '"><input type="button" class="btn btn-default btn-md printHide" style="margin-left:90px" value="Voltar"></a>'?>
+        <?php echo '<a class="printHide" href= "index.php?pagina=editarInterdicao&id='. $linha['id_interdicao'] . '"><input class=" btn btn-default printHide" value="Editar Interdição"></a>'?>
         <input class="btn btn-default" value="Interditar">
         <?php };?>
     </div>

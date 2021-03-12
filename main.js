@@ -569,3 +569,19 @@ function monitorarChamado() {
 }
 
 
+function formatarDataInterdicao(){
+    let data = document.getElementById('data_interdicao').value;
+
+    if(data.length == 2){
+        data = data + '/';
+        document.forms[0].data.value = data;
+        return true;              
+    }
+    if (data.length == 5){
+        data = data + '/';
+        document.forms[0].data.value = data;
+        return true;
+    }
+}
+
+

@@ -18,7 +18,7 @@ class IntedicaoDaoPgsql implements InterdicaoDAO{
         $sql->bindValue(":motivo", $i->getMotivo());
         $sql->bindValue(":descricao_interdicao", $i->getDescricao());
         $sql->bindValue(":danos_aparentes", $i->getDanos());
-        $sql->bindValue(":bens_afetados", $i->getDanos());
+        $sql->bindValue(":bens_afetados", $i->getBensAfetados());
         $sql->bindValue(":tipo", $i->getTipo());
         if($sql->execute()){
             $i->setId($this->pdo->lastInsertId());
@@ -26,6 +26,24 @@ class IntedicaoDaoPgsql implements InterdicaoDAO{
         }else{
             return false;
         }
+    }
+
+    public function editar(Interdicao $i){
+       $sql = $this->pdo->prepare("UPDATE interdicao set data_hora = :data, tipo = :tipo, 
+       motivo = :motivo, descricao_interdicao = :descricao,danos_aparentes = :danos ,bens_afetados = :bens WHERE id_interdicao = :id");
+       $sql->bindValue(":data", $i->getData());
+       $sql->bindValue(":tipo", $i->getTipo());
+       $sql->bindValue(":motivo", $i->getMotivo());
+       $sql->bindValue(":descricao", $i->getDescricao());
+       $sql->bindValue(":bens", $i->getBensAfetados());
+       $sql->bindValue(":id", $i->getId());
+       $sql->bindValue(":danos", $i->getDanos());
+    
+       if($sql->execute()){
+           return true;
+       }else{
+           return false;
+       }
     }
 
     public function adicionarLog($d, $iu,$a, $i){
@@ -50,7 +68,24 @@ class IntedicaoDaoPgsql implements InterdicaoDAO{
     }
 
     public function buscarPeloId($id){
-        $sql = $this->pdo->prepare();
+        $sql = $this->pdo->prepare("SELECT * FROM interdicao WHERE id_interdicao = :id");
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+
+        if($sql->rowCount() >0){
+            $linha = $sql->fetchAll(PDO::FETCH_ASSOC);
+            $i = new Interdicao();
+            $i->setId($linha['id_interdicao']);
+            $i->setData($linha['data_hora']);
+            $i->setTipo($linha['tipo']);
+            $i->setIdOcorrencia($linha['id_ocorrencia']);
+            $i->setMotivo($linha['motivo']);
+            $i->setDescricao($linha['descricao_interdicao']);
+            $i->setDanos($linha['danos_aparentes']);
+            $i->setBensAfetados($linha['bens_afetados']);
+
+            return $i;
+        }
     }
 
     public function buscarInterdicaoEOcorrencia($id){
