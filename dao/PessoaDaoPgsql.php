@@ -1,7 +1,7 @@
 <?php
 
-include 'database.php';
-require_once 'dao/PessoaDaoPgsql.php';
+require 'database.php';
+require 'models/Pessoa.php';
 
 class PessoaDaoPgsql implements PessoaDAO{
     private $pdo;
@@ -36,6 +36,19 @@ class PessoaDaoPgsql implements PessoaDAO{
         $sql->execute();
 
         return $sql->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function buscarPeloNome($n){
+        $sql = $this->pdo->prepare("SELECT * FROM pessoa WHERE nome = :pessoa_atendida_1");
+        $sql->bindValue(":pessoa_atendida_1", $n);
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            $linha = $sql->fetch(PDO::FETCH_ASSOC);
+            return $linha['id_pessoa'];
+        }else{
+            return false;
+        }
     }
 
     public function adicionarLogPessoa($ip, $iu, $d){

@@ -131,14 +131,14 @@ class Ocorrencia{
         return $this->agente_apoio1;
     }
     public function setApoio1($a1){
-        $this->agente_apoio1 = ucwords(trim($a1));
+        $this->agente_apoio1 = trim($a1);
     }
 
     public function getApoio2(){
         return $this->agente_apoio2;
     }
     public function setApoio2($a2){
-        $this->agente_apoio2 = ucwords(trim($a2));
+        $this->agente_apoio2 = trim($a2);
     }
 
     public function getCobrade(){
@@ -273,11 +273,14 @@ interface OcorrenciaDAO{
     public function buscarTodos();
     public function adicionar(Ocorrencia $o);
     public function remover($id);
+    public function editarOcorrencia(Ocorrencia $o);
+    public function editarEndereco(Ocorrencia $o);
     public function buscaEndereco($l,$n);
     public function buscaEnderecoPeloId($id);
     public function adicionarEndereco(Ocorrencia $o);
     public function adicionarLogEndereco($l,$i,$d);
     public function buscaAgente($a);
+    public function buscaFotos($i);
     public function buscaPessoa($p);
     public function buscaCobrade($c);
     public function buscaInterdicao($i);

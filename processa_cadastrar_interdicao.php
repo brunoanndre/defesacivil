@@ -1,6 +1,9 @@
 <?php
     //inclui a conexao com o banco de dados
     include 'database.php';
+    require_once 'dao/IntedicaoDaoPgsql.php';
+
+    $interdicaodao = new IntedicaoDaoPgsql($pdo);
 
     //recebe dados do $_POST
     $id_ocorrencia = addslashes($_POST['id_ocorrencia']);
@@ -18,30 +21,21 @@
 
     $timestamp = $data.' '.$hora.':00';
 
-    $sql = $pdo->prepare("INSERT INTO interdicao (data_hora, id_ocorrencia, motivo, descricao_interdicao, danos_aparentes, bens_afetados, tipo) 
-    VALUES (:timestamp, :id_ocorrencia, :motivo, :descricao_interdicao, :danos_aparentes, :bens_afetados, :tipo)
-    RETURNING id_interdicao");
-    $sql->bindValue(":timestamp", $timestamp);
-    $sql->bindValue(":id_ocorrencia", $id_ocorrencia);
-    $sql->bindValue(":motivo", $motivo);
-    $sql->bindValue(":descricao_interdicao", $descricao_interdicao);
-    $sql->bindValue(":danos_aparentes", $danos_aparentes);
-    $sql->bindValue(":bens_afetados", $bens_afetados);
-    $sql->bindValue(":tipo", $tipo);
-    $sql->execute();
+    $novaintedicao = new Interdicao();
+    $novaintedicao->setData($timestamp);
+    $novaintedicao->setIdOcorrencia($id_ocorrencia);
+    $novaintedicao->setMotivo($motivo);
+    $novaintedicao->setDescricao($descricao_interdicao);
+    $novaintedicao->setDanos($danos_aparentes);
+    $novaintedicao->setBensAfetados($bens_afetados);
+    $novaintedicao->setTipo($tipo);
 
-
-    if($sql){
-        $id_interdicao = $sql->fetch()['id_interdicao'];
-
-        $sql = $pdo->prepare( "INSERT INTO log_interdicao (data_hora, id_usuario, id_interdicao)
-        VALUES (:dataAtual, :id_usuario, :id_interdicao)");
-        $sql->bindValue(":dataAtual", $dataAtual);
-        $sql->bindValue(":id_usuario", $id_usuario);
-        $sql->bindValue(":id_interdicao", $id_interdicao);
-        $sql->execute();
-
-        header('location:index.php?pagina=exibirInterdicao&id='.$id_interdicao);
+    if($id = $interdicaodao->adicionar($novaintedicao)){
+    $acao = "interditar";
+    $id_interdicao = $id->getId(); 
+        $interdicaodao->adicionarLog($dataAtual, $id_usuario, $acao, $id_interdicao);
+ 
+        header('location:index.php?pagina=exibirInterdicao&id='.$id_interdicao .'&sucesso' );
     }else{
         //echo pg_last_error();
         header('location:index.php?pagina=cadastrarInterdicao&erroDB');

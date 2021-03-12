@@ -38,6 +38,15 @@ if(isset($_GET['cobrade']) || isset($_GET['agente_principal']) || isset($_GET['a
     $id_logradouro = $_POST['id_logradouro'];
 
 }
+$linhaOcorrencia = $ocorrenciadao->buscarPeloId($_POST['id_ocorrencia']);
+
+$string = $linhaOcorrencia->getFotos();
+
+$string = str_replace('{','',$string);
+$string = str_replace('}','',$string);
+
+$fotos = explode(',', $string);
+
 ?>
 
 <div class="container positioning">
@@ -370,6 +379,40 @@ if(isset($_GET['cobrade']) || isset($_GET['agente_principal']) || isset($_GET['a
             <div>
                 Adicionar fotos:
                 <input name="possui_fotos" type="hidden" value="<?php echo $_POST['possui_fotos']; ?>">
+                <?php if($_POST['possui_fotos'] == 1){ ?>
+                    <div class="box">
+                        <div id="myCarousel" class="carousel slide limite" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                <?php $i = 1; while($i < sizeof($fotos)){ ?>
+                                    <li data-target="#myCarousel" data-slide-to="<?php echo $i; ?>"></li>
+                                <?php $i+=1; } ?>
+                            </ol>
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner">
+                                <div class="item active">
+                                    <img src="data:image/png;base64,<?php echo $fotos[0]; ?>" alt="img1" style="width:100%;">
+                                </div>
+                                <?php $i = 1; while($i < sizeof($fotos)){ ?>
+                                    <div class="item">
+                                        <img src="data:image/png;base64,<?php echo $fotos[$i]; ?>" alt="img<?php echo $i; ?>" style="width:100%;">
+                                    </div>
+                                <?php $i+=1; } ?>
+                                
+                            </div>
+                            <!-- Left and right controls -->
+                            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                    <?php } ?>
                 <input name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
             </div>
         <hr>
@@ -388,10 +431,10 @@ if(isset($_GET['cobrade']) || isset($_GET['agente_principal']) || isset($_GET['a
                         <span>Analisado: <span style="color:red;">*</span></span><br>
                         <div style="display:inline;">
                             <label class="radio-inline">
-                                <input type="radio" value="true" id="analisado" name="analisado" <?php echo ($_POST['analisado'] == 't') ? 'checked':''; ?>>Sim
+                                <input type="radio" value="true" id="analisado" name="analisado" <?php echo ($_POST['analisado'] == 1) ? 'checked':''; ?>>Sim
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" value="false" id="analisado" name="analisado" <?php echo ($_POST['analisado'] == 't') ? '':'checked'; ?>>Não
+                                <input type="radio" value="false" id="analisado" name="analisado" <?php echo ($_POST['analisado'] == 1) ? '':'checked'; ?>>Não
                             </label>
                         </div>
                     </div>
@@ -399,10 +442,10 @@ if(isset($_GET['cobrade']) || isset($_GET['agente_principal']) || isset($_GET['a
                         <span>Congelado: <span style="color:red;">*</span></span><br>
                         <div>
                             <label class="radio-inline">
-                                <input type="radio" value="true" name="congelado" <?php echo ($_POST['congelado'] == 't') ? 'checked':''; ?>>Sim
+                                <input type="radio" value="true" name="congelado" <?php echo ($_POST['congelado'] == 1) ? 'checked':''; ?>>Sim
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" value="false" name="congelado" <?php echo ($_POST['congelado'] == 't') ? '':'checked'; ?>>Não
+                                <input type="radio" value="false" name="congelado" <?php echo ($_POST['congelado'] == 1) ? '':'checked'; ?>>Não
                             </label>
                         </div>
                     </div>
@@ -410,10 +453,10 @@ if(isset($_GET['cobrade']) || isset($_GET['agente_principal']) || isset($_GET['a
                         <span>Encerrado: <span style="color:red;">*</span></span><br>
                         <div>
                             <label class="radio-inline">
-                                <input type="radio" value="true" name="encerrado" <?php echo ($_POST['encerrado'] == 't') ? 'checked':''; ?>>Sim
+                                <input type="radio" value="true" name="encerrado" <?php echo ($_POST['encerrado'] == 1) ? 'checked':''; ?>>Sim
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" value="false" name="encerrado" <?php echo ($_POST['encerrado'] == 't') ? '':'checked'; ?>>Não
+                                <input type="radio" value="false" name="encerrado" <?php echo ($_POST['encerrado'] == 1) ? '':'checked'; ?>>Não
                             </label>
                         </div>
                     </div>

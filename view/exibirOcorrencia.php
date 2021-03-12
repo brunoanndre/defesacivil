@@ -2,8 +2,9 @@
     include 'database.php';
     require_once 'dao/OcorrenciaDaoPgsql.php';
     require_once 'dao/UsuarioDaoPgsql.php';
+    require_once 'dao/PessoaDaoPgsql.php';
 
-
+    $pessoadao = New PessoaDaoPgsql($pdo);
     $usuariodao = New UsuarioDaoPgsql($pdo);
     $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
     $id_ocorrencia = $_GET['id'];
@@ -43,11 +44,11 @@
  
     if($linhaOcorrencia->getIdPessoa1()){
        $id_pessoa = $linhaOcorrencia->getIdPessoa1();
-       $linhaPessoa1 = $ocorrenciadao->buscaPessoaPeloId($id_pessoa);
+       $linhaPessoa1 = $pessoadao->buscarPeloID($id_pessoa);
      }
     if($linhaOcorrencia->getIdPessoa2()){
         $id_pessoa = $linhaOcorrencia->getIdPessoa2();
-        $linhaPessoa2 = $ocorrenciadao->buscaPessoaPeloId($id_pessoa);
+        $linhaPessoa2 = $pessoadao->buscarPeloID($id_pessoa);
     }
     //BUSCAR COBRADE NO BD
     $cobrade = $linhaOcorrencia->getCobrade();
@@ -161,7 +162,7 @@
         <?php }else{ ?>
             <span class="titulo">Solicitante 1: </span><span><?php echo $linhaPessoa1['nome']; ?></span>
             <!--<a id="atendido_1" href="?pagina=exibirPessoa&id=<?php //echo $linhaOcorrencia['atendido_1']; ?>"><?php //echo $linhaPessoa1['nome']; ?></a><br>-->
-            <?php if($linhaOcorrencia->getPessoa2() != ""){ ?>
+            <?php if($linhaOcorrencia->getIdPessoa2() != ""){ ?>
                 <span class="titulo">Solicitante 2: </span><span><?php echo $linhaPessoa2['nome']; ?></span>
                 <!--<a id="atendido_2" href="?pagina=exibirPessoa&id=<?php //echo $linhaOcorrencia['atendido_2']; ?>"><?php //echo $linhaPessoa2['nome']; ?></a><br>-->
             <?php } 
@@ -173,16 +174,16 @@
         <hr>
         <div class="printWrap">
         <span class="titulo">Cobrade: </span><span id="ocorr_cobrade"><?php echo $linhaCobrade['subgrupo']; ?></span><br>
-        <span class="titulo">Possui fotos: </span><span id="fotos"><?php echo ($linhaOcorrencia->getPossuiFotos() == 't') ? 'Sim':'Não'; ?></span>
+        <span class="titulo">Possui fotos: </span><span id="fotos"><?php echo ($linhaOcorrencia->getPossuiFotos() == 1) ? 'Sim':'Não'; ?></span>
         </div>
     </div>
     <div class="box printMargin">
         <h4>Status</h4>
         <hr>
         <span class="titulo">Prioridade: </span><span id="ocorr_prioridade"><?php echo $linhaOcorrencia->getPrioridade(); ?></span>
-        <span class="titulo">Analisado: </span><span id="ocorr_analisado"><?php echo ($linhaOcorrencia->getAnalisado() == 't') ? 'Sim':'Não'; ?></span>
-        <span class="titulo">Congelado: </span><span id="ocorr_congelado"><?php echo ($linhaOcorrencia->getCongelado()== 't') ? 'Sim':'Não'; ?></span>
-        <span class="titulo">Encerrado: </span><span id="ocorr_encerrado"><?php echo ($linhaOcorrencia->getEncerrado()== 't') ? 'Sim':'Não'; ?></span>
+        <span class="titulo">Analisado: </span><span id="ocorr_analisado"><?php echo ($linhaOcorrencia->getAnalisado() == 1) ? 'Sim':'Não'; ?></span>
+        <span class="titulo">Congelado: </span><span id="ocorr_congelado"><?php echo ($linhaOcorrencia->getCongelado()== 1) ? 'Sim':'Não'; ?></span>
+        <span class="titulo">Encerrado: </span><span id="ocorr_encerrado"><?php echo ($linhaOcorrencia->getEncerrado()== 1) ? 'Sim':'Não'; ?></span>
         <br><br>
     </div>
     <div class="box">
@@ -202,7 +203,7 @@
             <?php }else{ ?>
             <span class="printShoww"><?php echo $linhaOcorrencia->getReferencia();?></span>
                 <a class="printHide" id="ocorr_referencia" href="?pagina=exibirOcorrencia&id=<?php echo $linhaOcorrencia->getReferencia(); ?>"><?php echo $linhaOcorrencia->getReferencia(); ?></a><br>
-            <?php } ?>
+            <?php }?>
         <br>
     </div>
     <?php if($linhaOcorrencia->getPossuiFotos() == true){ ?>
@@ -253,7 +254,7 @@
         </div>
     </div>
     <?php if($linhaOcorrencia->getAtivo() == true){ ?>
-        <form action="index.php?pagina=editarOcorrencia" method="post">
+        <form action="index.php?pagina=editarOcorrencia"   method="post">
             <input name="id_ocorrencia" type="hidden" value="<?php echo $id_ocorrencia; ?>">
             <input name="chamado_id" type="hidden" value="<?php echo $linhaOcorrencia->getChamadoId(); ?>">
             <input name="endereco_principal" type="hidden" value="<?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?>">
@@ -281,7 +282,7 @@
             <input name="pessoa1" type="hidden" value="<?php echo $linhaOcorrencia->getPessoa1(); ?>">
             <input name="pessoa2" type="hidden" value="<?php echo $linhaOcorrencia->getPessoa2(); ?>">
             <input name="ocorr_cobrade" type="hidden" value="<?php echo $linhaOcorrencia->getCobrade(); ?>"> 
-            <input name="possui_fotos" type="hidden" value="<?php echo $linhaOcorrencia->getFotos(); ?>">
+            <input name="possui_fotos" type="hidden" value="<?php echo $linhaOcorrencia->getPossuiFotos(); ?>">
             <input name="prioridade" type="hidden" value="<?php echo $linhaOcorrencia->getPrioridade(); ?>">
             <input name="analisado" type="hidden" value="<?php echo $linhaOcorrencia->getAnalisado(); ?>">
             <input name="congelado" type="hidden" value="<?php echo $linhaOcorrencia->getCongelado(); ?>">

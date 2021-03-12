@@ -139,6 +139,105 @@
             
         }
 
+        public function editarOcorrencia(Ocorrencia $o){
+            $sql = $this->pdo->prepare("UPDATE ocorrencia SET
+            chamado_id = :chamado_id, ocorr_endereco_principal = :endereco_principal,
+            ocorr_coordenada_latitude = :latitude, ocorr_coordenada_longitude = :longitude,
+            ocorr_logradouro_id = :logradouro_id, agente_principal = :agente_principal,
+            agente_apoio_1 = :agente_apoio_1, agente_apoio_2 = :agente_apoio_2,
+            data_ocorrencia = :data_ocorrencia, 
+            ocorr_titulo = :titulo, ocorr_descricao = :descricao, ocorr_origem = :ocorr_origem,
+            atendido_1 = :atendida_1, atendido_2 = :atendida_2,
+            ocorr_cobrade = :cobrade, ocorr_fotos = :possui_fotos,
+            ocorr_prioridade = :prioridade, ocorr_analisado = :analisado, ocorr_congelado = :congelado,
+            ocorr_encerrado = :encerrado, usuario_criador = :id_criador, data_alteracao =:dataAtual, fotos = :pg_array, 
+            nome_pessoa1 = :pessoa_atendida_1, nome_pessoa2 = :pessoa_atendida_2, usuario_editor = :usuario_editor 
+            WHERE id_ocorrencia = :id_ocorrencia;");
+            if($o->getChamadoId() == null || $o->getChamadoId() == ''){
+                $sql->bindValue(":chamado_id", null, PDO::PARAM_NULL);
+            }else{
+                $sql->bindValue(":chamado_id", $o->getChamadoId());
+            }
+            $sql->bindValue(":endereco_principal", $o->getEnderecoPrincipal());
+            if($o->getLatitude() == null || $o->getLatitude() == ''){
+                $sql->bindValue(":latitude", null, PDO::PARAM_NULL);
+            }else{
+                $sql->bindValue(":latitude", $o->getLatitude());
+            }
+            if($o->getLongitude() == null || $o->getLongitude() == ''){
+                $sql->bindValue(":longitude", null, PDO::PARAM_NULL);
+            }else{
+                $sql->bindValue(":longitude", $o->getLongitude());
+            }
+            if($o->getLogradouroid() == null || $o->getLogradouroid() == ''){
+                $sql->bindValue(":logradouro_id", null, PDO::PARAM_NULL);
+            }else{
+                $sql->bindValue(":logradouro_id", $o->getLogradouroid());
+            }
+            $sql->bindValue(":agente_principal", $o->getIdCriador());
+            if($o->getApoio1() == null || $o->getApoio1() == ''){
+                $sql->bindValue(":agente_apoio_1", null, PDO::PARAM_NULL);
+            }else{
+                $sql->bindValue(":agente_apoio_1", $o->getApoio1());
+            }
+            if($o->getApoio2() == null || $o->getApoio2() == ''){
+                $sql->bindValue(":agente_apoio_2", null, PDO::PARAM_NULL);
+            }else{
+                $sql->bindValue(":agente_apoio_2", $o->getApoio2());
+            }
+            $sql->bindValue(":data_ocorrencia", $o->getData());
+            $sql->bindValue(":titulo", $o->getTitulo());
+            $sql->bindValue(":descricao", $o->getDescricao());
+            $sql->bindValue(":ocorr_origem", $o->getOrigem());
+            if($o->getIdPessoa1() == null || $o->getIdPessoa1() == ''){
+                $sql->bindValue(":atendida_1", null, PDO::PARAM_NULL);
+            }else{
+                $sql->bindValue(":atendida_1", $o->getIdPessoa1());
+            }
+            if($o->getIdPessoa2() == null || $o->getIdPessoa2() == ''){
+                $sql->bindValue(":atendida_2", null, PDO::PARAM_NULL);
+            }else{
+                $sql->bindValue(":atendida_2", $o->getIdPessoa2());
+            }
+            $sql->bindValue(":cobrade", $o->getCobrade());
+            $sql->bindValue(":possui_fotos", $o->getPossuiFotos());
+            $sql->bindValue(":prioridade", $o->getPrioridade());
+            $sql->bindValue(":analisado", $o->getAnalisado());
+            $sql->bindValue(":congelado", $o->getCongelado());
+            $sql->bindValue(":encerrado", $o->getEncerrado());
+            $sql->bindValue(":id_criador", $o->getIdCriador());
+            $sql->bindValue(":dataAtual", $o->getDataAlteracao());
+            $sql->bindValue(":pg_array", $o->getFotos());
+            $sql->bindValue(":pessoa_atendida_1",$o->getPessoa1());
+            $sql->bindValue(":pessoa_atendida_2",$o->getPessoa2());
+            $sql->bindValue(":usuario_editor", $o->getUsuarioEditor());
+            $sql->bindValue(":id_ocorrencia", $o->getId());
+            if($sql->execute()){
+                return true;
+            }else{
+                return false;
+            }
+
+        }
+
+        public function editarEndereco(Ocorrencia $o){
+            $sql = $this->pdo->prepare("UPDATE endereco_logradouro SET cep = :cepbd, cidade = :cidade, bairro = :bairro, 
+            logradouro = :logradouro, numero = :numero, referencia = :referencia");
+            $sql->bindValue(":cepbd", $o->getCep());
+            $sql->bindValue(":cidade", $o->getCidade());
+            $sql->bindValue(":bairro", $o->getBairro());
+            $sql->bindValue(":logradouro", $o->getLogradouro());
+            $sql->bindValue(":numero", $o->getNumero());
+            $sql->bindValue(":referencia", $o->getReferencia());
+            if($sql->execute()){
+                return true;
+            }else{
+                return false;
+            }
+
+
+        }
+
         public function buscaEndereco($l, $n){
             $sql = $this->pdo->prepare("SELECT * FROM endereco_logradouro WHERE logradouro = :logradouro AND numero = :numero");
             $sql->bindValue(":logradouro", $l);
@@ -146,7 +245,7 @@
             $sql->execute();
 
             if($sql->rowCount() > 0){
-                $linha = $sql->fetchAll(PDO::FETCH_ASSOC);
+                $linha = $sql->fetch(PDO::FETCH_ASSOC);
                 return $linha['id_logradouro'];
             }else{
                 return false;
@@ -179,7 +278,7 @@
 
         public function adicionarEndereco(Ocorrencia $o){
             $sql = $this->pdo->prepare("INSERT INTO endereco_logradouro (cep,cidade,bairro,logradouro,numero,referencia)
-            VALUES (:cep, :cidade, :bairro, :logradouro, :numero, :referencia) RETURNING id_logradouro");
+            VALUES (:cep, :cidade, :bairro, :logradouro, :numero, :referencia)");
             $sql->bindValue(":cep", $o->getCep());
             $sql->bindValue(":cidade", $o->getCidade());
             $sql->bindValue(":bairro", $o->getBairro());
@@ -188,9 +287,11 @@
             $sql->bindValue(":referencia", $o->getReferencia());
             $sql->execute();
 
-            $linha = $sql->fetch(PDO::FETCH_ASSOC);
-
-            return $linha['id_logradouro'];
+            if($sql->rowCount() > 0 ){
+            return true;
+            }else{
+                return false;
+            }
         }
 
         public function adicionarLogEndereco($l, $i, $d){
@@ -230,11 +331,7 @@
         }
 
         public function buscaPessoaPeloId($i){
-            $sql = $this->pdo->prepare("SELECT nome FROM pessoa WHERE id_pessoa = :id_pessoa");
-            $sql->bindValue(":id_pessoa", $i);
-            $sql->execute();
 
-            return $sql->fetch(PDO::FETCH_ASSOC);
         }
 
         public function encerraChamadoAtivo($id){
@@ -276,5 +373,13 @@
             $linha = $sql->fetch(PDO::FETCH_ASSOC);
 
             return $linha;
+        }
+
+        public function buscaFotos($i){
+            $sql = $this->pdo->prepare("SELECT fotos FROM ocorrencia WHERE id_ocorrencia = :id_ocorrencia");
+            $sql->bindValue(":id_ocorrencia", $i);
+            $sql->execute();
+
+            return $sql->fetch()['fotos'];
         }
     }

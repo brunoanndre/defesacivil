@@ -1,19 +1,20 @@
 <?php
-    include 'database.php';
-    require_once 'dao/IntedicaoDaoPgsql.php';
-    require_once 'dao/OcorrenciaDaoPgsql.php';
+
+require_once 'database.php';
+require_once 'dao/IntedicaoDaoPgsql.php';
+require_once 'dao/OcorrenciaDaoPgsql.php';
     
-    $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
-    $interdicaodao = New IntedicaoDaoPgsql($pdo);
-    $id_interdicao = $_GET['id'];
+$ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
+$interdicaodao = New IntedicaoDaoPgsql($pdo);
 
-    $linha = $interdicaodao->buscarInterdicaoEOcorrencia($id_interdicao);
+$linha = $interdicaodao->buscarInterdicaoEOcorrencia($id_interdicao);
 
-    if($linha['ocorr_endereco_principal'] == 'Logradouro'){
-        $id_logradouro = $linha['ocorr_logradouro_id'];
-        $linhaLogradouro = $ocorrenciadao->buscaEnderecoPeloId($id_logradouro);
-    }
+if($linha['ocorr_endereco_principal'] == 'Logradouro'){
+    $id_logradouro = $linha['ocorr_logradouro_id'];
+    $linhaLogradouro = $ocorrenciadao->buscaEnderecoPeloId($id_logradouro);
+}
 ?>
+
 
 <div class="container positioning">
 <div class="jumbotron campo_cadastro">
@@ -114,16 +115,12 @@
         </div>
     </div>
     <?php if($linha['interdicao_ativa'] == 't'){ ?>
-    <form action="editarInterdicao.php" method="GET">
-        <input type="hidden" name="id" value="<?php $linha['id_interdicao'];?>">
-        <input type="submit" class="btn btn-default" value="Editar Interdição">
-    </form>
-        <?php echo '<a class="printHide href="index.php?pagina=exibirOcorrencia&id='. $linha['id_ocorrencia'] . '"><input type="button" class="btn btn-default btn-md printHide" value="Voltar"></a>'?>
-        <?php echo '<a class="printHide" href= "index.php?pagina=editarInterdicao&id='. $linha['id_interdicao'] . '"><input class=" btn btn-default printHide" value="Editar Interdição"></a>'?>
         <form action="desinterdicao.php" method="post">
             <input type="hidden" name="id_ocorrencia" value="<?php echo $linha['id_ocorrencia']; ?>">
             <input type="hidden" name="id_interdicao" value="<?php echo $linha['id_interdicao']; ?>">
             <div class="div-btn-desinterdicao">
+            <?php echo '<a class="printHide href="index.php?pagina=exibirOcorrencia&id='. $linha['id_ocorrencia'] . '"><input class="btn btn-default btn-md printHide" value="Voltar"></a>'?>
+            <?php echo '<a class="printHide" href= "index.php?pagina=editarInterdicao&id='. $linha['id_interdicao'] . '"><input class=" btn btn-default printHide" value="Editar Interdição"></a>'?>
                 <input type="submit" class="btn btn-default btn-md btn-desinterdicao printHide" value="Constatar Desinterdição">
             </div>
         </form>
@@ -131,11 +128,7 @@
     <div class="btn_interdicao" style="padding-left: 30px;">
     <?php if($linha['interdicao_ativa'] == false){ ?>
      <?php echo '<a class="printHide href="index.php?pagina=exibirOcorrencia&id='. $linha['id_ocorrencia'] . '"><input class="btn btn-default btn-md printHide" value="Voltar"></a>'?>
-
-     <form action="index.php/pagina=editarInterdicao.php" method="GET">
-        <input type="hidden" name="id" value="<?php echo $linha['id_interdicao'];?>">
-        <input type="submit" class="btn btn-default" value="Editar Interdição">
-    </form>
+     <?php echo '<a class="printHide href= "index.php?pagina=editarInterdicao&id='. $linha['id_interdicao'] . '"><input class=" btn btn-default printHide" value="Editar Interdição"></a>'?>
         <input class="btn btn-default" value="Interditar">
         <?php };?>
     </div>

@@ -181,4 +181,27 @@ class UsuarioDaoPgsql implements UsuarioDAO {
         return true;
     }
 
+    public function buscarPeloNome($n){
+        $sql = $this->pdo->prepare("SELECT * FROM usuario WHERE nome = :agente_principal");
+        $sql->bindValue(":agente_principal", $n);
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            $linha = $sql->fetch(PDO::FETCH_ASSOC);
+
+            $u = new Usuario();
+            $u->setNome($linha['nome']);
+            $u->setCPF($linha['cpf']);
+            $u->setEmail($linha['email']);
+            $u->setTelefone($linha['telefone']);
+            $u->setAcesso($linha['nivel_acesso']);
+            $u->setFoto($linha['foto']);
+            $u->setSenha($linha['senha']);
+            $u->setId($linha['id_usuario']);
+            return $u;
+        }else{
+            return false;
+        }
+    }
+
 }

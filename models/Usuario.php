@@ -86,6 +86,7 @@ interface UsuarioDAO{
     public function consultaUsuarioNumeroPaginas($p);
     public function findById($id);
     public function findByEmail($email);
+    public function buscarPeloNome($n);
     public function updateEmail($email, $id);
     public function updateComFoto(Usuario $u);
     public function updateSemFoto(Usuario $u);

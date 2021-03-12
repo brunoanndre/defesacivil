@@ -10,7 +10,8 @@
     $celular = addslashes($_GET['celular_pessoa']);
     $telefone = addslashes($_GET['telefone_pessoa']);
     $email = addslashes($_GET['email_pessoa']);
-
+    var_dump($nome);
+    die;
     if($nome != null){
         $response = 'Pessoa cadastrado com sucesso';
         if(strlen($erros) == 0){

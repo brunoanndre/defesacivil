@@ -63,5 +63,6 @@ class Pessoa{
 interface PessoaDAO{
     public function adicionar(Pessoa $p);
     public function buscarPeloID($i);
+    public function buscarPeloNome($n);
     public function adicionarLogPessoa($ip,$iu,$d);
 }

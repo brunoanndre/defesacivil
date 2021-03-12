@@ -37,6 +37,7 @@ if(isset($_SESSION['nivel_acesso'])){
             case 'monitorarChamado' : include 'view/monitorarChamado.php'; break;
             case 'alterarSenha' : include 'view/alterarSenha.php'; break;
             case 'EditarPerfil' : include 'view/EditarPerfil.php'; break;
+            case 'editarInterdicao' : include 'view/editarInterdicao.php'; break;
             default: include 'view/consultarOcorrencia.php'; break;
         }
     }else if($_SESSION['nivel_acesso'] == 2){
@@ -56,6 +57,7 @@ if(isset($_SESSION['nivel_acesso'])){
             case 'monitorarChamado' : include 'view/monitorarChamado.php'; break;
             case 'alterarSenha' : include 'view/alterarSenha.php'; break;
             case 'EditarPerfil' : include 'view/EditarPerfil.php'; break;
+            case 'editarInterdicao' : include 'view/editarInterdicao.php'; break;
             default: include 'view/consultarOcorrencia.php'; break;
         }
     }else if($_SESSION['nivel_acesso'] == 3){
