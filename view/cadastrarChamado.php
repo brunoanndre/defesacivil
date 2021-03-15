@@ -1,17 +1,18 @@
 <?php
     include 'database.php';
 
+    require_once 'dao/UsuarioDaoPgsql.php';
+    require_once 'dao/ChamadoDaoPgsql.php';
+
+    $usuariodao = new UsuarioDaoPgsql($pdo);
+    $chamadodao = new ChamadoDaoPgsql($pdo);
+
     session_start();
     $id = $_SESSION['id_usuario'];
             
-    $consulta_login = $pdo->prepare("SELECT nome FROM usuario WHERE id_usuario = :id");
-    $consulta_login->bindValue(":id", $id);
-    $consulta_login->execute();
+    $usuario_principal = $usuariodao->findById($id);
 
-    $usuario_principal = $consulta_login->fetch();
-
-    $consulta_usuarios = $pdo->prepare("SELECT id_usuario, nome FROM usuario");
-    $consulta_usuarios->execute();
+    $consulta_usuarios = $usuariodao->buscarUsuariosAtivos();
 ?>
 
 <div class="container positioning">
@@ -42,7 +43,7 @@
             <h3 class="text-center">Registro de chamado</h3>
         <hr>
             <div>
-                <span style="font-weight: bold;">Agente Principal: </span><?php echo $usuario_principal['nome']; ?>
+                <span style="font-weight: bold;">Agente Principal: </span><?php echo $usuario_principal->getNome(); ?>
                 <br>
             </div>
             <div>
@@ -78,12 +79,12 @@
                 <select id="distribuicao" name="distribuicao" class="form-control" style="width: 50%" required>
                     <?php
                         session_start();
-                        $linha = $consulta_usuarios->fetchAll();
-                        if($consulta_usuarios->rowCount() == 0)
+                        if($consulta_usuarios == false){
                             echo '<tr><td colspan="5" class="text-center">Nenhum usuário encontrado</td></tr>';
-                        foreach($linha as $item){
-                            if(strcmp($item['id_usuario'],$_SESSION['id_usuario']) != 0){
-                                echo '<option value='.$item['id_usuario'].'>'.$item['nome'].'</option>'; 
+                        }
+                        foreach($consulta_usuarios as $item){
+                            if(strcmp($item->getId(),$_SESSION['id_usuario']) != 0){
+                                echo '<option value='.$item->getId().'>'.$item->getNome().'</option>'; 
                             }
                         }
                     ?>

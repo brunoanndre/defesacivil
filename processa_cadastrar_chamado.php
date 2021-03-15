@@ -1,6 +1,11 @@
 <?php
 //inclui a conexao com o banco de dados
 include 'database.php';
+require_once 'dao/ChamadoDaoPgsql.php';
+require_once 'dao/EnderecoDaoPgsql.php';
+
+$enderecodao = new EnderecoDaoPgsql($pdo);
+$chamadodao = new ChamadoDaoPgsql($pdo);
 
 //recebe dados do $_POST
 $origem = addslashes($_POST['origem_chamado']);
@@ -24,42 +29,37 @@ session_start();
 $id_usuario = $_SESSION['id_usuario'];
 $dataAtual = date('Y-m-d H:i:s');
 
-$logradouro_id = 'null';
 if($endereco_principal == "Logradouro"){
 	$cep = str_replace("-","",$cep);
-	$sql = $pdo->prepare("SELECT * FROM endereco_logradouro WHERE logradouro = :logradouro AND numero = :numero");
-	$sql->bindValue(":logradouro", $logradouro);
-	$sql->bindValue(":numero", $numero);
-	$sql->execute();
-	 
-	if($sql->rowCount() == 0){
-		$sql = $pdo->prepare("INSERT INTO endereco_logradouro (cep,cidade,bairro,logradouro,numero,referencia) 
-		VALUES (:cep, :cidade, :bairro, :logradouro, :numero, :referencia) RETURNING id_logradouro");
-		$sql->bindValue(":cep", $cep);
-		$sql->bindValue(":cidade", $cidade);
-		$sql->bindValue(":bairro",$bairro);
-		$sql->bindValue(":logradouro",$logradouro);
-		$sql->bindValue(":numero",$numero);
-		$sql->bindValue(":referencia",$referencia);
-		$sql->execute();
-		if(!$sql)
+	$linhaendereco = $enderecodao->buscarEndereco($logradouro,$numero);	
+
+	if($linhaendereco == false){
+		$e = new Endereco();
+		$e->setCep($cep);
+		$e->setCidade($cidade);
+		$e->setBairro($bairro);
+		$e->setLogradouro($logradouro);
+		$e->setNumero($numero);
+		$e->setReferencia($referencia);
+
+		$logradouro_id = $enderecodao->adicionar($e);
+
+		if($logradouro_id == false){
 			$erros = $erros.'&logradouro';
+		}
+
+	}else{
+		$logradouro_id = $linhaendereco['id_logradouro'];
 	}
-	$linha = $sql->fetch();
-	$logradouro_id = $linha['id_logradouro'];
 
-	$sql = $pdo->prepare("INSERT INTO log_endereco (id_logradouro, id_usuario, data_hora)
-							VALUES (:logradouro_id, :id_usuario, :dataAtual)");
-	$sql->bindValue(":logradouro_id", $logradouro_id);
-	$sql->bindValue(":id_usuario", $id_usuario);
-	$sql->bindValue(":dataAtual", $dataAtual);
-	$sql->execute();
 
-	$longitude = 'null';
-	$latitude = 'null';
+	$enderecodao->adicionarLog($logradouro_id,$id_usuario,$dataAtual);
+
+	$longitude = null;
+	$latitude = null;
 }
 
-$pessoa_atendida = 'null';
+$pessoa_atendida = null;
 /*if(strlen($nome) > 0){ //se a pessoa foi informada, busca a mesma no BD 
 	$result = pg_query($connection, "SELECT * FROM pessoa WHERE nome = '$nome'");
 	if($result){
@@ -85,7 +85,7 @@ if(strlen($distribuicao) == 0 || $distribuicao == null){ //se o agente foi infor
 //	}else //retorna erro caso nao consiga acessar o banco de dados
 //		$erros = $erros.'&distribuicao';
 //}else //agente nao foi informado
-	$distribuicao = 'null';
+	$distribuicao = null;
 }
 
 $timestamp = $dataAtual;
@@ -95,26 +95,26 @@ if(strlen($erros) > 0){
     header('location:index.php?pagina=cadastrarChamado&erroDB'.$erros);
 //caso esteja tudo certo, procede com a inserção no banco de dados
 }else{
-	//insere a ocorrencia no banco de dados
-	$sql = $pdo->prepare("INSERT INTO chamado (data_hora,origem,pessoa_id,chamado_logradouro_id,
-	descricao,endereco_principal,latitude,longitude, agente_id, prioridade, distribuicao, nome_pessoa)
-	VALUES ('$timestamp','$origem',$pessoa_atendida,$logradouro_id,'$descricao',
-	'$endereco_principal',$latitude,$longitude, $id_usuario, '$prioridade', '$distribuicao', '$nome') 
-	RETURNING id_chamado");
-	$sql->execute();
-	
-	if($sql){
-		$linha = $sql->fetch();
-		$id_chamado = $linha['id_chamado'];
-		
-		$sql = $pdo->prepare("INSERT INTO log_chamado (id_usuario, id_chamado, data_hora, acao)
-		VALUES (:id_usuario,:id_chamado,:dataAtual,'cadastrar')");
-		$sql->bindValue(":id_usuario", $id_usuario);
-		$sql->bindValue(":id_chamado", $id_chamado);
-		$sql->bindValue(":dataAtual", $dataAtual);
-		$sql->execute();
+	//insere o chamado no banco de dados
+	$c = new Chamado();
+	$c->setData($timestamp);
+	$c->setOrigem($origem);
+	$c->setPessoaId($pessoa_atendida);
+	$c->setLogradouroId($logradouro_id);
+	$c->setDescricao($descricao);
+	$c->setEnderecoPrincipal($endereco_principal);
+	$c->setLatitude($latitude);
+	$c->setLongitude($longitude);
+	$c->setAgenteId($id_usuario);
+	$c->setPrioridade($prioridade);
+	$c->setDistribuicao($distribuicao);
+	$c->setNomePessoa($nome);
 
-		
+	
+	if($id_chamado = $chamadodao->adicionar($c) !== false){
+
+		$chamadodao->adicionarLog($id_usuario,$id_chamado,$dataAtual);
+
 		header('location:index.php?pagina=cadastrarChamado&sucesso');
 	}else
 		//echo pg_last_error();

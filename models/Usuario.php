@@ -84,6 +84,7 @@ interface UsuarioDAO{
     public function alterarUsuarioExcluido($im,$ia,$d);
     public function alterarSenha($h,$i);
     public function consultaUsuarioNumeroPaginas($p);
+    public function buscarUsuariosAtivos();
     public function findById($id);
     public function findByEmail($email);
     public function buscarPeloNome($n);

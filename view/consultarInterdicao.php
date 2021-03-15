@@ -9,7 +9,7 @@ $linha = $interdicaodao->buscarTodas();
 
 ?>
 <div class="box">
- <table id="myTable" class="display" >
+ <table id="myTable" class="display" style="width: 100%;" >
     <thead>
         <tr>
         <th></th>
@@ -20,7 +20,7 @@ $linha = $interdicaodao->buscarTodas();
         </tr>
     </thead>
     <tbody>
-    <?php //TERMINAR DE ARRUMAR A CONSULTA DE INTERDIÇÕES
+    <?php 
         foreach($linha as $item){
             echo '<tr>';
             echo '<td class="text-center"><a href="index.php?pagina=exibirInterdicao&id=' . $item->getId() .'"><span class="glyphicon glyphicon-eye-open"></span></a></td>';
@@ -36,15 +36,15 @@ $linha = $interdicaodao->buscarTodas();
 </table>
 </div>
 <script>
-$(document).ready( function () {
-    $('#myTable').DataTable()({
+$(document).ready(function() {
+    $('#myTable').DataTable( {
         "language": {
-            "lengthMenu": "Display _MENU_ Interdições por página",
+            "lengthMenu": "Exibir _MENU_ Registros por página",
             "zeroRecords": "Nenhuma interdição encontrada",
-            "info": "Mostrando página _PAGE_ of _PAGES_",
-            "infoEmpty": "Nenhuma interdição ativa",
-            "infoFiltered": "(filtered from _MAX_ interdições totais)"
+            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "infoEmpty": "Nenhuma interdição registrada",
+            "infoFiltered": "(filtered from _MAX_ total records)"
         }
-    });
+    } );
 } );
 </script>

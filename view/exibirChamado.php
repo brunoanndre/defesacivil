@@ -1,24 +1,25 @@
     <?php
     include 'database.php';
+    require_once 'dao/ChamadoDaoPgsql.php';
+    require_once 'dao/EnderecoDaoPgsql.php';
+    require_once 'dao/UsuarioDaoPgsql.php';
 
+    $usuariodao = new UsuarioDaoPgsql($pdo);
+    $enderecodao = new EnderecoDaoPgsql($pdo);
+    $chamadodao = new ChamadoDaoPgsql($pdo);
+    
     session_start();
 
     $id_chamado = $_GET['id'];
 
-    $sql = $pdo->prepare("SELECT * FROM chamado WHERE id_chamado = :id_chamado");
-    $sql->bindValue(":id_chamado", $id_chamado);
-    $sql->execute();
 
-    $linhaChamado = $sql->fetch();
+    $linhaChamado = $chamadodao->buscarPeloId($id_chamado);
+ 
 
-    if($linhaChamado['endereco_principal'] == "Logradouro"){
-        $id_logradouro = $linhaChamado['chamado_logradouro_id'];
-        $sql = $pdo->prepare("SELECT * FROM endereco_logradouro WHERE id_logradouro = :id_logradouro");
-        $sql->bindValue(":id_logradouro", $id_logradouro);
-        $sql->execute();
+    if($linhaChamado->getEnderecoPrincipal() == "Logradouro"){
+        $id_logradouro = $linhaChamado->getLogradouroId();
 
-        $linhaLogradouro = $sql->fetch();
-
+        $linhaLogradouro = $enderecodao->buscarPeloId($id_logradouro);
     }
 
     //$id_pessoa = $linhaChamado['pessoa_id'];
@@ -28,15 +29,14 @@
     //    $linhaPessoa = pg_fetch_array($result, 0);
     //}
 
-    $id_agente = $linhaChamado['agente_id'];
+    $id_agente = $linhaChamado->getAgenteId();
     if($id_agente != ""){
-        $sql = $pdo->prepare("SELECT nome FROM usuario WHERE id_usuario = :id_agente");
-        $sql->bindValue(":id_agente", $id_agente);
-        $sql->execute();
-        $linhaAgente = $sql->fetch();
+        $linhaAgente = $usuariodao->findById($id_agente);
     }
 
-    $id_distribuicao = $linhaChamado['distribuicao'];
+    $id_distribuicao = $linhaChamado->getDistribuicao();
+    var_dump($id_distribuicao);
+    die;
     if($id_distribuicao != ""){
         $sql = $pdo->prepare("SELECT nome FROM usuario WHERE id_usuario = :id_distribuicao");
         $sql->bindValue(":id_distribuicao", $id_distribuicao);

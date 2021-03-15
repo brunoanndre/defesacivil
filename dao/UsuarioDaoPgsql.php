@@ -204,4 +204,24 @@ class UsuarioDaoPgsql implements UsuarioDAO {
         }
     }
 
+    public function buscarUsuariosAtivos(){
+        $sql = $this->pdo->prepare("SELECT * FROM usuario u INNER JOIN dados_login dl ON u.id_usuario = dl.id_usuario WHERE dl.ativo = true");
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            $lista = $sql->fetchAll(PDO::FETCH_ASSOC);
+          
+            foreach($lista as $item){
+                $u = new Usuario;
+                $u->setId($item['id_usuario']);
+                $u->setNome($item['nome']);
+
+                $array[] = $u;
+            }
+            return $array;
+        }else{
+            return false;
+        }
+    }
+
 }
