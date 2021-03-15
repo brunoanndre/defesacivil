@@ -74,11 +74,13 @@ class IntedicaoDaoPgsql implements InterdicaoDAO{
                 $i->setDescricao($item['descricao_interdicao']);
                 $i->setBensAfetados($item['bens_afetados']);
                 
-                return $i;
+                $array[] = $i;
             }
         }else{
             return false;
+            die;
         }
+        return $array;
     }
 
     public function adicionarLog($d, $iu,$a, $i){
