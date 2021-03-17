@@ -10,8 +10,7 @@
     $celular = addslashes($_GET['celular_pessoa']);
     $telefone = addslashes($_GET['telefone_pessoa']);
     $email = addslashes($_GET['email_pessoa']);
-    var_dump($nome);
-    die;
+
     if($nome != null){
         $response = 'Pessoa cadastrado com sucesso';
         if(strlen($erros) == 0){
@@ -24,12 +23,12 @@
             $novapessoa->setEmail($email);
 
             $id_pessoa = $pessoadao->adicionar($novapessoa);
+
             if($id_pessoa == null){
                 $response = 'Ocorreu um erro com o banco de dados';//'Erro ao cadastrar pessoa';
             }else{
                 session_start();
                 $id_usuario = $_SESSION['id_usuario'];
-                $id_pessoa = pg_fetch_array($result, 0)['id_pessoa'];
                 $data = date('Y-m-d H:i:s');
 
                 $pessoadao->adicionarLogPessoa($id_pessoa,$id_usuario,$data);

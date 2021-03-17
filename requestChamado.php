@@ -1,7 +1,10 @@
 <?php
     include 'database.php';
+    include 'dao/UsuarioDaoPgsql.php';
 
-    $consultaChamado = $pdo->prepare("SELECT * FROM chamado WHERE usado = false ORDER BY chamado.data_hora DESC LIMIT 5");
+    $usuariodao = New UsuarioDaoPgsql($pdo);
+
+    $consultaChamado = $pdo->prepare("SELECT * FROM chamado WHERE usado = false ORDER BY id_chamado DESC");
     $consultaChamado->execute();
 
 
@@ -34,6 +37,8 @@
         $sql->execute();
         $linhaAgente = $sql->fetch();
 
+        $distribuicao = $usuariodao->findById($linhaChamado['distribuicao']);
+        
         $color = '#88ff50';
         if($linhaChamado['prioridade'] == "Alta"){
             $color = '#ff5050';
@@ -46,7 +51,7 @@
         $response = $response.'<td>'.$linhaChamado['origem'].'</td>';
         $response = $response.'<td>'.$nomePessoa.'</td>';
         $response = $response.'<td>'.$linhaAgente['nome'].'</td>';
-        $response = $response.'<td>'.$linhaChamado['distribuicao'].'</td>';
+        $response = $response.'<td>'.$distribuicao->getNome().'</td>';
         $response = $response.'<td>'.$linhaLogradouro['logradouro'].'</td>';
         $response = $response.'<td>'.$linhaChamado['descricao'].'</td></tr>';
     

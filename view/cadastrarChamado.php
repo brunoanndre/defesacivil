@@ -20,7 +20,7 @@
     <form method="post" action="processa_cadastrar_chamado.php" onsubmit="return validarFormCadastroChamado()">
         <?php if(isset($_GET['sucesso'])){ ?>
             <div class="alert alert-success" role="alert">
-                Chamado cadastrada com sucesso.
+                Chamado cadastrado com sucesso.
             </div>
             <?php } ?>
             <?php if(isset($_GET['erroDB'])){ ?>
@@ -61,13 +61,14 @@
             <div class="row">
                 <div class="col-sm-12">
                     Solicitante:
-                    <input type="text" id="pessoa_nome" name="nome_chamado" class="form-control inline"><!-- onkeyup="showResult(this.value,this.id)">
+                    <input id="pessoa_nome" name="nome_chamado" autocomplete="off" type="text" class="form-control inline" style="width:93%;" onkeyup="showResult(this.value,this.id)">
+                    <button type="button" class="btn-default btn-small inline open-AddBookDialog" data-toggle="modal" data-id="pessoa_nome"><span class="glyphicon glyphicon-plus"></span></button>
                     <div class="autocomplete" id="livesearchpessoa_nome"></div>
                     <div id="resultpessoa_nome"></div>
 
-                    <?php //if(isset($_GET['nome'])){ ?>
+                    <?php if(isset($_GET['nome'])){ ?>
                         <span class="alertErro">Pessoa não encontrada, por favor faça um novo cadastro.</span>
-                    <?php //} ?> -->
+                    <?php } ?>
                 </div>
                 <!--<div class="col-sm-2">
                     <br>

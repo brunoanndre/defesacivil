@@ -50,12 +50,12 @@ class UsuarioDaoPgsql implements UsuarioDAO {
         $sql->execute();
     }
 
-    public function findAll($p,$i,$o){
+    public function findAll(){
         $array = [];
 
         $sql = $this->pdo->query("SELECT dl.id_usuario,dl.email,u.nome,u.telefone FROM dados_login dl
-        INNER JOIN usuario U ON dl.id_usuario = u.id_usuario WHERE nome ILIKE '%$p%' AND ativo = true
-        ORDER BY nome LIMIT $i OFFSET $o");
+        INNER JOIN usuario U ON dl.id_usuario = u.id_usuario WHERE ativo = true
+        ORDER BY id_usuario");
         if($sql->rowCount() > 0){
             $lista = $sql->fetchAll(PDO::FETCH_ASSOC);
 
@@ -68,11 +68,11 @@ class UsuarioDaoPgsql implements UsuarioDAO {
 
                 $array[] = $u;
             }
+            return $array;
         }else{
             return false;
             die;
         }
-        return $array;
     }
 
     public function findById($id){
@@ -182,8 +182,8 @@ class UsuarioDaoPgsql implements UsuarioDAO {
     }
 
     public function buscarPeloNome($n){
-        $sql = $this->pdo->prepare("SELECT * FROM usuario WHERE nome = :agente_principal");
-        $sql->bindValue(":agente_principal", $n);
+        $sql = $this->pdo->prepare("SELECT * FROM usuario WHERE nome = :nome");
+        $sql->bindValue(":nome", $n);
         $sql->execute();
 
         if($sql->rowCount() > 0){

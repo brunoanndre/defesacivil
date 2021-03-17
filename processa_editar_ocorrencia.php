@@ -4,7 +4,9 @@ include 'database.php';
 require_once 'dao/OcorrenciaDaoPgsql.php';
 require_once 'dao/UsuarioDaoPgsql.php';
 require_once 'dao/PessoaDaoPgsql.php';
+require_once 'dao/EnderecoDaoPgsql.php';
 
+$enderecodao = new EnderecoDaoPgsql($pdo);
 $ocorrenciadao = new OcorrenciaDaoPgsql($pdo);
 $usuariodao = new UsuarioDaoPgsql($pdo);
 $pessoadao = new PessoaDaoPgsql($pdo);
@@ -124,8 +126,8 @@ $logradouro_id = null;
 
 if($endereco_principal == "Logradouro"){
 //VERIFICA SE TEM O ENDEREÇO NO BD, SE NÃO TIVE INSERE
-	if($ocorrenciadao->buscaEnderecoPeloId($id_logradouro) == false){
-		$novoendereco = new Ocorrencia();
+	if($enderecodao->buscarPeloId($id_logradouro) == false){
+		$novoendereco = new Endereco();
 		$novoendereco->setCep($cep);
 		$novoendereco->setCidade($cidade);
 		$novoendereco->setBairro($bairro);
@@ -133,17 +135,17 @@ if($endereco_principal == "Logradouro"){
 		$novoendereco->setNumero($numero);
 		$novoendereco->setReferencia($referencia);
 
-		$ocorrenciadao->adicionarEndereco($novoendereco);
+		$enderecodao->adicionar($novoendereco);
 		
-		if($ocorrenciadao->adicionarEndereco($novoendereco) == true){
-			$linha = $ocorrenciadao->buscaEndereco($logradouro,$numero);
+		if($enderecodao->adicionar($novoendereco) == true){
+			$linha = $enderecodao->buscarEndereco($logradouro,$numero);
 		}else{
 			$erros = $erros.'&logradouro';
 		}
 	}
-	$endereco = $ocorrenciadao->buscaEnderecoPeloId($id_logradouro);
+	$endereco = $enderecodao->buscarPeloId($id_logradouro);
 
-	$logradouro_id = $endereco->getLogradouroid();
+	$logradouro_id = $endereco->getId();
 	$longitude = null;
 	$latitude = null;
 }

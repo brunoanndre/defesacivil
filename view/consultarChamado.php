@@ -7,7 +7,6 @@
     $chamadodao = new ChamadoDaoPgsql($pdo);
 
     $pesquisa_chamado = addslashes($_POST['pesquisa_chamado']);
-    $pesquisa_filtro = $_POST['filtro'];
 
     if(isset($_POST['pesquisa_chamado']) && $pesquisa_chamado != null){
         $parametro = 'normal';
@@ -51,16 +50,16 @@
         </form>
     </div>
     <div class="box">
-        <table id="myTable" style="width:100%">
+        <table id="myTable" class="row-border" style="width:100%">
             <thead><tr>
                 <th><!--<span class="glyphicon glyphicon-fullscreen"></span>--></th>
-                <th>ID<span class="glyphicon glyphicon-sort sort-icon"></span></th>
-                <th>Data<span class="glyphicon glyphicon-sort sort-icon"></span></th>
-                <th>Origem<span class="glyphicon glyphicon-sort sort-icon"></span></th>
-                <th>Agente<span class="glyphicon glyphicon-sort sort-icon"></span></th>
-                <th>Distribuição<span class="glyphicon glyphicon-sort sort-icon"></span></th>
-                <th>Solicitante<span class="glyphicon glyphicon-sort sort-icon"></span></th>
-                <th class="elimina-tabela">Descrição<span class="glyphicon glyphicon-sort sort-icon elimina-tabela"></span></th>
+                <th>ID</th>
+                <th>Data</th>
+                <th>Origem</th>
+                <th>Agente</th>
+                <th>Distribuição</th>
+                <th>Solicitante</th>
+                <th>Descrição</th>
             </tr></thead>
             <tbody>
             <?php

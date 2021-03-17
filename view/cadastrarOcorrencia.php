@@ -190,7 +190,10 @@
             <div class="row">
                 <div class="col-sm-12">
                     <span>Solicitante 1:</span>
-                    <input name="pessoa_atendida_1" id="pessoa_atendida_1" type="text" class="form-control" value="<?php echo $_POST['pessoa_atendida_1']; ?>">
+                    <input id="pessoa_atendida_1" name="pessoa_atendida_1" autocomplete="off" type="text" class="form-control inline" style="width:93%;" value="<?php echo $_POST['pessoa1']; echo $pessoa_atendida_1; ?>" onkeyup="showResult(this.value,this.id)">
+                    <button type="button" class="btn-default btn-small inline" data-toggle="modal" data-target="#pessoasModal"><span class="glyphicon glyphicon-plus"></span></button>
+                    <div class="autocomplete" id="livesearchpessoa_atendida_1"></div>
+                    <div id="resultpessoa_atendida_1"></div>
                     <!-- onkeyup="showResult(this.value,this.id)">
                     <div class="autocomplete" id="livesearchpessoa_atendida_1"></div>
                     <div id="resultpessoa_atendida_1"></div>
@@ -206,7 +209,10 @@
             <div class="row">
                 <div class="col-sm-12">
                     <span>Solicitante 2:</span>
-                    <input name="pessoa_atendida_2" id="pessoa_atendida_2" type="text" class="form-control inline" value="<?php echo $_POST['pessoa_atendida_2']; ?>">
+                    <input id="pessoa_atendida_2" name="pessoa_atendida_2" autocomplete="off" type="text" class="form-control inline" style="width:93%;" value="<?php echo $_POST['pessoa1']; echo $pessoa_atendida_1; ?>" onkeyup="showResult(this.value,this.id)">
+                    <button type="button" class="btn-default btn-small inline" data-toggle="modal" data-target="#pessoasModal"><span class="glyphicon glyphicon-plus"></span></button>
+                    <div class="autocomplete" id="livesearchpessoa_atendida_2"></div>
+                    <div id="resultpessoa_atendida_2"></div>
                     <!-- onkeyup="showResult(this.value,this.id)">
                     <div class="autocomplete" id="livesearchpessoa_atendida_2"></div>
                     <div id="resultpessoa_atendida_2"></div>

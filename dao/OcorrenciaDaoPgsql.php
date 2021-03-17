@@ -238,102 +238,6 @@
 
         }
 
-        public function buscaEndereco($l, $n){
-            $sql = $this->pdo->prepare("SELECT * FROM endereco_logradouro WHERE logradouro = :logradouro AND numero = :numero");
-            $sql->bindValue(":logradouro", $l);
-            $sql->bindValue(":numero", $n);
-            $sql->execute();
-
-            if($sql->rowCount() > 0){
-                $linha = $sql->fetch(PDO::FETCH_ASSOC);
-                return $linha['id_logradouro'];
-            }else{
-                return false;
-            }
-        }
-
-        public function buscaEnderecoPeloId($id){
-            $sql = $this->pdo->prepare("SELECT * FROM endereco_logradouro WHERE id_logradouro = :id_logradouro");
-            $sql->bindValue(":id_logradouro", $id);
-            $sql->execute();
-
-            if($sql->rowCount() > 0 ){
-                $linha = $sql->fetch(PDO::FETCH_ASSOC);
-
-                $o = New Ocorrencia();
-                $o->setLogradouroId($linha['id_logradouro']);
-                $o->setCep($linha['cep']);
-                $o->setCidade($linha['cidade']);
-                $o->setBairro($linha['bairro']);
-                $o->setLogradouro($linha['logradouro']);
-                $o->setNumero($linha['numero']);
-                $o->setReferencia($linha['referencia']);
-
-                return $o;
-                
-            }else{
-                return false;
-            }
-        }
-
-        public function adicionarEndereco(Ocorrencia $o){
-            $sql = $this->pdo->prepare("INSERT INTO endereco_logradouro (cep,cidade,bairro,logradouro,numero,referencia)
-            VALUES (:cep, :cidade, :bairro, :logradouro, :numero, :referencia)");
-            $sql->bindValue(":cep", $o->getCep());
-            $sql->bindValue(":cidade", $o->getCidade());
-            $sql->bindValue(":bairro", $o->getBairro());
-            $sql->bindValue(":logradouro", $o->getLogradouro());
-            $sql->bindValue(":numero", $o->getNumero());
-            $sql->bindValue(":referencia", $o->getReferencia());
-            $sql->execute();
-
-            if($sql->rowCount() > 0 ){
-            return true;
-            }else{
-                return false;
-            }
-        }
-
-        public function adicionarLogEndereco($l, $i, $d){
-            $sql = $this->pdo->prepare("INSERT INTO log_endereco (id_logradouro, id_usuario, data_hora) VALUES (:logradouro_id,:id_criador,:dataAtual)");
-            $sql->bindValue(":logradouro_id", $l);
-            $sql->bindValue(":id_criador", $i);
-            $sql->bindValue(":dataAtual", $d);
-            $sql->execute();
-
-            return true;
-        }
-
-        public function buscaAgente($a){
-        $sql = $this->pdo->prepare('SELECT * FROM usuario WHERE nome = :agente');
-        $sql->bindValue(":agente", $a);
-        $sql->execute();
-
-        $linha = $sql->fetch(PDO::FETCH_ASSOC);
-        if($sql->rowCount() > 0){
-            return $linha['id_usuario'];
-        }else{
-            return false;
-        }
-        }
-
-        public function buscaPessoa($p){
-            $sql = $this->pdo->prepare("SELECT * FROM pessoa WHERE nome = :pessoa");
-            $sql->bindValue(":pessoa", $p);
-            $sql->execute();
-
-            $linha = $sql->fetch();
-            if($sql->rowCount() == 0){
-                return false;
-            }else{
-                return $linha['id_pessoa'];
-            }
-        }
-
-        public function buscaPessoaPeloId($i){
-
-        }
-
         public function encerraChamadoAtivo($id){
             $sql = $this->pdo->prepare("UPDATE chamado SET usado = TRUE WHERE id_chamado = :chamado_id");
             $sql->bindValue(":chamado_id", $id);
@@ -381,5 +285,155 @@
             $sql->execute();
 
             return $sql->fetch()['fotos'];
+        }
+
+        public function buscarConsulta($parametro){
+            if($parametro == 'normal'){
+                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, 
+                TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY') as data_ocorrencia,
+                usuario.nome, cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao 
+                FROM ocorrencia 
+                INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario
+                INNER JOIN cobrade ON ocorrencia.ocorr_cobrade = cobrade.codigo ORDER BY data_ocorrencia DESC");
+                $sql->execute();
+
+                if($sql->rowCount() > 0){
+                    $lista = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach($lista as $item){
+                        $o = new Ocorrencia;
+                        $o->setId($item['id_ocorrencia']);
+                        $o->setPrioridade($item['ocorr_prioridade']);
+                        $o->setData($item['data_ocorrencia']);
+                        $o->setNomeAgentePrincipal($item['nome']);
+                        $o->setCobrade($item['subgrupo']);
+                        $o->setPessoa1($item['nome_pessoa1']);
+                        $o->setDescricao($item['ocorr_descricao']);
+
+                        $array[] = $o;
+                    }
+                    return $array;
+                }else{
+                    return false;
+                }
+            }
+
+            if($parametro == 'encerrada_false'){
+                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, 
+                TO_CHAR(ocorrencia.data_ocorrencia, 'YYYY/MM/DD') as data_ocorrencia,
+                usuario.nome, cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao
+                FROM ocorrencia 
+                INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario
+                INNER JOIN cobrade ON ocorrencia.ocorr_cobrade = cobrade.codigo  WHERE ocorrencia.ocorr_encerrado = FALSE ORDER BY id_ocorrencia DESC");
+                $sql->execute();
+
+                if($sql->rowCount() > 0){
+                    $lista = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach($lista as $item){
+                        $o = new Ocorrencia;
+                        $o->setId($item['id_ocorrencia']);
+                        $o->setPrioridade($item['ocorr_prioridade']);
+                        $o->setData($item['data_ocorrencia']);
+                        $o->setNomeAgentePrincipal($item['nome']);
+                        $o->setCobrade($item['subgrupo']);
+                        $o->setPessoa1($item['nome_pessoa1']);
+                        $o->setDescricao($item['ocorr_descricao']);
+
+                        $array[] = $o;
+                    }
+                    return $array;
+                }else{
+                    return false;
+                }
+            }
+            if($parametro == 'ativo_true'){
+                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'YYYY/MM/DD') as data_ocorrencia,
+                usuario.nome,cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao
+                FROM ocorrencia 
+                INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario 
+                INNER JOIN cobrade ON ocorrencia.ocorr_cobrade = cobrade.codigo 
+                WHERE ocorrencia.ativo = TRUE ORDER BY id_ocorrencia DESC");
+                $sql->execute();
+
+                if($sql->rowCount() > 0){
+                    $lista = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach($lista as $item){
+                        $o = new Ocorrencia;
+                        $o->setId($item['id_ocorrencia']);
+                        $o->setPrioridade($item['ocorr_prioridade']);
+                        $o->setData($item['data_ocorrencia']);
+                        $o->setNomeAgentePrincipal($item['nome']);
+                        $o->setCobrade($item['subgrupo']);
+                        $o->setPessoa1($item['nome_pessoa1']);
+                        $o->setDescricao($item['ocorr_descricao']);
+
+                        $array[] = $o;
+                    }
+                    return $array;
+                }else{
+                    return false;
+                }
+            }
+
+            if($parametro == 'ativo_encerrada_false'){
+                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'YYYY/MM/DD') as data_ocorrencia,
+                usuario.nome,cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao
+                FROM ocorrencia 
+                INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario 
+                INNER JOIN cobrade ON ocorrencia.ocorr_cobrade = cobrade.codigo 
+                WHERE ocorrencia.ativo = TRUE AND ocorrencia.ocorr_encerrado = FALSE ORDER BY id_ocorrencia DESC");
+                $sql->execute();
+
+                if($sql->rowCount() > 0){
+                    $lista = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach($lista as $item){
+                        $o = new Ocorrencia;
+                        $o->setId($item['id_ocorrencia']);
+                        $o->setPrioridade($item['ocorr_prioridade']);
+                        $o->setData($item['data_ocorrencia']);
+                        $o->setNomeAgentePrincipal($item['nome']);
+                        $o->setCobrade($item['subgrupo']);
+                        $o->setPessoa1($item['nome_pessoa1']);
+                        $o->setDescricao($item['ocorr_descricao']);
+
+                        $array[] = $o;
+                    }
+                    return $array;
+                }else{
+                    return false;
+                }
+            }
+            if($parametro == 'ativo_encerrada_true'){
+                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'YYYY/MM/DD') as data_ocorrencia,
+                usuario.nome,cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao
+                FROM ocorrencia 
+                INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario 
+                INNER JOIN cobrade ON ocorrencia.ocorr_cobrade = cobrade.codigo 
+                WHERE ocorrencia.ativo = true AND ocorrencia.ocorr_encerrado = true ORDER BY id_ocorrencia DESC");
+                $sql->execute();
+
+                if($sql->rowCount() > 0){
+                    $lista = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach($lista as $item){
+                        $o = new Ocorrencia;
+                        $o->setId($item['id_ocorrencia']);
+                        $o->setPrioridade($item['ocorr_prioridade']);
+                        $o->setData($item['data_ocorrencia']);
+                        $o->setNomeAgentePrincipal($item['nome']);
+                        $o->setCobrade($item['subgrupo']);
+                        $o->setPessoa1($item['nome_pessoa1']);
+                        $o->setDescricao($item['ocorr_descricao']);
+                        
+                        $array[] = $o;
+                    }
+                    return $array;
+                }else{
+                    return false;
+                }
+            }
         }
     }

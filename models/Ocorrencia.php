@@ -15,6 +15,7 @@ class Ocorrencia{
     private $numero;
     private $referencia;
     private $id_criador;
+    private $nome_agente_principal;
     private $agente_apoio1;
     private $agente_apoio2;
     private $data_ocorrencia;
@@ -48,6 +49,13 @@ class Ocorrencia{
     }
     public function setId($id){
         $this->id = trim($id);
+    }
+
+    public function getNomeAgentePrincipal(){
+        return $this->nome_agente_principal;
+    }
+    public function setNomeAgentePrincipal($nome){
+        $this->nome_agente_principal = $nome;
     }
 
     public function getEnderecoPrincipal(){
@@ -275,15 +283,10 @@ interface OcorrenciaDAO{
     public function remover($id);
     public function editarOcorrencia(Ocorrencia $o);
     public function editarEndereco(Ocorrencia $o);
-    public function buscaEndereco($l,$n);
-    public function buscaEnderecoPeloId($id);
-    public function adicionarEndereco(Ocorrencia $o);
-    public function adicionarLogEndereco($l,$i,$d);
-    public function buscaAgente($a);
     public function buscaFotos($i);
-    public function buscaPessoa($p);
     public function buscaCobrade($c);
     public function buscaInterdicao($i);
+    public function buscarConsulta($parametro);
     public function encerraChamadoAtivo($id);
     public function buscaOcorrenciaUsuarioEndereco($i);
 }

@@ -3,7 +3,9 @@
 require_once 'database.php';
 require_once 'dao/IntedicaoDaoPgsql.php';
 require_once 'dao/OcorrenciaDaoPgsql.php';
-    
+require_once 'dao/EnderecoDaoPgsql.php';
+
+$enderecodao = New EnderecoDaoPgsql($pdo);    
 $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
 $interdicaodao = New IntedicaoDaoPgsql($pdo);
 
@@ -13,7 +15,7 @@ $linha = $interdicaodao->buscarInterdicaoEOcorrencia($id_interdicao);
 
 if($linha['ocorr_endereco_principal'] == 'Logradouro'){
     $id_logradouro = $linha['ocorr_logradouro_id'];
-    $linhaLogradouro = $ocorrenciadao->buscaEnderecoPeloId($id_logradouro);
+    $linhaLogradouro = $enderecodao->buscarPeloId($id_logradouro);
 }
 
 $data = date("d/m/Y", strtotime($linha['data_hora']));

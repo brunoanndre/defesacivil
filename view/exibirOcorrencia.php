@@ -3,7 +3,9 @@
     require_once 'dao/OcorrenciaDaoPgsql.php';
     require_once 'dao/UsuarioDaoPgsql.php';
     require_once 'dao/PessoaDaoPgsql.php';
+    require_once 'dao/EnderecoDaoPgsql.php';
 
+    $enderecodao = new EnderecoDaoPgsql($pdo);
     $pessoadao = New PessoaDaoPgsql($pdo);
     $usuariodao = New UsuarioDaoPgsql($pdo);
     $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
@@ -15,7 +17,7 @@
     //BUSCA O ENDEREÇO NO BD
     if($linhaOcorrencia->getEnderecoPrincipal() == "Logradouro"){
         $id_logradouro = $linhaOcorrencia->getLogradouroid();
-        $linhaLogradouro = $ocorrenciadao->buscaEnderecoPeloId($id_logradouro);
+        $linhaLogradouro = $enderecodao->buscarPeloId($id_logradouro);
     }
 
     $id_agente = $linhaOcorrencia->getIdCriador();
@@ -160,10 +162,10 @@
         <?php if(!$linhaOcorrencia->getIdPessoa1() && !$linhaOcorrencia->getIdPessoa2()){ ?>
             <span class="titulo printHide">Nenhuma pessoa foi cadastrada</span><br>
         <?php }else{ ?>
-            <span class="titulo">Solicitante 1: </span><span><?php echo $linhaPessoa1['nome']; ?></span>
+            <span class="titulo">Solicitante 1: </span><span><?php echo $linhaPessoa1->getNome(); ?></span>
             <!--<a id="atendido_1" href="?pagina=exibirPessoa&id=<?php //echo $linhaOcorrencia['atendido_1']; ?>"><?php //echo $linhaPessoa1['nome']; ?></a><br>-->
             <?php if($linhaOcorrencia->getIdPessoa2() != ""){ ?>
-                <span class="titulo">Solicitante 2: </span><span><?php echo $linhaPessoa2['nome']; ?></span>
+                <span class="titulo">Solicitante 2: </span><span><?php echo $linhaPessoa2->getNome(); ?></span>
                 <!--<a id="atendido_2" href="?pagina=exibirPessoa&id=<?php //echo $linhaOcorrencia['atendido_2']; ?>"><?php //echo $linhaPessoa2['nome']; ?></a><br>-->
             <?php } 
         }?>

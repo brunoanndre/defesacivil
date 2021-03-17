@@ -35,13 +35,9 @@
     }
 
     $id_distribuicao = $linhaChamado->getDistribuicao();
-    var_dump($id_distribuicao);
-    die;
+
     if($id_distribuicao != ""){
-        $sql = $pdo->prepare("SELECT nome FROM usuario WHERE id_usuario = :id_distribuicao");
-        $sql->bindValue(":id_distribuicao", $id_distribuicao);
-        $sql->execute();
-        $linhaDistribuicao = $sql->fetch();
+        $linhaDistribuicao = $usuariodao->findById($id_distribuicao);
     }
 ?>
 
@@ -63,25 +59,25 @@
         <button class="printHide" style="background-color: white; border:none;" onclick="print()"><img src="images/print.png" style="width: 50px; height:auto"></button>
     <hr>
         <h4>Endereço</h4>
-        <span class="titulo hide">Endereço principal: </span><span class="hide" id="coordenada_principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaChamado['endereco_principal']; ?>'"><?php echo $linhaChamado['endereco_principal']; ?></span>
+        <span class="titulo hide">Endereço principal: </span><span class="hide" id="coordenada_principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaChamado->getEnderecoPrincipal(); ?>'"><?php echo $linhaChamado->getEnderecoPrincipal(); ?></span>
         <div ng-show="sel_endereco == 'Logradouro'">
             <div class="row">
-                <div class="col-sm-7"><span class="titulo">CEP: </span><?php echo $linhaLogradouro['cep']; ?></div>
-                <div class="col-sm-7"><span class="titulo">Logradouro: </span><?php echo $linhaLogradouro['logradouro']; ?></div>
-                <div class="col-sm-3"><span class="titulo">Número: </span><?php echo $linhaLogradouro['numero']; ?></div>
+                <div class="col-sm-7"><span class="titulo">CEP: </span><?php echo $linhaLogradouro->getCep(); ?></div>
+                <div class="col-sm-7"><span class="titulo">Logradouro: </span><?php echo $linhaLogradouro->getLogradouro(); ?></div>
+                <div class="col-sm-3"><span class="titulo">Número: </span><?php echo $linhaLogradouro->getNumero(); ?></div>
             </div>
             <div class="row">
-                <div class="col-sm-7"><span class="titulo">Cidade: </span><?php echo $linhaLogradouro['cidade']; ?></div>
-                <div class="col-sm-6"><span class="titulo">Bairro: </span><?php echo $linhaLogradouro['bairro']; ?></div>
+                <div class="col-sm-7"><span class="titulo">Cidade: </span><?php echo $linhaLogradouro->getCidade(); ?></div>
+                <div class="col-sm-6"><span class="titulo">Bairro: </span><?php echo $linhaLogradouro->getBairro(); ?></div>
             </div>
-            <nav><span class="titulo">Referência: </span><?php echo $linhaLogradouro['referencia']; ?></nav><br>
+            <nav><span class="titulo">Referência: </span><?php echo $linhaLogradouro->getReferencia(); ?></nav><br>
         </div>
         <div ng-show="sel_endereco == 'Coordenada'">
             <nav>
-                <span class="titulo">Latitude: </span><span id="latitude" ><?php echo $linhaChamado['latitude']; ?></span>
+                <span class="titulo">Latitude: </span><span id="latitude" ><?php echo $linhaChamado->getLatitude(); ?></span>
             </nav>
             <nav class="inline">
-                <span class="titulo">Longitude: </span><span id="longitude" ><?php echo $linhaChamado['longitude']; ?></span>
+                <span class="titulo">Longitude: </span><span id="longitude" ><?php echo $linhaChamado->getLongitude(); ?></span>
             </nav>
             <button type="button" class="btn-default btn-small inline open-AddBookDialog" style="position:relative;left:5%" data-toggle="modal" data-id="map"><span class="glyphicon glyphicon-map-marker"></span></button>
         </div>
@@ -89,16 +85,16 @@
         <h4>Ocorrencia</h4>
         <nav>
             <span class="titulo">Data e hora: </span>
-            <span><?php echo date("d/m/Y H:i", strtotime($linhaChamado['data_hora'])); ?></span><br>
-            <span class="titulo">Origem: </span><span id="ocorr_origem"><?php echo $linhaChamado['origem']; ?></span><br>
+            <span><?php echo date("d/m/Y H:i", strtotime($linhaChamado->getData())); ?></span><br>
+            <span class="titulo">Origem: </span><span id="ocorr_origem"><?php echo $linhaChamado->getOrigem(); ?></span><br>
             <span class="titulo">Descrição: </span><br>
-            <textarea name="descricao" rows="5" readonly class="readtextarea"><?php echo $linhaChamado['descricao']; ?></textarea><br>
+            <textarea name="descricao" rows="5" readonly class="readtextarea"><?php echo $linhaChamado->getDescricao(); ?></textarea><br>
         </nav>
     <hr>
         <h4>Solicitante</h4>
         <nav>
-            <?php if($linhaChamado['nome_pessoa'] != ""){ ?>
-            <span class="titulo">Pessoa atendida: </span><span><?php echo $linhaChamado['nome_pessoa']; ?></span>
+            <?php if($linhaChamado->getNomePessoa() != ""){ ?>
+            <span class="titulo">Pessoa atendida: </span><span><?php echo $linhaChamado->getNomePessoa(); ?></span>
             <!--<a id="atendido" href="?pagina=exibirPessoa&id=<?php //echo $linhaChamado['pessoa_id']; ?>"><?php //echo $linhaPessoa['nome']; ?></a>-->
             <?php }else{ ?>
             <span>Nenhuma pessoa cadastrada.</span>
@@ -107,8 +103,8 @@
     <hr>
         <h4>Distribuído para</h4>
         <nav>
-            <?php if($linhaChamado['distribuicao'] != NULL){ ?>
-            <span class="printShoww"> <?php echo $linhaDistribuicao['nome']; ?></span><a id="distribuicao" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaChamado['distribuicao']; ?>"><?php echo $linhaDistribuicao['nome']; ?></a>
+            <?php if($linhaChamado->getDistribuicao() != NULL){ ?>
+            <span class="printShoww"> <?php echo $linhaDistribuicao->getNome(); ?></span><a id="distribuicao" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaChamado->getDistribuicao(); ?>"><?php echo $linhaDistribuicao->getNome(); ?></a>
             <?php }else{ ?>
             <span>Nenhuma distribuição cadastrada.</span>
             <?php } ?>
@@ -116,7 +112,7 @@
     </div>
     <div class="row">
     <div class="col-sm-6">
-        <?php if($linhaChamado['usado'] == false && ($_SESSION['nivel_acesso'] == 1 || $_SESSION['nivel_acesso'] == 2)){ ?>
+        <?php if($linhaChamado->getUsado() == false && ($_SESSION['nivel_acesso'] == 1 || $_SESSION['nivel_acesso'] == 2)){ ?>
         <form action="cancelarChamado.php" method="post">
             <!--<input name="id_chamado" type="hidden" value="<?php //echo $id_chamado; ?>">
             <input type="submit" class="btn btn-default btn-md" value="Cancelar chamado">-->
@@ -125,23 +121,23 @@
         <?php } ?>
     </div>
     <div class="col-sm-3">
-        <?php if($linhaChamado['usado'] == false){ ?>
+        <?php if($linhaChamado->getUsado() == false){ ?>
             <form action="index.php?pagina=cadastrarOcorrencia" method="post">
                 <input name="id_chamado" type="hidden" value="<?php echo $id_chamado; ?>">
-                <input name="endereco_principal" type="hidden" value="<?php echo $linhaChamado['endereco_principal']; ?>">
-                <input name="cep" type="hidden" value="<?php echo $linhaLogradouro['cep']; ?>">
-                <input name="cidade" type="hidden" value="<?php echo $linhaLogradouro['cidade']; ?>">
-                <input name="bairro" type="hidden" value="<?php echo $linhaLogradouro['bairro']; ?>">
-                <input name="logradouro" type="hidden" value="<?php echo $linhaLogradouro['logradouro']; ?>">
-                <input name="numero" type="hidden" value="<?php echo $linhaLogradouro['numero'] ?>">
-                <input name="referencia" type="hidden" value="<?php echo $linhaLogradouro['referencia']; ?>">
-                <input name="latitude" type="hidden" value="<?php echo $linhaChamado['latitude']; ?>">
-                <input name="longitude" type="hidden" value="<?php echo $linhaChamado['longitude']; ?>">
-                <input name="data_ocorrencia" type="hidden" value="<?php echo date("Y-m-d", strtotime($linhaChamado['data_hora'])); ?>">
-                <input name="descricao" type="hidden" value="<?php echo $linhaChamado['descricao']; ?>">
-                <input name="ocorr_origem" type="hidden" value="<?php echo $linhaChamado['origem']; ?>">
-                <input name="pessoa_atendida_1" type="hidden" value="<?php echo $$linhaChamado['nome_pessoa']; ?>">
-                <input name="agente_principal" type="hidden" value="<?php echo $linhaAgente['nome']; ?>">
+                <input name="endereco_principal" type="hidden" value="<?php echo $linhaChamado->getEnderecoPrincipal(); ?>">
+                <input name="cep" type="hidden" value="<?php echo $linhaLogradouro->getCep(); ?>">
+                <input name="cidade" type="hidden" value="<?php echo $linhaLogradouro->getCidade(); ?>">
+                <input name="bairro" type="hidden" value="<?php echo $linhaLogradouro->getBairro(); ?>">
+                <input name="logradouro" type="hidden" value="<?php echo $linhaLogradouro->getLogradouro(); ?>">
+                <input name="numero" type="hidden" value="<?php echo $linhaLogradouro->getNumero() ?>">
+                <input name="referencia" type="hidden" value="<?php echo $linhaLogradouro->getReferencia(); ?>">
+                <input name="latitude" type="hidden" value="<?php echo $linhaChamado->getLatitude(); ?>">
+                <input name="longitude" type="hidden" value="<?php echo $linhaChamado->getLongitude(); ?>">
+                <input name="data_ocorrencia" type="hidden" value="<?php echo date("Y-m-d", strtotime($linhaChamado->getData())); ?>">
+                <input name="descricao" type="hidden" value="<?php echo $linhaChamado->getDescricao(); ?>">
+                <input name="ocorr_origem" type="hidden" value="<?php echo $linhaChamado->getOrigem(); ?>">
+                <input name="pessoa_atendida_1" type="hidden" value="<?php echo $linhaChamado->getNomePessoa(); ?>">
+                <input name="agente_principal" type="hidden" value="<?php echo $linhaAgente->getNome(); ?>">
                 <input type="submit" class="btn btn-default btn-md printHide" value="Gerar Ocorrência">
             </form>
         <?php } ?>

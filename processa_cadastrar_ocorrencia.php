@@ -2,8 +2,14 @@
 //inclui a conexao com o banco de dados
 include 'database.php';
 require_once 'dao/OcorrenciaDaoPgsql.php';
+require_once 'dao/EnderecoDaoPgsql.php';
+require_once 'dao/UsuarioDaoPgsql.php';
+require_once 'dao/PessoaDaoPgsql.php';
 
+$pessoadao = New PessoaDaoPgsql($pdo);
+$usuariodao = new UsuarioDaoPgsql($pdo);
 $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
+$enderecodao = new EnderecoDaoPgsql($pdo);
 
 
 //recebe dados do $_POST
@@ -100,8 +106,8 @@ if ($endereco_principal == "Logradouro") {
 	$cep = str_replace("-", "", $cep);
 
 
-	if ($ocorrenciadao->buscaEndereco($logradouro,$numero) === false) {
-		$novoEndereco = New Ocorrencia();
+	if ($enderecodao->buscarEndereco($logradouro, $numero) === false) {
+		$novoEndereco = New Endereco();
 		$novoEndereco->setCep($cep);
 		$novoEndereco->setCidade($cidade);
 		$novoEndereco->setBairro($bairro);
@@ -109,14 +115,14 @@ if ($endereco_principal == "Logradouro") {
 		$novoEndereco->setNumero($numero);
 		$novoEndereco->setReferencia($referencia);
 		
-		$logradouro_id = $ocorrenciadao->adicionarEndereco($novoEndereco);
+		$logradouro_id = $enderecodao->adicionar($novoEndereco);
 
 		if (!$ocorrenciadao)
 			$erros = $erros . '&logradouro';
 	}
 
 	//INSERIR NO LOG DE ENDEREÇO
-	$ocorrenciadao->adicionarLogEndereco($logradouro_id, $id_criador,$dataAtual);
+	$enderecodao->adicionarLog($logradouro_id, $id_criador,$dataAtual);
 	
 	$longitude = NULL;
 	$latitude = NULL;
@@ -129,51 +135,55 @@ if ($ocorr_retorno == "true") { //caso seja retorno de ocorrencia, verifica se n
 	$ocorr_referencia = NULL;
 
 //busca o agente informado no banco de dados
-$ocorrenciadao->buscaAgente($agente_principal);
+$usuariodao->buscarPeloNome($agente_principal);
 
 if (strlen($agente_apoio_1) > 0 && $agente_apoio_1 != null) { //se o agente foi informado, busca o mesmo no BD
 
-	if ($ocorrenciadao->buscaAgente($agente_apoio_1) == false) {
+	if ($usuariodao->buscarPeloNome($agente_apoio_1) == false) {
 			$erros = $erros . '&agente_apoio_1';
 		} else {
-			$agente_apoio_1 = $ocorrenciadao->buscaAgente($agente_apoio_1);
+			$agente_apoio_1 = $usuariodao->buscarPeloNome($agente_apoio_1)->getId();
 		}
 	}else{
 		$agente_apoio_1 = NULL;
 	}
 
 if (strlen($agente_apoio_2) > 0 && $agente_apoio_2 != null) { //se o agente foi informado, busca o mesmo no BD
-	$ocorrenciadao->buscaAgente($agente_apoio_2);
+	$usuariodao->buscarPeloNome($agente_apoio_2);
 	if ($ocorrenciadao) {
-		if ($ocorrenciadao->buscaAgente($agente_apoio_2) == false) { 
+		if ($usuariodao->buscarPeloNome($agente_apoio_2) == false) { 
 			$erros = $erros . '&agente_apoio_2';
 		} else {
-			$agente_apoio_2 = $ocorrenciadao->buscaAgente($agente_apoio_2);
+			$agente_apoio_2 = $usuariodao->buscarPeloNome($agente_apoio_2)->getId();
 		}
 	} else //retorna erro caso nao consiga acessar o banco de dados
 		$erros = $erros . '&agente_apoio_2';
 } else //agente nao foi informado
-	$agente_apoio_2 = NULL;
+	{
+		$agente_apoio_2 = NULL;
+	}
+	
 
-if(strlen($pessoa_atendida_1) > 0){ //se a pessoa foi informada, busca a mesma no BD 
-	$id_pessoa1 = $ocorrenciadao->buscaAgente($pessoa_atendida_1);
+
+if(strlen($nome_pessoa1) > 0){ //se a pessoa foi informada, busca a mesma no BD 
+	$id_pessoa1 = $pessoadao->buscarPeloNome($nome_pessoa1);
 
 	if($id_pessoa1 == false){
 		$id_pessoa1 = NULL;
 		}
 	}else{ //pessoa nao foi informada
-		$pessoa_atendida_1 = NULL;
+		$nome_pessoa1 = NULL;
 		$id_pessoa1 = NULL;
 	}
-if(strlen($pessoa_atendida_2) > 0){ //se a pessoa foi informada, busca a mesma no BD
-	$id_pessoa2 = $ocorrenciadao->buscaAgente($pessoa_atendida_2);
+if(strlen($nome_pessoa2) > 0){ //se a pessoa foi informada, busca a mesma no BD
+	$id_pessoa2 = $pessoadao->buscarPeloNome($nome_pessoa2)();
 
 	if($id_pessoa2 == false){
 		$id_pessoa2 = NULL;
 	}
 }else //pessoa nao foi informada
 	$id_pessoa2 = NULL;
-	$pessoa_atendida_2 = NULL;
+	$nome_pessoa2 = NULL;
 
 if (strlen($chamado_id) == 0)
 	$chamado_id = NULL;
@@ -208,8 +218,8 @@ if (strlen($erros) > 0) {
 	$novaOcorrencia->setEncerrado($encerrado);
 	$novaOcorrencia->setDataAlteracao($dataAtual);
 	$novaOcorrencia->setFotos($pg_array);
-	$novaOcorrencia->setPessoa1($pessoa_atendida_1);
-	$novaOcorrencia->setPessoa2($pessoa_atendida_2);
+	$novaOcorrencia->setPessoa1($nome_pessoa1);
+	$novaOcorrencia->setPessoa2($nome_pessoa2);
 	$novaOcorrencia->setUsuarioEditor($id_criador);
 
 	if($ocorrenciadao->adicionar($novaOcorrencia) == false) {

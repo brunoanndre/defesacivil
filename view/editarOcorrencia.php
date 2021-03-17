@@ -2,7 +2,9 @@
 include('database.php');
 require_once 'dao/OcorrenciaDaoPgsql.php';
 require_once 'dao/UsuarioDaoPgsql.php';
+require_once 'dao/PessoaDaoPgsql.php';
 
+$pessoadao = new PessoaDaoPgsql($pdo);
 $ocorrenciadao = new OcorrenciaDaoPgsql($pdo);
 $usuariodao = new UsuarioDaoPgsql($pdo);
 
@@ -24,12 +26,13 @@ if(isset($_GET['cobrade']) || isset($_GET['agente_principal']) || isset($_GET['a
         $agente_apoio_2 = $queryagt2;
     }
 
-    $queryopessoa1 = $ocorrenciadao->buscaPessoaPeloId($linha['atendido_1']);
+    $queryopessoa1 = $pessoadao->buscarPeloID($linha['atendido_1']);
+
     if($querypessoa1 !== false){
         $pessoa_atendida_1 = $querypessoa1;
     }
     
-    $querypessoa2 = $ocorrenciadao->buscaPessoaPeloId($linha['atendido_2']);
+    $querypessoa2 = $pessoadao->buscarPeloID($linha['atendido_2']);
     if($querypessoa2 !== false){
         $pessoa_atendida_2 = $querypessoa2;
     }
@@ -198,7 +201,7 @@ $fotos = explode(',', $string);
             <div>
                 Pessoa atendida 1:
                 <br>
-                <input id="pessoa_atendida_1" name="pessoa_atendida_1" autocomplete="off" type="text" class="form-control inline" style="width:93%;" value="<?php echo $_POST['pessoa1']; echo $pessoa_atendida_1['nome']; ?>" onkeyup="showResult(this.value,this.id)">
+                <input id="pessoa_atendida_1" name="pessoa_atendida_1" autocomplete="off" type="text" class="form-control inline" style="width:93%;" value="<?php echo $_POST['pessoa1']; echo $pessoa_atendida_1; ?>" onkeyup="showResult(this.value,this.id)">
                 <button type="button" class="btn-default btn-small inline" data-toggle="modal" data-target="#pessoasModal"><span class="glyphicon glyphicon-plus"></span></button>
                 <div class="autocomplete" id="livesearchpessoa_atendida_1"></div>
                 <div id="resultpessoa_atendida_1"></div>

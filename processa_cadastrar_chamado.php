@@ -3,7 +3,9 @@
 include 'database.php';
 require_once 'dao/ChamadoDaoPgsql.php';
 require_once 'dao/EnderecoDaoPgsql.php';
+require_once 'dao/PessoaDaoPgsql.php';
 
+$pessoadao = New PessoaDaoPgsql($pdo);
 $enderecodao = new EnderecoDaoPgsql($pdo);
 $chamadodao = new ChamadoDaoPgsql($pdo);
 
@@ -22,6 +24,7 @@ $referencia = addslashes($_POST['referencia']);
 $descricao = addslashes($_POST['descricao']);
 $prioridade = addslashes($_POST['prioridade']);
 $distribuicao = addslashes($_POST['distribuicao']);
+
 
 $erros='';
 
@@ -59,19 +62,13 @@ if($endereco_principal == "Logradouro"){
 	$latitude = null;
 }
 
-$pessoa_atendida = null;
-/*if(strlen($nome) > 0){ //se a pessoa foi informada, busca a mesma no BD 
-	$result = pg_query($connection, "SELECT * FROM pessoa WHERE nome = '$nome'");
-	if($result){
-		if(pg_num_rows($result) == 0){ //pessoa nao encontrada
+
+if(strlen($nome) > 0){ //se a pessoa foi informada, busca a mesma no BD 
+	$pessoa_atendida = $pessoadao->buscarPeloNome($nome);
+		if($pessoa_atendida == 0 || $pessoa_atendida == null){ //pessoa nao encontrada
 			$erros = $erros.'&nome';
-		}else{  //pessoa encontrada, seleciona o id da mesma
-			$linha = pg_fetch_array($result, 0);
-			$pessoa_atendida = $linha['id_pessoa'];
 		}
-	}else //erro no acesso ao BD
-		$erros = $erros.'&nome';
-}*/
+}
 
 if(strlen($distribuicao) == 0 || $distribuicao == null){ //se o agente foi informado, busca o mesmo no BD
 //	$result = pg_query($connection, "SELECT * FROM usuario WHERE nome = '$distribuicao'");

@@ -78,7 +78,7 @@ class Usuario{
 interface UsuarioDAO{
     public function addUsuario(Usuario $u);
     public function addDadosLogin(Usuario $u);
-    public function findAll($p,$i,$o);
+    public function findAll();
     public function findId($email);
     public function alterarUsuarioAdicionado($ic,$i,$d);
     public function alterarUsuarioExcluido($im,$ia,$d);
