@@ -178,9 +178,9 @@ class ChamadoDaoPgsql implements ChamadoDAO{
 
     public function adicionar(Chamado $c){
         $sql = $this->pdo->prepare("INSERT INTO chamado (data_hora,origem,pessoa_id,chamado_logradouro_id,
-        descricao,endereco_principal,latitude,longitude, agente_id, prioridade, distribuicao, nome_pessoa)
+        descricao,endereco_principal,latitude,longitude, agente_id, prioridade, distribuicao, nome_pessoa, fotos)
         VALUES (:timestamp,:origem,:pessoa_atendida,:logradouro_id,:descricao,
-        :endereco_principal,:latitude,:longitude, :id_usuario, :prioridade, :distribuicao, :nome)");
+        :endereco_principal,:latitude,:longitude, :id_usuario, :prioridade, :distribuicao, :nome,:fotos)");
         $sql->bindValue(":timestamp", $c->getData());
         $sql->bindValue(":origem", $c->getOrigem());
         if($c->getPessoaId() == false){
@@ -205,6 +205,11 @@ class ChamadoDaoPgsql implements ChamadoDAO{
         $sql->bindValue(":prioridade", $c->getPrioridade());
         $sql->bindValue(":distribuicao", $c->getDistribuicao());
         $sql->bindValue(":nome", $c->getNomePessoa());
+        if($c->getFotos() == "{}"){
+            $sql->bindValue(":fotos",null,PDO::PARAM_NULL);
+        }else{
+            $sql->bindValue(":fotos", $c->getFotos());
+        }
 
         if($sql->execute()){
             $id = $this->pdo->lastInsertId();
@@ -248,6 +253,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
             $c->setNomePessoa($linha['nome_pessoa']);
             $c->setCancelado($linha['cancelado']);
             $c->setMotivo($linha['motivo']);
+            $c->setFotos($linha['fotos']);
 
             return $c;
         }else{

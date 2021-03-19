@@ -9,13 +9,9 @@ require_once 'dao/ChamadoDaoPgsql.php';
 require_once 'dao/EnderecoDaoPgsql.php';
 require_once 'dao/PessoaDaoPgsql.php';
 
-
-
 $pessoadao = New PessoaDaoPgsql($pdo);
 $enderecodao = new EnderecoDaoPgsql($pdo);
 $chamadodao = new ChamadoDaoPgsql($pdo);
-
-
 
 //recebe dados do $_POST
 $origem = addslashes($_POST['origem_chamado']);
@@ -32,6 +28,22 @@ $referencia = addslashes($_POST['referencia']);
 $descricao = addslashes($_POST['descricao']);
 $prioridade = addslashes($_POST['prioridade']);
 $distribuicao = addslashes($_POST['distribuicao']);
+
+$base64_array = array();
+
+
+foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
+	$temp = $_FILES["files"]["tmp_name"][$key];
+
+	if (empty($temp))
+		break;
+
+	$binary = file_get_contents($temp);
+	$base64 = base64_encode($binary);
+	array_push($base64_array, $base64);
+}
+
+$pg_array = '{' . join(',', $base64_array) . '}';
 
 $erros='';
 
@@ -121,6 +133,7 @@ if(strlen($erros) > 0){
 	$c->setPrioridade($prioridade);
 	$c->setDistribuicao($distribuicao);
 	$c->setNomePessoa($nome);
+	$c->setFotos($pg_array);
 
 	$id_chamado = $chamadodao->adicionar($c);
 

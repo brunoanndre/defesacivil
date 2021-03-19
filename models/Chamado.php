@@ -19,6 +19,7 @@ class Chamado{
     private $nome_pessoa;
     private $cancelado;
     private $motivo;
+    private $fotos;
 
     public function getId(){
         return $this->id;
@@ -137,6 +138,13 @@ class Chamado{
     }
     public function setMotivo($motivo){
         $this->motivo = $motivo;
+    }
+
+    public function getFotos(){
+        return $this->fotos;
+    }
+    public function setFotos($fotos){
+        $this->fotos = $fotos;
     }
 }
 

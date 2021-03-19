@@ -17,7 +17,7 @@
 
 <div class="container positioning">
 <div class="jumbotron campo_cadastro">
-    <form method="post" action="processa_cadastrar_chamado.php" onsubmit="return validarFormCadastroChamado()">
+    <form method="post" action="processa_cadastrar_chamado.php" enctype="multipart/form-data" onsubmit="return validarFormCadastroChamado()">
         <?php if(isset($_GET['sucesso'])){ ?>
             <div class="alert alert-success" role="alert">
                 Chamado cadastrado com sucesso.
@@ -190,6 +190,12 @@
                 </select>
             </div>
         </div>
+        <hr>
+        <div>
+            Fotos:
+            <input name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
+        </div>
+        <hr>
         <div class="div-btn-cadastrar">
             <input type="submit" class="btn-cadastrar btn-default btn-md" value="Cadastrar">
         </div>
