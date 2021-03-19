@@ -15,7 +15,8 @@ class UsuarioDaoPgsql implements UsuarioDAO {
         $sql->bindValue(":hash", $u->getSenha());
         $sql->execute();
 
-        return $u;
+        $id = $this->pdo->lastInsertId();
+        return $id;
     }
 
     public function findId($email){
@@ -28,17 +29,25 @@ class UsuarioDaoPgsql implements UsuarioDAO {
     }
 
     public function addUsuario(Usuario $u){
+        
         $sql = $this->pdo->prepare("INSERT INTO usuario (id_usuario, nome, cpf, telefone, nivel_acesso,foto) 
 		VALUES (:id, :nome, :cpf, :telefone, :acesso, :foto)");
         $sql->bindValue(":id", $u->getId());
         $sql->bindValue(":nome", $u->getNome());
-        $sql->bindValue(":cpf",$u->getCPF());
+        if($u->getCPF() != null || $u->getCPF() != '' ){
+            $sql->bindValue(":cpf",$u->getCPF());
+        }else{
+            $sql->bindValue(":cpf", null, PDO::PARAM_NULL);
+        }
         $sql->bindValue(":telefone", $u->getTelefone());
         $sql->bindValue(":acesso", $u->getAcesso());
         $sql->bindValue(":foto", $u->getFoto());
-        $sql->execute();
-
-        return $u;
+        
+        if($sql->execute()){
+            return $this->pdo->lastInsertId();
+        }else{
+            return false;
+        }
     }
 
     public function alterarUsuarioAdicionado($ic, $i, $d){
@@ -101,7 +110,7 @@ class UsuarioDaoPgsql implements UsuarioDAO {
     }
 
     public function findByEmail($email){
-        $sql = $this->pdo->prepare("SELECT * FROM dados_login WHERE email = :email");
+        $sql = $this->pdo->prepare("SELECT * FROM dados_login WHERE email = :email AND ativo = true");
         $sql->bindValue(":email", $email);
         $sql->execute();
 

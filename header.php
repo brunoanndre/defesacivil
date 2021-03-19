@@ -70,7 +70,9 @@
                         <ul class="dropdown-menu">
                         <li><a href="?pagina=cadastrarChamado">Chamado</a></li>
                         <li><a href="?pagina=cadastrarOcorrencia">Ocorrência</a></li>
+                        <?php if($_SESSION['nivel_acesso'] == 1){ ?>
                         <li><a href="?pagina=cadastrarUsuario">Usuários</a></li>
+                        <?php } ?>
                         </ul>
                     </li>
                     <li class="dropdown">

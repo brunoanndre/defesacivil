@@ -278,7 +278,6 @@ class Ocorrencia{
 
 interface OcorrenciaDAO{
     public function buscarPeloId($id);
-    public function buscarTodos();
     public function adicionar(Ocorrencia $o);
     public function remover($id);
     public function editarOcorrencia(Ocorrencia $o);

@@ -267,6 +267,12 @@ $(document).on("click", ".open-AddBookDialog", function () {
         }
     }else if(element_id == 'motivo'){
         $('#cancelarModal').modal('show');
+    }else if(element_id == 'pessoa_nome1'){
+        $(".modal-body #id_pessoa").val( element_id );
+        $('#pessoa1Modal').modal('show');
+    }else if(element_id = 'pessoa_nome2'){
+        $(".modal-body #id_pessoa").val( element_id );
+        $('#pessoa2Modal').modal('show');
     }else{
         $(".modal-body #id_pessoa").val( element_id );
         $('#pessoasModal').modal('show');
@@ -439,7 +445,7 @@ function ativaJson(){
             }
             $("#nivel_precipitacao99018_indicacao_10").removeClass();
             if(data[0].Valor < data[1].Valor){
-                $("#nivel_precipitacao99018_indicacao_10").addClass("arrow-down");
+                $("#nivefdl_precipitacao99018_indicacao_10").addClass("arrow-down");
             }else if(data[0].Valor > data[1].Valor){
                 $("#nivel_precipitacao99018_indicacao_10").addClass("arrow-up");
             }else{
@@ -583,4 +589,3 @@ function formatarDataInterdicao(){
         return true;
     }
 }
-

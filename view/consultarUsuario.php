@@ -40,7 +40,7 @@
                         echo '<td class="elimina-tabela">'.$usuario->getId().'</td>';
                         echo '<td>'.$usuario->getNome().'</td>'; 
                         echo '<td>'.$usuario->getEmail().'</td>';
-                        echo '<td class="elimina-tabela">'.$usuario->getEmail().'</td></tr>';
+                        echo '<td class="elimina-tabela">'.$usuario->getTelefone().'</td></tr>';
                     }
                 }
             ?>

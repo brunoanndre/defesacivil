@@ -1,7 +1,7 @@
 <?php
     include 'database.php';
-    require_once 'dao/ChamadoDaoPgsql.php';
-    require_once 'dao/UsuarioDaoPgsql.php';
+    include 'dao/ChamadoDaoPgsql.php';
+    include 'dao/UsuarioDaoPgsql.php';
 
     $usuariodao = new UsuarioDaoPgsql($pdo);
     $chamadodao = new ChamadoDaoPgsql($pdo);
@@ -57,7 +57,7 @@
                 <th>Data</th>
                 <th>Origem</th>
                 <th>Agente</th>
-                <th>Distribuição</th>
+                <th>Responsável</th>
                 <th>Solicitante</th>
                 <th>Descrição</th>
             </tr></thead>

@@ -1,4 +1,6 @@
 <?php
+
+
 //inclui a conexao com o banco de dados
 include 'database.php';
 require_once 'dao/OcorrenciaDaoPgsql.php';
@@ -10,7 +12,6 @@ $pessoadao = New PessoaDaoPgsql($pdo);
 $usuariodao = new UsuarioDaoPgsql($pdo);
 $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
 $enderecodao = new EnderecoDaoPgsql($pdo);
-
 
 //recebe dados do $_POST
 $chamado_id = addslashes($_POST['id_chamado']);
@@ -37,10 +38,12 @@ $cobrade_grupo = $_POST['cobrade_grupo'];
 $cobrade_subgrupo = $_POST['cobrade_subgrupo'];
 $cobrade_tipo = $_POST['cobrade_tipo'];
 $cobrade_subtipo = $_POST['cobrade_subtipo'];
-
 $prioridade = addslashes($_POST['prioridade']);
+$ativo = true;
 
 $base64_array = array();
+
+
 
 foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
 	$temp = $_FILES["files"]["tmp_name"][$key];
@@ -105,7 +108,6 @@ $logradouro_id = NULL;
 if ($endereco_principal == "Logradouro") {
 	$cep = str_replace("-", "", $cep);
 
-
 	if ($enderecodao->buscarEndereco($logradouro, $numero) === false) {
 		$novoEndereco = New Endereco();
 		$novoEndereco->setCep($cep);
@@ -127,6 +129,8 @@ if ($endereco_principal == "Logradouro") {
 	$longitude = NULL;
 	$latitude = NULL;
 }
+
+
 
 if ($ocorr_retorno == "true") { //caso seja retorno de ocorrencia, verifica se nao esta vazio e soh aceita numeros
 	if (!preg_match("/^[0-9]$/", $ocorr_referencia) || strlen($ocorr_referencia) <= 0)
@@ -175,18 +179,23 @@ if(strlen($nome_pessoa1) > 0){ //se a pessoa foi informada, busca a mesma no BD
 		$nome_pessoa1 = NULL;
 		$id_pessoa1 = NULL;
 	}
+
 if(strlen($nome_pessoa2) > 0){ //se a pessoa foi informada, busca a mesma no BD
-	$id_pessoa2 = $pessoadao->buscarPeloNome($nome_pessoa2)();
+	$id_pessoa2 = $pessoadao->buscarPeloNome($nome_pessoa2);
 
 	if($id_pessoa2 == false){
 		$id_pessoa2 = NULL;
 	}
-}else //pessoa nao foi informada
+}else{
 	$id_pessoa2 = NULL;
 	$nome_pessoa2 = NULL;
+} //pessoa nao foi informada
 
-if (strlen($chamado_id) == 0)
+
+if (strlen($chamado_id) == 0){
 	$chamado_id = NULL;
+}
+
 
 //caso ocorra algum erro na validacao, entao volta para a pagina e indica onde esta o erro
 if (strlen($erros) > 0) {
@@ -221,8 +230,11 @@ if (strlen($erros) > 0) {
 	$novaOcorrencia->setPessoa1($nome_pessoa1);
 	$novaOcorrencia->setPessoa2($nome_pessoa2);
 	$novaOcorrencia->setUsuarioEditor($id_criador);
+	$novaOcorrencia->setAtivo($ativo);
 
-	if($ocorrenciadao->adicionar($novaOcorrencia) == false) {
+	$adicionar = $ocorrenciadao->adicionar($novaOcorrencia);
+
+	if($adicionar == false) {
 		header('location:index.php?pagina=cadastrarOcorrencia&erroDB');
 	} else {
 		if ($chamado_id != NULL) {

@@ -50,7 +50,7 @@ if($sql->execute() == false){ //caso ocorra algum erro na conexao
             
         }else{
             //retorna o erro
-            header('view/login.php');
+            header('Location: view/login.php?erro');
         }
     }else{
         //retorna o erro;

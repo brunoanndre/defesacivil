@@ -2,6 +2,7 @@
 include 'database.php';
 require_once 'dao/UsuarioDaoPgsql.php';
 
+
 $usuarioDao = new UsuarioDaoPgsql($pdo);
 
 
@@ -33,10 +34,11 @@ if($email && $senha){
 		$novoUsuario->setEmail($email);
 		$novoUsuario->setSenha($hash);
 
-		$usuarioDao->addDadosLogin($novoUsuario);
+		$id = $usuarioDao->addDadosLogin($novoUsuario);
+	}else{
+		header('Location:index.php?pagina=cadastrarUsuario&erroEmail');
 	}
 }
-$id= $usuarioDao->findId($email);
 
 $acesso;
 if($nivel_acesso == 'Diretor'){
@@ -53,8 +55,7 @@ session_start();
 $id_criador = $_SESSION['id_usuario'];
 $data = date('Y-m-d H:i:s');
 
-
-if($nome && $cpf && $id && $telefone && $acesso){
+if($nome && $telefone && $acesso){
 	$novoUsuario = New Usuario();
 	$novoUsuario->setId($id);
 	$novoUsuario->setNome($nome);
@@ -63,7 +64,7 @@ if($nome && $cpf && $id && $telefone && $acesso){
 	$novoUsuario->setAcesso($acesso);
 	$novoUsuario->setFoto($base64);
 
-	$usuarioDao->addUsuario($novoUsuario);
+	$id = $usuarioDao->addUsuario($novoUsuario);
 
 	$usuarioDao->alterarUsuarioAdicionado($id_criador,$id,$data);
 	

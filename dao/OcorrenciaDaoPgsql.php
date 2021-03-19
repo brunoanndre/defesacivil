@@ -55,21 +55,17 @@
 
         }
 
-        public function buscarTodos(){
-            
-        }
-
         public function adicionar(Ocorrencia $o){
             $sql = $this->pdo->prepare("INSERT INTO ocorrencia 
             (chamado_id,ocorr_endereco_principal,ocorr_coordenada_latitude,ocorr_coordenada_longitude,
             ocorr_logradouro_id,agente_principal,agente_apoio_1,agente_apoio_2,
             data_ocorrencia,ocorr_titulo,ocorr_descricao,ocorr_origem,atendido_1,atendido_2,ocorr_cobrade,
             ocorr_fotos,ocorr_prioridade,ocorr_analisado,ocorr_congelado,ocorr_encerrado,
-            usuario_criador,data_alteracao,ocorr_referencia, fotos, nome_pessoa1, nome_pessoa2, usuario_editor)
+            usuario_criador,data_alteracao,ocorr_referencia, fotos, nome_pessoa1, nome_pessoa2, usuario_editor,ativo)
             VALUES (:chamado_id, :ocorr_endereco_principal, :latitude, :longitude, :logradouro_id, :agente_principal,
             :agente_apoio_1,:agente_apoio_2, :data_ocorrencia, :titulo, :descricao, :origem, :atendido_1, :atendido_2,
             :cobrade, :possui_fotos, :prioridade, :analisado, :congelado, :encerrado, :criador, :data_alteracao, :referencia,
-            :fotos,:nome_pessoa1,:nome_pessoa2,:usuario_editor)");
+            :fotos,:nome_pessoa1,:nome_pessoa2,:usuario_editor, :ativo)");
             if($o->getChamadoId() != null){
                 $sql->bindValue(":chamado_id", $o->getChamadoId(), PDO::PARAM_INT);
             }else{
@@ -120,19 +116,22 @@
             $sql->bindValue(":encerrado", $o->getEncerrado());
             $sql->bindValue(":criador", $o->getIdCriador());
             $sql->bindValue(":data_alteracao", $o->getDataAlteracao());
-            $sql->bindValue(":referencia", $o->getReferencia());
+            if($o->getReferencia() != null || $o->getReferencia() != ''){
+                $sql->bindValue(":referencia", $o->getReferencia());
+            }else{
+                $sql->bindValue(":referencia", null, PDO::PARAM_NULL);
+            }
             $sql->bindValue(":fotos", $o->getFotos());
             $sql->bindValue(":nome_pessoa1", $o->getPessoa1());
             $sql->bindValue(":nome_pessoa2", $o->getPessoa2());
             $sql->bindValue(":usuario_editor", $o->getUsuarioEditor());
+            $sql->bindValue(":ativo", $o->getAtivo());
 
-            $sql->execute();
-
-            if($sql){
+            if($sql->execute()){
                 return true;
             }else{
                 return false;
-            }
+            }  
         }
 
         public function remover($id){

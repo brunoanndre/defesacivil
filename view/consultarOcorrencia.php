@@ -1,6 +1,20 @@
+<script>
+$(document).ready(function() {
+    $('#myTable').DataTable( {
+        "language": {
+            "lengthMenu": "Exibir _MENU_ Registros por página",
+            "zeroRecords": "Nenhuma interdição encontrada",
+            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "infoEmpty": "Nenhuma interdição registrada",
+            "infoFiltered": "(filtered from _MAX_ total records)"
+        }
+    } );
+} );
+</script>
+
 <?php
     include ('database.php');
-    require_once 'dao/OcorrenciaDaoPgsql.php';
+    include 'dao/OcorrenciaDaoPgsql.php';
 
     $ocorrenciadao = new OcorrenciaDaoPgsql($pdo);
     
@@ -72,16 +86,3 @@
         <table>
     </div>
 </div>
-<script>
-$(document).ready(function() {
-    $('#myTable').DataTable( {
-        "language": {
-            "lengthMenu": "Exibir _MENU_ Registros por página",
-            "zeroRecords": "Nenhuma interdição encontrada",
-            "info": "Mostrando página _PAGE_ de _PAGES_",
-            "infoEmpty": "Nenhuma interdição registrada",
-            "infoFiltered": "(filtered from _MAX_ total records)"
-        }
-    } );
-} );
-</script>

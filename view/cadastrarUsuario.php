@@ -1,3 +1,4 @@
+
 <link rel= "stylesheet" type="text/css" href="../css/main.css">
 <div class="container positioning">
 <div class="jumbotron campo_cadastro">
@@ -10,6 +11,9 @@
             <?php } ?>
             <?php if(isset($_GET['erroDB'])){ ?>
                 <div class="alert alert-danger" role="alert">Falha ao cadastrar usuário.</div>
+            <?php } ?>
+            <?php if(isset($_GET['erroEmail'])){ ?>
+                <div class="alert alert-danger" role="alert">Email já cadastrado.</div>
             <?php } ?>
             <div>
                 Nome completo: <span style="color:red;">*</span>
