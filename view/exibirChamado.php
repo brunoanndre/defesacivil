@@ -3,7 +3,9 @@
     require_once 'dao/ChamadoDaoPgsql.php';
     require_once 'dao/EnderecoDaoPgsql.php';
     require_once 'dao/UsuarioDaoPgsql.php';
+    require_once 'dao/PessoaDaoPgsql.php';
 
+    $pessoadao = New PessoaDaoPgsql($pdo);
     $usuariodao = new UsuarioDaoPgsql($pdo);
     $enderecodao = new EnderecoDaoPgsql($pdo);
     $chamadodao = new ChamadoDaoPgsql($pdo);
@@ -14,20 +16,13 @@
 
 
     $linhaChamado = $chamadodao->buscarPeloId($id_chamado);
- 
-
+    
     if($linhaChamado->getEnderecoPrincipal() == "Logradouro"){
         $id_logradouro = $linhaChamado->getLogradouroId();
 
         $linhaLogradouro = $enderecodao->buscarPeloId($id_logradouro);
     }
 
-    //$id_pessoa = $linhaChamado['pessoa_id'];
-    //if($id_pessoa != ""){
-    //    $query = "SELECT nome FROM pessoa WHERE id_pessoa = $id_pessoa";
-    //    $result = pg_query($connection, $query) or die(pg_last_error());
-    //    $linhaPessoa = pg_fetch_array($result, 0);
-    //}
 
     $id_agente = $linhaChamado->getAgenteId();
     if($id_agente != ""){
@@ -94,13 +89,66 @@
         <h4>Solicitante</h4>
         <nav>
             <?php if($linhaChamado->getNomePessoa() != ""){ ?>
-            <span class="titulo">Pessoa atendida: </span><span><?php echo $linhaChamado->getNomePessoa(); ?></span>
-            <!--<a id="atendido" href="?pagina=exibirPessoa&id=<?php //echo $linhaChamado['pessoa_id']; ?>"><?php //echo $linhaPessoa['nome']; ?></a>-->
+            <?php 
+            $idpessoa = $linhaChamado->getPessoaId();
+            $linhaPessoa1 = $pessoadao->buscarPeloID($idpessoa);
+            ?>
+            <span class="titulo">Pessoa atendida: </span> <a href="" class="open-AddBookDialog" data-toggle="modal" data-id="pessoa_nome1"><span><?php echo $linhaChamado->getNomePessoa(); ?></span></a>
             <?php }else{ ?>
             <span>Nenhuma pessoa cadastrada.</span>
             <?php } ?>
         </nav>
     <hr>
+    <?php
+if($linhaPessoa1 !== null){ ?>
+<div class="modal fade" id="pessoa1Modal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span>Dados da pessoa</span>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                    <div class="modal-body">
+                        <nav>
+                            <input id="id_pessoa" type="hidden" value="">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    Nome:
+                                   <?php echo '<input id="nome_pessoa" name="nome_pessoa" type="text" class="form-control" value=" '.$linhaPessoa1->getNome() . ' " disabled > '  ?>
+                                </div>
+                            </div>   
+                            <span id="erroNome" class="alertErro hide">Nome inválido.</span>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    CPF:
+                                    <?php echo '<input id="cpf_pessoa" name="cpf_pessoa" type="text" class="form-control" value="'.$linhaPessoa1->getCPF().'" disabled>' ?>
+                                </div>
+                                <div class="col-sm-6">
+                                    Outros documentos:
+                                    <?php echo '<input id="outros_documentos" name="outros_documentos" class="form-control" type="text" value="'.$linhaPessoa1->getOutrosDocumentos().'" disabled>' ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    Celular: 
+                                    <?php echo ' <input id="celular_pessoa" name="celular_pessoa" type="text" class="form-control" value="'. $linhaPessoa1->getCelular() .'" disabled >'?>
+                                    
+                                </div>
+                                <div class="col-sm-6">
+                                    Telefone: 
+                                    <?php echo'<input id="telefone_pessoa" name="telefone_pessoa" type="text" class="form-control" value="'.$linhaPessoa1->getTelefone().'" disabled>'?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                Email:
+                                <?php echo'<input id="email_pessoa" name="email_pessoa" type="email" class="form-control" value="'.$linhaPessoa1->getEmail().'" disabled>' ?>
+                            </div>
+                        </nav>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
         <h4>Distribuído para</h4>
         <nav>
             <?php if($linhaChamado->getDistribuicao() != NULL){ ?>
