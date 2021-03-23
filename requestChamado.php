@@ -4,10 +4,8 @@
 
     $usuariodao = New UsuarioDaoPgsql($pdo);
 
-    $consultaChamado = $pdo->prepare("SELECT * FROM chamado WHERE usado = false ORDER BY id_chamado DESC");
+    $consultaChamado = $pdo->prepare("SELECT * FROM chamado WHERE usado = false ORDER BY id_chamado");
     $consultaChamado->execute();
-
-
 
     $response = "";
     $linha = $consultaChamado->fetchAll();
@@ -31,6 +29,11 @@
             $nomePessoa = $linhaPessoa['nome'];
         }
 
+        $data = New DateTime($linhaChamado['data_hora']);
+        $dataAtual = New DateTime(date('Y-m-d H:i:s'));
+        $diff = date_diff($data, $dataAtual);
+
+
         $id_agente = $linhaChamado['agente_id'];
         $sql = $pdo->prepare("SELECT nome FROM usuario WHERE id_usuario = :id_agente");
         $sql->bindValue(":id_agente", $id_agente);
@@ -48,6 +51,7 @@
 
         $response = $response.'<tr style="background-color:'.$color.';"><td>'.$linhaChamado['id_chamado'].'</td>';
         $response = $response.'<td>'.$linhaChamado['data_hora'].'</td>';
+        $response = $response. '<td>'. $diff->format('%a')  . '</td>';
         $response = $response.'<td>'.$linhaChamado['origem'].'</td>';
         $response = $response.'<td>'.$nomePessoa.'</td>';
         $response = $response.'<td>'.$linhaAgente['nome'].'</td>';

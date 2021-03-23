@@ -51,7 +51,7 @@ $erros='';
 
 session_start();
 $id_usuario = $_SESSION['id_usuario'];
-$dataAtual = date('Y-m-d H:i:s');
+$dataAtual = date('Y-m-d');
 
 
 

@@ -214,7 +214,7 @@ class UsuarioDaoPgsql implements UsuarioDAO {
     }
 
     public function buscarUsuariosAtivos(){
-        $sql = $this->pdo->prepare("SELECT * FROM usuario u INNER JOIN dados_login dl ON u.id_usuario = dl.id_usuario WHERE dl.ativo = true");
+        $sql = $this->pdo->prepare("SELECT * FROM usuario u INNER JOIN dados_login dl ON u.id_usuario = dl.id_usuario WHERE dl.ativo = true AND u.nivel_acesso != '4'");
         $sql->execute();
 
         if($sql->rowCount() > 0){

@@ -94,15 +94,20 @@
                     <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho">
                 </div>
             </div>
-            <div class="printTitle">
+            <div class="printHide">
                 <h3 class="text-center">Registro de ocorrência</h3>
             </div>
-            <div class="printShowImg"> <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho" style="width: 100px; height:auto;"></div>
+        </div>
+        <div class="printShow" style="display: flex; justify-content:space-between; margin-bottom:30px;">
+                <img class="printShow" src="images/logo.jpg" style="width: 40px;">
+                <h3 class="text-center printShow">Registro de Ocorrência</h3>
+                <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho printShow" style="width: 120px;">
         </div>
         <button class="printHide" style="background-color: white; border:none;" onclick="print()"><img src="images/print.png" style="width: 50px; height:auto"></button>
     </div>
     <div class="box">
-        <h4>Endereço</h4>
+        <h4 class="printHide">Endereço</h4>
+        <h3 class="printShow">Endereço</h3>
         <hr>
         <span class="titulo printHide">Endereço principal: </span><span class="printHide" id="coordenada_principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?>'"><?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?></span>
         <div ng-show="sel_endereco == 'Logradouro'">
@@ -128,7 +133,8 @@
         <?php }?>
     </div>
     <div class="box">
-        <h4>Agentes</h4>
+        <h4 class="printHide">Agentes</h4>
+        <h3 class="printShow">Agentes</h3>
         <hr>
         <span class="titulo">Agente principal:</span><span class="printShoww"> <?php echo $linhaAgentePrincipal->getNome(); ?></span></span><a id="agente_principal" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaOcorrencia->getIdCriador(); ?>"><?php echo $linhaAgentePrincipal->getNome(); ?></a><br>
         <?php if($linhaOcorrencia->getApoio1()){ ?>
@@ -139,7 +145,8 @@
         <br>
     </div>
     <div class="box">
-        <h4>Ocorrencia</h4>
+        <h4 class="printHide">Ocorrência</h4>
+        <h3 class="printShow">Ocorrência</h3>
         <hr>
         <div class="printWrap">
             <span class="titulo">Data de ocorrência: </span><span id="data_ocorrencia"><?php echo date("d/m/Y", strtotime($linhaOcorrencia->getData())); ?></span><br>
@@ -153,7 +160,8 @@
     </div>
     <div class="box">
        <?php if($linhaOcorrencia->getIdPessoa1() || $linhaOcorrencia->getIdPessoa2()){?>
-          <h4 >Solicitantes</h4> 
+          <h4 class="printHide" >Solicitantes</h4> 
+          <h4 class="printShow">Solicitantes</h4>
           <hr> 
       <?php  } else{ ?>
         <h4 class="printHide">Solicitantes</h4>
@@ -272,7 +280,8 @@ if($linhaPessoa2 !== null){ ?>
     <?php } ?>
 
     <div class="box">
-        <h4>Tipo</h4>
+        <h4 class="printHide">Tipo</h4>
+        <h4 class="printShow">Tipo</h4>
         <hr>
         <div class="printWrap">
         <span class="titulo">Cobrade: </span><span id="ocorr_cobrade"><?php echo $linhaCobrade['subgrupo']; ?></span><br>
@@ -280,7 +289,8 @@ if($linhaPessoa2 !== null){ ?>
         </div>
     </div>
     <div class="box printMargin">
-        <h4>Status</h4>
+        <h4 class="printHide">Status</h4>
+        <h4 class="printShow">Status</h4>
         <hr>
         <span class="titulo">Prioridade: </span><span id="ocorr_prioridade"><?php echo $linhaOcorrencia->getPrioridade(); ?></span>
         <span class="titulo">Analisado: </span><span id="ocorr_analisado"><?php echo ($linhaOcorrencia->getAnalisado() == 1) ? 'Sim':'Não'; ?></span>
@@ -289,7 +299,8 @@ if($linhaPessoa2 !== null){ ?>
         <br><br>
     </div>
     <div class="box">
-        <h4>Informações</h4>
+        <h4 class="printHide">Informações</h4>
+        <h4 class="printShow">Informações</h4>
         <hr>
         <?php  
         if($usuario_editor == false){
@@ -354,6 +365,12 @@ if($linhaPessoa2 !== null){ ?>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="printShoww" style="display: flex; flex-direction:column; align-items:center;">
+        <div style="margin-bottom: 1px solid black;">
+        <span class="printShow" style="margin-bottom: 1px solid black;">_____________________</span>
+        </div>
+       <span class="printShow" style="margin-left: ;"><?php echo $linhaAgentePrincipal->getNome(); ?></span>
     </div>
     <?php if($linhaOcorrencia->getAtivo() == true){ ?>
         <form action="index.php?pagina=editarOcorrencia"   method="post">

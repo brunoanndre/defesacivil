@@ -11,7 +11,7 @@
     
 
 
-    $linha = $consulta_login->fetch();
+    $linha = $consulta_login->fetch();  
 ?>
 
 <div class="container positioning">

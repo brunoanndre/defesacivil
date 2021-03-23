@@ -2,6 +2,7 @@
     <thead><tr>
         <th>ID</th>
         <th>Data</th>
+        <th>Dias em aberto</th>
         <th>Origem</th>
         <th>Solicitante</th>
         <th>Agente</th>

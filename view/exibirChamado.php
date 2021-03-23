@@ -55,14 +55,21 @@
                 <nav class="texto-cabecalho">Secretaria de segurança</nav>
                 <nav class="texto-cabecalho">Defesa Civil</nav>
             </div>
-            <div class="col-sm-6 print-chamado-img">
+            <div class="col-sm-6 print-chamado-img printHide">
                 <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho">
             </div>
         </div>
-        <h3 class="text-center">Registro de chamado</h3>
+        <div class="printShow" style="display: flex; justify-content:space-between;">
+            <img class="printShow" src="images/logo.jpg" style="width: 40px;">
+            <h3 class="text-center printShow">Registro de chamado</h3>
+            <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho printShow" style="width: 120px;">
+        </div>
+
+        <h3 class="text-center printHide">Registro de chamado</h3>
         <button class="printHide" style="background-color: white; border:none;" onclick="print()"><img src="images/print.png" style="width: 50px; height:auto"></button>
     <hr>
-        <h4>Endereço</h4>
+        <h4 class="printHide">Endereço</h4>
+        <h2 class="printShow titulo" style="margin-bottom: 10px; border-bottom:1px solid">Endereço</h3>
         <span class="titulo hide">Endereço principal: </span><span class="hide" id="coordenada_principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaChamado->getEnderecoPrincipal(); ?>'"><?php echo $linhaChamado->getEnderecoPrincipal(); ?></span>
         <div ng-show="sel_endereco == 'Logradouro'">
             <div class="row">
@@ -86,7 +93,8 @@
             <button type="button" class="btn-default btn-small inline open-AddBookDialog" style="position:relative;left:5%" data-toggle="modal" data-id="map"><span class="glyphicon glyphicon-map-marker"></span></button>
         </div>
     <hr>
-        <h4>Ocorrencia</h4>
+        <h4 class="printHide">Ocorrência</h4>
+        <h2 class="printShow titulo" style="margin-bottom: 10px; border-bottom:1px solid">Ocorrência</h3>
         <nav>
             <span class="titulo">Data e hora: </span>
             <span><?php echo date("d/m/Y H:i", strtotime($linhaChamado->getData())); ?></span><br>
@@ -95,7 +103,8 @@
             <textarea name="descricao" rows="5" readonly class="readtextarea"><?php echo $linhaChamado->getDescricao(); ?></textarea><br>
         </nav>
     <hr>
-        <h4>Solicitante</h4>
+        <h4 class="printHide">Solicitante</h4>
+        <h2 class="printShow titulo" style="margin-bottom: 10px; border-bottom:1px solid">Solicitante</h3>
         <nav>
             <?php if($idpessoa){ ?>
             <?php 
@@ -165,8 +174,9 @@ if($linhaPessoa1 !== null){ ?>
             <span>Nenhuma distribuição cadastrada.</span>
             <?php } ?>
         </nav>
+        <hr class="printShow" style="border-bottom: 1px solid; margin-bottom: 40px;">
     </div>
-    <div class="box">
+    <div class="box printShow">
         <div id="myCarousel" class="carousel slide limite" data-ride="carousel">
             <!-- Indicators -->
             <ol class="carousel-indicators">
@@ -178,7 +188,7 @@ if($linhaPessoa1 !== null){ ?>
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
                 <div class="item active">
-                    <img src="data:image/png;base64,<?php echo $fotos[0]; ?>" alt="img1" style="width:100%;">
+                    <img src="data:image/png;base64,<?php echo $fotos[0]; ?>" alt="img1" style="width:80%;">
                 </div>
                 <?php $i = 1; while($i < sizeof($fotos)){ ?>
                     <div class="item">
@@ -188,11 +198,11 @@ if($linhaPessoa1 !== null){ ?>
                 
             </div>
             <!-- Left and right controls -->
-            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <a class="left carousel-control printHide" href="#myCarousel" data-slide="prev">
                 <span class="glyphicon glyphicon-chevron-left"></span>
                 <span class="sr-only">Previous</span>
             </a>
-            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <a class="right carousel-control printHide" href="#myCarousel" data-slide="next">
                 <span class="glyphicon glyphicon-chevron-right"></span>
                 <span class="sr-only">Next</span>
             </a>
