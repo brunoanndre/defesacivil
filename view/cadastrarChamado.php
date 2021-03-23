@@ -92,7 +92,7 @@
                 </select>
             <hr>
             <div>
-                Endereço principal: <span style="color:red;">*</span>
+                Localizar por: <span style="color:red;">*</span>
                 <br>
                 <label for="endereco_principal"></label>
                 <select name="endereco_principal" class="form-control endereco-principal" ng-model="sel_endereco" ng-init="sel_endereco='Logradouro'" required>

@@ -54,10 +54,10 @@
             <thead><tr>
                 <th><!--<span class="glyphicon glyphicon-fullscreen"></span>--></th>
                 <th>ID</th>
-                <th>Data</th>
+                <th style="width: 100px;">Data</th>
                 <th>Origem</th>
-                <th>Agente</th>
-                <th>Responsável</th>
+                <th>Endereço</th>
+                <th>Distribuição</th>
                 <th>Solicitante</th>
                 <th>Descrição</th>
             </tr></thead>
@@ -87,7 +87,7 @@
                     echo '<td>'.$item->getId().'</td>';
                     echo '<td>'.$item->getData().'</td>';
                     echo '<td>'.$item->getOrigem().'</td>';
-                    echo '<td>'.$item->getNomeAgente().'</td>';
+                    echo '<td>'.$item->getLogradouro().'</td>';
                     echo '<td>'.$linhaDistribuicao->getNome().'</td>';
                     echo '<td>'.$item->getNomePessoa().'</td>';
                     echo '<td class="elimina-tabela">'.$item->getDescricao().'</td></tr>';

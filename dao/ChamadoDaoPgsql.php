@@ -3,6 +3,8 @@
 require_once 'database.php';
 require_once 'models/Chamado.php';
 
+date_default_timezone_set('America/Sao_Paulo');
+
 class ChamadoDaoPgsql implements ChamadoDAO{
     private $pdo;
 
@@ -12,11 +14,12 @@ class ChamadoDaoPgsql implements ChamadoDAO{
 
     public function buscarConsulta($p){
         if($p == 'normal'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'DD/MM/YYYY') as dataa,
-            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, 
-            chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,chamado.data_hora as dataa) as dataa,
+            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa,chamado_logradouro_id, 
+            chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao, logradouro
             FROM chamado 
-            INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario) ORDER BY dataa DESC");
+            INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario)
+            INNER JOIN endereco_logradouro el ON chamado_logradouro_id = el.id_logradouro ORDER BY chamado.id_chamado DESC ");
             $sql->execute();
 
             if($sql->rowCount() > 0 ){
@@ -34,6 +37,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                     $c->setCancelado($item['cancelado']);
                     $c->setNomeAgente($item['usuario']);
                     $c->setDistribuicao($item['distribuicao']);
+                    $c->setLogradouro($item['logradouro']);
 
                     $array[] = $c;
                 }
@@ -44,11 +48,13 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                 }
         }
         if($p == 'usado_false'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'YYYY/MM/DD') as dataa,
-            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, 
-            chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,chamado.data_hora as dataa,
+            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id,
+            chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao, logradouro
             FROM chamado 
-            INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario) WHERE chamado.usado = false  ORDER BY dataa DESC");
+            INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario)
+            INNER JOIN endereco_logradouro el ON chamado_logradouro_id = el.id_logradouro WHERE chamado.usado = false  ORDER BY id_chamado DESC ");
+            
             $sql->execute();
 
             if($sql->rowCount() > 0 ){
@@ -57,6 +63,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                 foreach($linha as $item){
                     $c = new Chamado();
                     $c->setId($item['id_chamado']);
+                    $c->setLogradouroId($item['chamado_logradouro_id']);
                     $c->setData($item['dataa']);
                     $c->setOrigem($item['origem']);
                     $c->setDescricao($item['descricao']);
@@ -66,6 +73,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                     $c->setCancelado($item['cancelado']);
                     $c->setNomeAgente($item['usuario']);
                     $c->setDistribuicao($item['distribuicao']);
+                    $c->setLogradouro($item['logradouro']);
 
                     $array[] = $c;
                 }
@@ -76,11 +84,12 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                 }
         }
         if($p == 'usado_true'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'YYYY/MM/DD') as dataa,
-            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, 
-            chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,chamado.data_hora as dataa) as dataa,
+            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id,
+            chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao, logradouro
             FROM chamado 
-            INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario) WHERE chamado.usado = true OR chamado.cancelado = true ORDER BY dataa DESC");
+            INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario)
+            INNER JOIN endereco_logradouro el ON chamado_logradouro_id = el.id_logradouro WHERE chamado.usado = true OR chamado.cancelado = true ORDER BY dataa DESC");
             $sql->execute();
 
             if($sql->rowCount() > 0 ){
@@ -98,6 +107,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                     $c->setCancelado($item['cancelado']);
                     $c->setNomeAgente($item['usuario']);
                     $c->setDistribuicao($item['distribuicao']);
+                    $c->setLogradouro($item['logradouro']);
 
                     $array[] = $c;
                 }
@@ -109,11 +119,12 @@ class ChamadoDaoPgsql implements ChamadoDAO{
         }
 
         if($p == 'usado_true_cancelado_false'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'YYYY/MM/DD') as dataa,
-            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, 
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,chamado.data_hora as dataa) as dataa,
+            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa,chamado_logradouro_id,logradouro,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao
             FROM chamado 
-            INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario) WHERE chamado.usado = true AND chamado.cancelado = false  ORDER BY dataa DESC");
+            INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario) 
+            INNER JOIN endereco_logradouro el ON chamado_logradouro_id = el.id_logradouro WHERE chamado.usado = true AND chamado.cancelado = false  ORDER BY dataa DESC");
             $sql->execute();
 
             if($sql->rowCount() > 0 ){
@@ -131,6 +142,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                     $c->setCancelado($item['cancelado']);
                     $c->setNomeAgente($item['usuario']);
                     $c->setDistribuicao($item['distribuicao']);
+                    $c->setLogradouro($item['logradouro']);
 
                     $array[] = $c;
                 }
@@ -142,11 +154,12 @@ class ChamadoDaoPgsql implements ChamadoDAO{
         }
 
         if($p == 'usado_cancelado_true'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'YYYY/MM/DD') as dataa,
-            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, 
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,chamado.data_hora as dataa) as dataa,
+            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id,logradouro,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao
             FROM chamado 
-            INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario) WHERE chamado.usado = true AND chamado.cancelado = true  ORDER BY dataa DESC");
+            INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario)
+            INNER JOIN endereco_logradouro el ON chamado_logradouro_id = el.id_logradouro WHERE chamado.usado = true AND chamado.cancelado = true  ORDER BY dataa DESC");
             $sql->execute();
 
             if($sql->rowCount() > 0 ){
@@ -164,6 +177,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                     $c->setCancelado($item['cancelado']);
                     $c->setNomeAgente($item['usuario']);
                     $c->setDistribuicao($item['distribuicao']);
+                    $c->setLogradouro($item['logradouro']);
 
                     $array[] = $c;
                 }

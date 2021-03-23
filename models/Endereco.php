@@ -27,21 +27,21 @@ class Endereco{
         return $this->cidade;
     }
     public function setCidade($cidade){
-        $this->cidade = $cidade;
+        $this->cidade = ucwords($cidade);
     }
 
     public function getBairro(){
         return $this->bairro;
     }
     public function setBairro($bairro){
-        $this->bairro = $bairro;
+        $this->bairro = ucwords($bairro);
     }
 
     public function getLogradouro(){
         return $this->logradouro;
     }
     public function setLogradouro($logradouro){
-        $this->logradouro = $logradouro;
+        $this->logradouro = strtoupper($logradouro);
     }
 
     public function getNumero(){
@@ -55,7 +55,7 @@ class Endereco{
         return $this->referencia;
     }
     public function setReferencia($referencia){
-        $this->referencia = $referencia;
+        $this->referencia = strtoupper($referencia);
     }
 }
 

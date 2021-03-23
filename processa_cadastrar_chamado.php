@@ -50,8 +50,10 @@ $erros='';
 
 
 session_start();
+
 $id_usuario = $_SESSION['id_usuario'];
-$dataAtual = date('Y-m-d');
+$dataAtual = date('d-m-Y H:i:s');
+
 
 
 

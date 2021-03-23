@@ -8,6 +8,7 @@ class Chamado{
     private $descricao;
     private $endereco_principal;
     private $logradouro_id;
+    private $logradouro;
     private $latitude;
     private $longitude;
     private $pessoa_id;
@@ -61,6 +62,13 @@ class Chamado{
     }
     public function setLogradouroId($logradouro_id){
         $this->logradouro_id = trim($logradouro_id);
+    }
+
+    public function getLogradouro(){
+        return $this->logradouro;
+    }
+    public function setLogradouro($logradouro){
+        $this->logradouro = strtoupper($logradouro);
     }
 
     public function getLatitude(){

@@ -1,14 +1,15 @@
 <table id="myTable" class="row-border" style="width:100%">
     <thead><tr>
+        <th></th>
         <th>ID</th>
-        <th>Data</th>
+        <th style="width: 100px;">Data</th>
         <th>Dias em aberto</th>
         <th>Origem</th>
         <th>Solicitante</th>
         <th>Agente</th>
         <th>Responsável</th>
         <th>Endereço</th>
-        <th>Descricao</th>
+        <th>Descrição</th>
     </tr></thead>
     <tbody id="requestChamado">
     <?php include 'requestChamado.php' ?>

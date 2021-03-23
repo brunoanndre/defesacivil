@@ -55,7 +55,7 @@
             <?php } ?>
         <hr>
             <div>
-                Endereço principal: <span style="color:red;">*</span>
+                Localizar por: <span style="color:red;">*</span>
                 <br>
                 <label for="endereco_principal"></label>
                 <select name="endereco_principal" class="form-control endereco-principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php if(isset($_POST['endereco_principal'])){echo $_POST['endereco_principal'];}else{echo 'Logradouro';} ?>'" required>

@@ -2,9 +2,11 @@
     include 'database.php';
     include 'dao/UsuarioDaoPgsql.php';
 
+    date_default_timezone_set('America/Sao_Paulo');
+
     $usuariodao = New UsuarioDaoPgsql($pdo);
 
-    $consultaChamado = $pdo->prepare("SELECT * FROM chamado WHERE usado = false ORDER BY id_chamado");
+    $consultaChamado = $pdo->prepare("SELECT * FROM chamado WHERE usado = false ORDER BY id_chamado DESC ");
     $consultaChamado->execute();
 
     $response = "";
@@ -32,7 +34,7 @@
         $data = New DateTime($linhaChamado['data_hora']);
         $dataAtual = New DateTime(date('Y-m-d H:i:s'));
         $diff = date_diff($data, $dataAtual);
-
+        $diff = $diff->format('%a');
 
         $id_agente = $linhaChamado['agente_id'];
         $sql = $pdo->prepare("SELECT nome FROM usuario WHERE id_usuario = :id_agente");
@@ -48,10 +50,14 @@
         }else if($linhaChamado['prioridade'] == "Média"){
             $color = '#fff050';
         }
-
-        $response = $response.'<tr style="background-color:'.$color.';"><td>'.$linhaChamado['id_chamado'].'</td>';
+        $response = $response . '<tr style="background-color:'.$color.';"><td></td>';
+        $response = $response.'<td>'.$linhaChamado['id_chamado'].'</td>';
         $response = $response.'<td>'.$linhaChamado['data_hora'].'</td>';
-        $response = $response. '<td>'. $diff->format('%a')  . '</td>';
+        if($diff >= 3){
+            $response = $response . '<td style="color:red;"> <strong>' . $diff . '</strong></td>';
+        }else{
+            $response = $response. '<td>'. $diff  . '</td>';
+        }
         $response = $response.'<td>'.$linhaChamado['origem'].'</td>';
         $response = $response.'<td>'.$nomePessoa.'</td>';
         $response = $response.'<td>'.$linhaAgente['nome'].'</td>';
