@@ -4,22 +4,17 @@ require_once 'dao/UsuarioDaoPgsql.php';
 
 $usuarioDAO = new UsuarioDaoPgsql($pdo);
 
-session_start();
 
-if($_SESSION['nivel_acesso'] == 1){
-    $nome = filter_input(INPUT_POST, "nome");
-    $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
-    $telefone = filter_input(INPUT_POST, "telefone");
-    $cpf = filter_input(INPUT_POST,"cpf");
-    $acesso = $_SESSION['nivel_acesso'];
-    $id = $_SESSION['id_usuario'];
-    $erros = '';
-    $foto = $_FILES["foto"]["tmp_name"];
-}else{
-    $id = $_SESSION['id_usuario'];
-    $telefone = filter_input(INPUT_POST, "telefone");
-    $foto = $_FILES["foto"]["tmp_name"];
-}
+session_start();
+$id = $_POST['id_usuario'];
+$nome = filter_input(INPUT_POST, "nome");
+$email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
+$telefone = filter_input(INPUT_POST, "telefone");
+$cpf = filter_input(INPUT_POST,"cpf");
+$acesso = filter_input(INPUT_POST,"acesso");
+
+$erros = '';
+$foto = $_FILES["foto"]["tmp_name"];
 
 
 if($foto){
@@ -31,7 +26,6 @@ if($email){
     $usuario = $usuarioDAO->findByEmail($email);
 
     if($usuario == true){
-
         $usuarioEmail = $usuarioDAO->findById($id);
         $usuarioEmail = $usuarioEmail->getEmail();
         if($usuarioEmail === $email){
@@ -76,22 +70,16 @@ if($cpf){
     }
 }
 
-
 if(strlen($erros) > 0){
 header('Location: index.php?pagina=EditarPerfil'.$erros."&id=".$_SESSION['id_usuario']);
 } else{
     //ATUALIZAR O EMAIL NA TABELA DADOS_LOGIN
 
-    if($_SESSION['nivel_acesso'] == 1){
         $usuario = $usuarioDAO->findById($id);
         $usuario->setEmail($email);
         $usuarioDAO->updateEmail($email,$id);
-
-    }
-
-    if($foto !== ""){
-        if($_SESSION['nivel_acesso'] == 1){
-
+    
+    if($foto){
             $usuarioEditado = new Usuario();
             $usuarioEditado->setId($id);
             $usuarioEditado->setNome($nome);
@@ -101,21 +89,9 @@ header('Location: index.php?pagina=EditarPerfil'.$erros."&id=".$_SESSION['id_usu
             $usuarioEditado->setAcesso($acesso);
 
             if($usuarioDAO->updateComFoto($usuarioEditado)){
-                header("Location: index.php?pagina=perfil&sucesso");
+                header("Location: index.php?pagina=exibirUsuario&id=" .$id. "&sucesso");
             }
-        }else{
-            $usuarioEditado = new Usuario();
-            $usuarioEditado->setId($id);
-            $usuarioEditado->setTelefone($telefone);
-            $usuarioEditado->setFoto($base64);
-
-            if($usuarioDAO->updateTelefoneFoto($usuarioEditado)){
-                header("Location: index.php?pagina=perfil&sucesso");
-            }
-        }
-
     }else{
-        if($_SESSION['nivel_acesso'] == 1){
         $usuarioEditado = new Usuario();
         $usuarioEditado->setId($id);
         $usuarioEditado->setNome($nome);
@@ -124,16 +100,7 @@ header('Location: index.php?pagina=EditarPerfil'.$erros."&id=".$_SESSION['id_usu
         $usuarioEditado->setAcesso($acesso);
 
         $usuarioDAO->updateSemFoto($usuarioEditado);
-        header("Location: index.php?pagina=perfil&sucesso");
-        }else{
-            $usuarioEditado = new Usuario();
-            $usuarioEditado->setId($id);
-            $usuarioEditado->setTelefone($telefone);
-
-            if($usuarioDAO->updateTelefone($usuarioEditado)){
-                header("Location: index.php?pagina=perfil&sucesso");
-            }
-        }
+        header("Location: index.php?pagina=exibirUsuario&id=". $id. "&sucesso");
     }
 }
 

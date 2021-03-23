@@ -54,14 +54,7 @@ session_start();
                     <hr>
 
                     <span class="titulo">Nivel de acesso: </span>
-                    <?php if($_SESSION['nivel_acesso'] == 1){?>
-                    <select id="acesso" name="acesso" required>
-                    <option>Diretor</option>
-                    <option>Coordenador</option>
-                    <option>Agente</option>
-                    </select>
-                    <?php }else{
-                         if($_SESSION['nivel_acesso']==1){echo 'Diretor';}else if($_SESSION['nivel_acesso']==2){echo 'Coordenador';}else{echo 'Agente';} }?>
+                    <?php if($_SESSION['nivel_acesso']==1){echo 'Diretor';}else if($_SESSION['nivel_acesso']==2){echo 'Coordenador';}else{echo 'Agente';} ?>
                     <br>
                 </div>
             </div>

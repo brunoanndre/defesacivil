@@ -84,6 +84,30 @@ class UsuarioDaoPgsql implements UsuarioDAO {
         }
     }
 
+    public function updateTelefone(Usuario $u){
+        $sql = $this->pdo->prepare("UPDATE usuario SET telefone = :telefone WHERE id_usuario = :id");
+        $sql->bindValue(":telefone", $u->getTelefone());
+        $sql->bindValue(":id", $u->getId());
+        if($sql->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function updateTelefoneFoto(Usuario $u){
+        $sql = $this->pdo->prepare("UPDATE usuario SET telefone = :telefone, foto = :foto WHERE id_usuario = :id");
+        $sql->bindValue(":telefone", $u->getTelefone());
+        $sql->bindValue(":foto", $u->getFoto());
+        $sql->bindValue(":id", $u->getId());
+
+        if($sql->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function findById($id){
         $sql = $this->pdo->prepare("SELECT * FROM usuario u
         INNER JOIN dados_login dl ON u.id_usuario = dl.id_usuario WHERE u.id_usuario = :id");
@@ -131,23 +155,25 @@ class UsuarioDaoPgsql implements UsuarioDAO {
     }
 
     public function updateComFoto(Usuario $u){
-        $sql = $this->pdo->prepare("UPDATE usuario SET nome = :nome, cpf = :cpf, telefone = :telefone, foto = :foto WHERE id_usuario = :id");
+        $sql = $this->pdo->prepare("UPDATE usuario SET nome = :nome, cpf = :cpf, telefone = :telefone, foto = :foto, nivel_acesso = :aceso WHERE id_usuario = :id");
         $sql->bindValue(":nome", $u->getNome());
         $sql->bindValue(":cpf", $u->getCPF());
         $sql->bindValue(":telefone", $u->getTelefone());
         $sql->bindValue(":foto", $u->getFoto());
         $sql->bindValue(":id", $u->getId());
+        $sql->bindValue(":acesso",$u->getAcesso());
         $sql->execute();
 
         return true;
     }
 
     public function updateSemFoto(Usuario $u){
-        $sql = $this->pdo->prepare("UPDATE usuario SET nome = :nome, cpf = :cpf, telefone = :telefone WHERE id_usuario = :id");
+        $sql = $this->pdo->prepare("UPDATE usuario SET nome = :nome, cpf = :cpf, telefone = :telefone, nivel_acesso = :acesso WHERE id_usuario = :id");
         $sql->bindValue(":nome", $u->getNome());
         $sql->bindValue(":cpf", $u->getCPF());
         $sql->bindValue(":telefone", $u->getTelefone());
         $sql->bindValue(":id", $u->getId());
+        $sql->bindValue(":acesso",$u->getAcesso());
         $sql->execute();
 
         return true;

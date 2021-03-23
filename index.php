@@ -25,6 +25,7 @@ if(isset($_SESSION['nivel_acesso'])){
             case 'consultarUsuario': include 'view/consultarUsuario.php'; break;
             case 'exibirUsuario': include 'view/exibirUsuario.php'; break;
             case 'perfil': include 'view/perfil.php'; break;
+            case 'EditarUsuario': include 'view/EditarUsuario.php'; break;
             case 'exibirOcorrencia': include 'view/exibirOcorrencia.php'; break;
             case 'editarOcorrencia' : include 'view/editarOcorrencia.php'; break;
             case 'cadastrarChamado' : include 'view/cadastrarChamado.php'; break;

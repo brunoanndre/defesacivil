@@ -91,5 +91,7 @@ interface UsuarioDAO{
     public function updateEmail($email, $id);
     public function updateComFoto(Usuario $u);
     public function updateSemFoto(Usuario $u);
+    public function updateTelefone(Usuario $u);
+    public function updateTelefoneFoto(Usuario $u);
     public function delete($id);
 }

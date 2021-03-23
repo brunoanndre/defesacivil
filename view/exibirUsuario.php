@@ -10,6 +10,11 @@
 
 <div class="container positioning">
 <div class="jumbotron text-center">
+    <?php if(isset($_GET['sucesso'])){ ?>
+            <div class="alert alert-success" role="alert">
+                Usuario editado com sucesso.
+            </div>
+    <?php } ?>
     <div class="box">
         <h3 class="text-center" style="margin:5px;">Usuário</h3>
     </div>
@@ -38,9 +43,17 @@
             </div>
         </div>
     </div>
+    <div style="display: flex; justify-content: center;">
+    <?php if($_SESSION['nivel_acesso'] == 1){ ?>
+    <form action="index.php?pagina=EditarUsuario" method="post">
+    <input type="hidden" name="id_usuario" value="<?php echo $id_usuario; ?>">
+    <input type="submit" value="Editar" class="btn btn-default">
+    </form>
+    <?php }?>
     <form action="excluir_usuario.php" method="post" onsubmit="return confirm('Você realmente deseja excluir o usuário? Essa exclusão será permanente');">
         <input type="hidden" name="id" value="<?php echo $id_usuario; ?>">
         <input type="submit" value="Excluir" class="btn btn-default">
     </form>
+    </div>
 </div>
 </div>
