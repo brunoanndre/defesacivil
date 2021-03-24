@@ -237,7 +237,7 @@ $fotos = explode(',', $string);
                     <select name="cobrade_categoria" class="form-control cobrade-sub" ng-model="categoria" ng-init="categoria='<?php echo $_POST['ocorr_cobrade'][0]; echo $cobrade['0']; ?>'">
                         <option value="1">Naturais</option>
                         <option value="2">Tecnológicos</option>
-                        <option value="0">Não Listado</option>
+                        <option value="0">Sem cobrade</option>
                     </select>
                     Grupo: <span style="color:red;" ng-hide="categoria == 0">*</span><br>
                     <select name="cobrade_grupo" class="form-control cobrade-sub" ng-model="grupo" ng-disabled="categoria == 0" ng-init="grupo='<?php echo $_POST['ocorr_cobrade'][1]; echo $cobrade['1']; ?>'">
@@ -374,10 +374,6 @@ $fotos = explode(',', $string);
                 </div>
             </div>
             <br>
-            <div>
-                Descricao cobrade: <span style="color:red;" ng-show="categoria == 0">*</span>
-                <textarea id="natureza" name="cobrade_descricao" class="form-control titulobox  " cols="30" rows="2" maxlength = "100" ng-disabled="categoria != 0"  ng-model="cobrade_descricao" ng-init="cobrade_descricao='<?php echo $_POST['cobrade_descricao']; ?>'" required></textarea>
-            </div>
             <br>
             <div>
                 Adicionar fotos:
@@ -416,7 +412,8 @@ $fotos = explode(',', $string);
                         </div>
                     </div>
                     <?php } ?>
-                <input name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
+                <input id="imgInp" name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
+                <div class="gallery"></div>
             </div>
         <hr>
             <div>

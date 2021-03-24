@@ -29,6 +29,10 @@ $descricao = addslashes($_POST['descricao']);
 $prioridade = addslashes($_POST['prioridade']);
 $distribuicao = addslashes($_POST['distribuicao']);
 
+if($origem == 'Outro'){
+	$origem = filter_input(INPUT_POST, 'origem_chamado2');
+}
+
 $base64_array = array();
 
 
@@ -48,14 +52,14 @@ $pg_array = '{' . join(',', $base64_array) . '}';
 $erros='';
 
 
-
 session_start();
 
 $id_usuario = $_SESSION['id_usuario'];
 $dataAtual = date('d-m-Y H:i:s');
 
 
-
+var_dump($origem);
+die;
 
 if($endereco_principal == "Logradouro"){
 	$cep = str_replace("-","",$cep);

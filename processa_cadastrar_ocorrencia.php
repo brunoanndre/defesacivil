@@ -40,7 +40,11 @@ $cobrade_tipo = $_POST['cobrade_tipo'];
 $cobrade_subtipo = $_POST['cobrade_subtipo'];
 $prioridade = addslashes($_POST['prioridade']);
 $ativo = true;
-
+if($ocorr_origem == 'Outro'){
+	$ocorr_origem = filter_input(INPUT_POST,'ocorr_origem2');
+}
+var_dump($ocorr_origem);
+die;
 $base64_array = array();
 
 

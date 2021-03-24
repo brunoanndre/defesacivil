@@ -591,7 +591,7 @@ function formatarDataInterdicao(){
 }
 
 $(function() {
-    // Multiple images preview in browser
+    // Previsualizar as imagens no cadastro
     var imagesPreview = function(input, placeToInsertImagePreview) {
 
         if (input.files) {

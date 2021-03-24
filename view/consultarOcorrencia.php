@@ -30,16 +30,19 @@ $(document).ready(function() {
     }else{
         $parametro = 'ativo_true';
 
-
-        if($_POST['encerrada'] != true){
-            $parametro = 'ativo_encerrada_false';
+        if($_POST['congelada'] == true){
+            $parametro = 'ativo_congelada_true';
         }else{
-            $parametro = 'ativo_encerrada_true';
+            if($_POST['encerrada'] != true){
+                $parametro = 'ativo_encerrada_false';
+            }else{
+                $parametro = 'ativo_encerrada_true';
+            }
         }
+    
 
         $consulta_ocorrencias= $ocorrenciadao->buscarConsulta($parametro);
     }   
-
 ?>
 
 <div>
@@ -47,7 +50,9 @@ $(document).ready(function() {
     <div class="box">
         <form class="input-group" method="post" action="index.php?pagina=consultarOcorrencia&n=0">
             <span class="ocorrencias_encerradas">Mostrar ocorrências encerradas: </span>
-            <input name="encerrada" onchange="this.form.submit()" value="true" type="checkbox" <?php if($_POST['encerrada']==true)echo 'checked'; ?>>
+            <input name="encerrada" onchange="this.form.submit()" value="true" type="checkbox" <?php if($_POST['encerrada']==true)echo 'checked'; ?>><br>
+            <span class="ocorrencias_encerradas"> Mostrar ocorrências congeladas: </span>
+            <input name="congelada" onchange="this.form.submit()" value="true" type="checkbox" <?php if($_POST['congelada'] == true)echo 'checked'; ?>>
         </form>
     </div>
     <div class="box">

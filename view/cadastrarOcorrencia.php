@@ -181,7 +181,19 @@
             <div>
                 <?php if($_POST['ocorr_origem'] == ""){ ?>
                     Origem: <span style="color:red;">*</span>
-                    <input name="ocorr_origem" type="text" class="form-control" value="" required>
+                    <select name="ocorr_origem" class="form-control" ng-model="sel_origem" ng-init="sel_origem='telefone'" required>
+                    <option value="Telefone Base">Telefone Base</option>
+                    <option value="Ouvidoria">Ouvidoria</option>
+                    <option value="Secretaria de Obras">Secretaria de Obras</option>
+                    <option value="Secretaria do Meio Ambiente">Secretaria do Meio Ambiente</opntion>
+                    <option value="Secretaria da Saúde">Secretaria da Saúde</option>
+                    <option value="Outro">Outro</option>
+                    </select>
+
+                    <div ng-show="sel_origem == 'Outro'">
+                    Descrição Origem:
+                    <input type="text" name="ocorr_origem2" class="form-control">
+                    </div>
                 <?php } else { ?>
                     <input name="ocorr_origem" type="hidden" class="form-control" value="<?php echo $_POST['ocorr_origem']; ?>">
                 <?php } ?>

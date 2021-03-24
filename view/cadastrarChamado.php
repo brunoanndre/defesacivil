@@ -47,7 +47,19 @@
             </div>
             <div>
                 Origem: <span style="color:red;">*</span>
-                <input type="text" name="origem_chamado" class="form-control" required>
+                <select name="origem_chamado" class="form-control" ng-model="sel_origem" ng-init="sel_origem='telefone'" required>
+                <option value="Telefone Base">Telefone Base</option>
+                <option value="Ouvidoria">Ouvidoria</option>
+                <option value="Secretaria de Obras">Secretaria de Obras</option>
+                <option value="Secretaria do Meio Ambiente">Secretaria do Meio Ambiente</opntion>
+                <option value="Secretaria da Saúde">Secretaria da Saúde</option>
+                <option value="Outro">Outro</option>
+                </select>
+
+                <div ng-show="sel_origem == 'Outro'">
+                Descrição Origem:
+                <input type="text" name="origem_chamado2" class="form-control">
+                </div>
             </div>
             <!--<div>
                 Agente principal: <span style="color:red;">*</span>
@@ -276,10 +288,3 @@
     </div>
 </div>
 </div>
-
-
-<script>
-
-
-
-</script>

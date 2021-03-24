@@ -434,5 +434,35 @@
                     return false;
                 }
             }
+
+            if($parametro == 'ativo_congelada_true'){
+                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'YYYY/MM/DD') as data_ocorrencia,
+                usuario.nome,cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao
+                FROM ocorrencia 
+                INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario 
+                INNER JOIN cobrade ON ocorrencia.ocorr_cobrade = cobrade.codigo 
+                WHERE ocorrencia.ativo = true AND ocorrencia.ocorr_congelado = true ORDER BY id_ocorrencia DESC");
+                $sql->execute();
+
+                if($sql->rowCount() > 0){
+                    $lista = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach($lista as $item){
+                        $o = new Ocorrencia;
+                        $o->setId($item['id_ocorrencia']);
+                        $o->setPrioridade($item['ocorr_prioridade']);
+                        $o->setData($item['data_ocorrencia']);
+                        $o->setNomeAgentePrincipal($item['nome']);
+                        $o->setCobrade($item['subgrupo']);
+                        $o->setPessoa1($item['nome_pessoa1']);
+                        $o->setDescricao($item['ocorr_descricao']);
+                        
+                        $array[] = $o;
+                    }
+                    return $array;
+                }else{
+                    return false;
+                }
+            }
         }
     }

@@ -179,7 +179,7 @@ if($linhaPessoa1 !== null){ ?>
         <hr class="printShow" style="border-bottom: 1px solid; margin-bottom: 40px;">
     </div>
     <?php if(($fotos[0]) != "" && $fotos[0] != null){?>
-        <div class="box printShow printImgg">
+        <div class="box">
         <div id="myCarousel" class="carousel slide limite" data-ride="carousel">
             <!-- Indicators -->
             <ol class="carousel-indicators">
