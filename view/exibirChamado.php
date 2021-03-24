@@ -96,6 +96,7 @@
         <h4 class="printHide">Ocorrência</h4>
         <h2 class="printShow titulo" style="margin-bottom: 10px; border-bottom:1px solid">Ocorrência</h3>
         <nav>
+            <span class="titulo">Criador:</span><span><a class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaChamado->getAgenteId(); ?>    "><?php echo $linhaAgente->getNome(); ?></a></span><br>
             <span class="titulo">Data e hora: </span>
             <span><?php echo date("d/m/Y H:i", strtotime($linhaChamado->getData())); ?></span><br>
             <span class="titulo">Origem: </span><span id="ocorr_origem"><?php echo $linhaChamado->getOrigem(); ?></span><br>
@@ -174,9 +175,11 @@ if($linhaPessoa1 !== null){ ?>
             <span>Nenhuma distribuição cadastrada.</span>
             <?php } ?>
         </nav>
+
         <hr class="printShow" style="border-bottom: 1px solid; margin-bottom: 40px;">
     </div>
-    <div class="box printShow">
+    <?php if(($fotos[0]) != "" && $fotos[0] != null){?>
+        <div class="box printShow printImgg">
         <div id="myCarousel" class="carousel slide limite" data-ride="carousel">
             <!-- Indicators -->
             <ol class="carousel-indicators">
@@ -188,7 +191,7 @@ if($linhaPessoa1 !== null){ ?>
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
                 <div class="item active">
-                    <img src="data:image/png;base64,<?php echo $fotos[0]; ?>" alt="img1" style="width:80%;">
+                    <img src="data:image/png;base64,<?php echo $fotos[0]; ?>" alt="img1" style="width:100%;">
                 </div>
                 <?php $i = 1; while($i < sizeof($fotos)){ ?>
                     <div class="item">
@@ -208,6 +211,8 @@ if($linhaPessoa1 !== null){ ?>
             </a>
         </div>
     </div>
+    <?php }?>
+
     <div class="row">
     <div class="col-sm-6">
         <?php if($linhaChamado->getUsado() == false && ($_SESSION['nivel_acesso'] == 1 || $_SESSION['nivel_acesso'] == 2)){ ?>

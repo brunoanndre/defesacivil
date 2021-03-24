@@ -49,6 +49,7 @@ if(isset($_SESSION['nivel_acesso'])){
             case 'perfil': include 'view/perfil.php'; break;
             case 'exibirOcorrencia': include 'view/exibirOcorrencia.php'; break;
             case 'editarOcorrencia' : include 'view/editarOcorrencia.php'; break;
+            case 'exibirUsuario': include 'view/exibirUsuario.php'; break;
             case 'cadastrarChamado' : include 'view/cadastrarChamado.php'; break;
             case 'consultarChamado' : include 'view/consultarChamado.php'; break;
             case 'exibirChamado' : include 'view/exibirChamado.php'; break;
@@ -70,6 +71,7 @@ if(isset($_SESSION['nivel_acesso'])){
             case 'perfil': include 'view/perfil.php'; break;
             case 'exibirOcorrencia': include 'view/exibirOcorrencia.php'; break;
             case 'editarOcorrencia' : include 'view/editarOcorrencia.php'; break;
+            case 'exibirUsuario': include 'view/exibirUsuario.php'; break;
             case 'cadastrarChamado' : include 'view/cadastrarChamado.php'; break;
             case 'consultarChamado' : include 'view/consultarChamado.php'; break;
             case 'exibirChamado' : include 'view/exibirChamado.php'; break;

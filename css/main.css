@@ -318,6 +318,14 @@ body{
     border-radius: 50%;
 }
 
+.imageThumb {
+    max-height: 75px;
+    border: none;
+    margin: 10px 10px 0 0;
+    padding: 1px;
+ }
+
+
 .quadro-informacao{
     border-style: solid;
     border-width: 2px;
@@ -621,6 +629,11 @@ i{
     }
     .printShowImg{
     display: inline;
+    }
+
+    .printImgg{
+        width: 200px;
+        height: 200px;
     }
 
     .row,

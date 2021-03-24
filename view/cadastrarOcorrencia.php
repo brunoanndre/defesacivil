@@ -377,8 +377,9 @@
             <br>
             <div>
                 Fotos:
-                <input name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
+                <input id="imgInp" name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
             </div>
+            <div class="gallery"></div>
         <hr>
             <div>
                 Prioridade: <span style="color:red;">*</span>

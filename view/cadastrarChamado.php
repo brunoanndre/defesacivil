@@ -14,7 +14,6 @@
 
     $consulta_usuarios = $usuariodao->buscarUsuariosAtivos();
 ?>
-
 <div class="container positioning">
 <div class="jumbotron campo_cadastro">
     <form method="post" action="processa_cadastrar_chamado.php" enctype="multipart/form-data" onsubmit="return validarFormCadastroChamado()">
@@ -168,7 +167,7 @@
                         <input id="complemento" name="complemento" type="text" class="form-control">
                     </div>
                     <div class="col-sm-8">
-                        <span>Referência: </span>
+                        <span class="testu">Referência: </span>
                         <input name="referencia" type="text" class="form-control">
                     </div>
                 </div>
@@ -193,13 +192,15 @@
         <hr>
         <div>
             Fotos:
-            <input name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
+            <input id="imgInp" name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
         </div>
+        <div class="gallery"></div>
         <hr>
         <div class="div-btn-cadastrar">
             <input type="submit" class="btn-cadastrar btn-default btn-md" value="Cadastrar">
         </div>
     </form>
+
     
     <div class="modal fade" id="pessoasModal" role="dialog">
         <div class="modal-dialog modal-lg">
@@ -275,3 +276,10 @@
     </div>
 </div>
 </div>
+
+
+<script>
+
+
+
+</script>
