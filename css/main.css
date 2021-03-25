@@ -317,6 +317,10 @@ body{
     border-color: black;
     border-radius: 50%;
 }
+.signature-line{
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
 
 .imageThumb {
     max-height: 75px;
@@ -572,10 +576,22 @@ i{
 
 @media print{
 
-    *{
-        margin: none !important;
-        padding: 0;
-    }
+    * {
+        background:transparent !important;
+        color:#000 !important;
+        text-shadow:none !important;
+        filter:none !important;
+        page-break-before: auto;
+        -ms-filter:none !important;
+        }
+        
+        body {
+        margin:0;
+        padding:0;
+        line-height: 1.4em;
+        }
+
+ 
     .box{
         margin: 0 !important;
         padding: 0;
@@ -597,6 +613,17 @@ i{
         padding-right: 20px;
         flex: 1;
         text-align:right;
+    }
+
+    .divPrintHeader{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+
+    }
+    .ocorrenciaTitlePrint,
+    .chamadoTitlePrint{
+        margin-left: 60px;
     }
 
     .print-interdicao-img{
@@ -636,6 +663,34 @@ i{
         height: 200px;
     }
 
+    .print-img-area{
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .image-print{
+        max-height: 5cm;
+        max-width: 5cm;
+        border: none;
+        margin: 10px;
+    }
+
+    .image-print-chamado{
+        max-width: 60px;
+        max-height: 200px;
+        margin: 5px;
+    }
+
+    .page-break-always{
+        page-break-before: always;
+    }
+
+    .page-break-auto{
+        page-break-before: auto;
+    }
+
     .row,
     .printWrap{
         display: flex;
@@ -649,5 +704,9 @@ i{
     .printMargin{
         margin-top: 10px !important;
     }
+
+    @page {
+        margin: 0.5cm;
+        }
 
 }

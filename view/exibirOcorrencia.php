@@ -98,9 +98,9 @@
                 <h3 class="text-center">Registro de ocorrência</h3>
             </div>
         </div>
-        <div class="printShow" style="display: flex; justify-content:space-between; margin-bottom:30px;">
+        <div class="printShow divPrintHeader row">
                 <img class="printShow" src="images/logo.jpg" style="width: 40px;">
-                <h3 class="text-center printShow">Registro de Ocorrência</h3>
+                <h3 class="ocorrenciaTitlePrint printShow">Registro de Ocorrência</h3>
                 <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho printShow" style="width: 120px;">
         </div>
         <button class="printHide" style="background-color: white; border:none;" onclick="print()"><img src="images/print.png" style="width: 50px; height:auto"></button>
@@ -171,10 +171,9 @@
             <span class="titulo printHide">Nenhuma pessoa foi cadastrada</span><br>
         <?php }else{ ?>
             <span class="titulo">Solicitante 1: <a href="" class="open-AddBookDialog" data-toggle="modal" data-id="pessoa_nome1"></span><span><?php echo $linhaPessoa1->getNome(); ?></span></a>
-            <!--<a id="atendido_1" href="?pagina=exibirPessoa&id=<?php //echo $linhaOcorrencia['atendido_1']; ?>"><?php //echo $linhaPessoa1['nome']; ?></a><br>-->
+
             <?php if($linhaOcorrencia->getIdPessoa2() != ""){ ?>
                 <span class="titulo">Solicitante 2: <a href="" class="open-AddBookDialog" data-toggle="modal" data-id="pessoa_nome2"></span><span><?php echo $linhaPessoa2->getNome(); ?></span></a>
-                <!--<a id="atendido_2" href="?pagina=exibirPessoa&id=<?php //echo $linhaOcorrencia['atendido_2']; ?>"><?php //echo $linhaPessoa2['nome']; ?></a><br>-->
             <?php } 
         }?>
 <?php
@@ -298,7 +297,7 @@ if($linhaPessoa2 !== null){ ?>
         <span class="titulo">Encerrado: </span><span id="ocorr_encerrado"><?php echo ($linhaOcorrencia->getEncerrado()== 1) ? 'Sim':'Não'; ?></span>
         <br><br>
     </div>
-    <div class="box">
+    <div class="box page-break-auto">
         <h4 class="printHide">Informações</h4>
         <h4 class="printShow">Informações</h4>
         <hr>
@@ -320,7 +319,7 @@ if($linhaPessoa2 !== null){ ?>
         <br>
     </div>
     <?php if($linhaOcorrencia->getPossuiFotos() == true){ ?>
-    <div class="box">
+    <div class="box printHide">
         <div id="myCarousel" class="carousel slide limite" data-ride="carousel">
             <!-- Indicators -->
             <ol class="carousel-indicators">
@@ -353,6 +352,11 @@ if($linhaPessoa2 !== null){ ?>
         </div>
     </div>
     <?php } ?>
+    <div class="print-img-area printShow page-break-always">
+        <?php for($i = 0; $i < sizeof($fotos); $i++){
+        echo '<img class="image-print" src="data:image/png;base64,' . $fotos[$i] .'">';
+        } ?>
+    </div>
     <div class="modal fade" id="map" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -368,9 +372,9 @@ if($linhaPessoa2 !== null){ ?>
     </div>
     <div class="printShoww" style="display: flex; flex-direction:column; align-items:center;">
         <div style="margin-bottom: 1px solid black;">
-        <span class="printShow" style="margin-bottom: 1px solid black;">_____________________</span>
+        <span class="printShow" style="margin-top:40px;">_____________________</span>
         </div>
-       <span class="printShow" style="margin-left: ;"><?php echo $linhaAgentePrincipal->getNome(); ?></span>
+       <span class="printShow" >Assinatura</span>
     </div>
     <?php if($linhaOcorrencia->getAtivo() == true){ ?>
         <form action="index.php?pagina=editarOcorrencia"   method="post">

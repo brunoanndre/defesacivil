@@ -30,6 +30,7 @@
             $linhaPessoa = $sql->fetch();
             $nomePessoa = $linhaPessoa['nome'];
         }
+        $dataPrint= New DateTime($linhaChamado['data_hora']);
 
         $data = New DateTime($linhaChamado['data_hora']);
         $dataAtual = New DateTime(date('Y-m-d H:i:s'));
@@ -52,7 +53,7 @@
         }
         $response = $response . '<tr style="background-color:'.$color.';"><td></td>';
         $response = $response.'<td>'.$linhaChamado['id_chamado'].'</td>';
-        $response = $response.'<td>'.$linhaChamado['data_hora'].'</td>';
+        $response = $response.'<td>'.$dataPrint->format('d-m-y H:i').'</td>';
         if($diff >= 3){
             $response = $response . '<td style="color:red;"> <strong>' . $diff . '</strong></td>';
         }else{

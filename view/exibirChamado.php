@@ -59,19 +59,18 @@
                 <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho">
             </div>
         </div>
-        <div class="printShow" style="display: flex; justify-content:space-between;">
+        <div class="printShow divPrintHeader row">
             <img class="printShow" src="images/logo.jpg" style="width: 40px;">
-            <h3 class="text-center printShow">Registro de chamado</h3>
+            <h3 class="chamadoTitlePrint printShow">Registro de chamado</h3>
             <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho printShow" style="width: 120px;">
         </div>
 
         <h3 class="text-center printHide">Registro de chamado</h3>
         <button class="printHide" style="background-color: white; border:none;" onclick="print()"><img src="images/print.png" style="width: 50px; height:auto"></button>
-    <hr>
         <h4 class="printHide">Endereço</h4>
-        <h2 class="printShow titulo" style="margin-bottom: 10px; border-bottom:1px solid">Endereço</h3>
+        <h2 class="printShow titulo" style="margin-bottom: 10px;">Endereço</h3>
         <span class="titulo hide">Endereço principal: </span><span class="hide" id="coordenada_principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaChamado->getEnderecoPrincipal(); ?>'"><?php echo $linhaChamado->getEnderecoPrincipal(); ?></span>
-        <div ng-show="sel_endereco == 'Logradouro'">
+        <div style="margin-bottom: none;" ng-show="sel_endereco == 'Logradouro'">
             <div class="row">
                 <div class="col-sm-7"><span class="titulo">CEP: </span><?php echo $linhaLogradouro->getCep(); ?></div>
                 <div class="col-sm-7"><span class="titulo">Logradouro: </span><?php echo $linhaLogradouro->getLogradouro(); ?></div>
@@ -83,7 +82,7 @@
             </div>
             <nav><span class="titulo">Referência: </span><?php echo $linhaLogradouro->getReferencia(); ?></nav><br>
         </div>
-        <div ng-show="sel_endereco == 'Coordenada'">
+        <div style="margin-bottom: none;" ng-show="sel_endereco == 'Coordenada'">
             <nav>
                 <span class="titulo">Latitude: </span><span id="latitude" ><?php echo $linhaChamado->getLatitude(); ?></span>
             </nav>
@@ -94,7 +93,7 @@
         </div>
     <hr>
         <h4 class="printHide">Ocorrência</h4>
-        <h2 class="printShow titulo" style="margin-bottom: 10px; border-bottom:1px solid">Ocorrência</h3>
+        <h2 class="printShow titulo" style="margin-bottom: 10px;">Ocorrência</h3>
         <nav>
             <span class="titulo">Criador:</span><span><a class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaChamado->getAgenteId(); ?>    "><?php echo $linhaAgente->getNome(); ?></a></span><br>
             <span class="titulo">Data e hora: </span>
@@ -102,10 +101,16 @@
             <span class="titulo">Origem: </span><span id="ocorr_origem"><?php echo $linhaChamado->getOrigem(); ?></span><br>
             <span class="titulo">Descrição: </span><br>
             <textarea name="descricao" rows="5" readonly class="readtextarea"><?php echo $linhaChamado->getDescricao(); ?></textarea><br>
+            <span class="titulo">Distribuído para:</span>
+            <?php if($linhaChamado->getDistribuicao() != NULL){ ?>
+            <span class="printShoww"> <?php echo $linhaDistribuicao->getNome(); ?></span><a id="distribuicao" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaChamado->getDistribuicao(); ?>"><?php echo $linhaDistribuicao->getNome(); ?></a>
+            <?php }else{ ?>
+            <span style="margin-top: 5px;">Nenhuma distribuição cadastrada.</span>
+            <?php } ?>
         </nav>
     <hr>
         <h4 class="printHide">Solicitante</h4>
-        <h2 class="printShow titulo" style="margin-bottom: 10px; border-bottom:1px solid">Solicitante</h3>
+        <h2 class="printShow titulo" style="margin-bottom: 10px;">Solicitante</h3>
         <nav>
             <?php if($idpessoa){ ?>
             <?php 
@@ -113,10 +118,10 @@
             ?>
             <span class="titulo">Pessoa atendida: </span> <a href="" class="open-AddBookDialog" data-toggle="modal" data-id="pessoa_nome1"><span><?php echo $linhaChamado->getNomePessoa(); ?></span></a>
             <?php }else{ ?>
-            <span>Nenhuma pessoa cadastrada.</span>
+            Nenhuma pessoa cadastrada.
             <?php } ?>
         </nav>
-    <hr>
+    <hr style="margin-bottom:0;">
     <?php
 if($linhaPessoa1 !== null){ ?>
 <div class="modal fade" id="pessoa1Modal" role="dialog">
@@ -167,22 +172,11 @@ if($linhaPessoa1 !== null){ ?>
         </div>
     </div>
     <?php } ?>
-        <h4>Distribuído para</h4>
-        <nav>
-            <?php if($linhaChamado->getDistribuicao() != NULL){ ?>
-            <span class="printShoww"> <?php echo $linhaDistribuicao->getNome(); ?></span><a id="distribuicao" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaChamado->getDistribuicao(); ?>"><?php echo $linhaDistribuicao->getNome(); ?></a>
-            <?php }else{ ?>
-            <span>Nenhuma distribuição cadastrada.</span>
-            <?php } ?>
-        </nav>
-
-        <hr class="printShow" style="border-bottom: 1px solid; margin-bottom: 40px;">
-    </div>
     <?php if(($fotos[0]) != "" && $fotos[0] != null){?>
-        <div class="box">
+        <div class="box printHide">
         <div id="myCarousel" class="carousel slide limite" data-ride="carousel">
             <!-- Indicators -->
-            <ol class="carousel-indicators">
+            <ol class="carousel-indicators printHide">
                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                 <?php $i = 1; while($i < sizeof($fotos)){ ?>
                     <li data-target="#myCarousel" data-slide-to="<?php echo $i; ?>"></li>
@@ -212,7 +206,18 @@ if($linhaPessoa1 !== null){ ?>
         </div>
     </div>
     <?php }?>
+    <div class="print-img-area printShow">
+        <?php for($i = 0; $i < 3; $i++){
+        echo '<img class="image-print-chamado"  src="data:image/png;base64,' . $fotos[$i] .'">';
+        } ?>
+    </div>
+    <div class="printShoww">
+        <div style="margin-top:20px; display:flex;">
+        Assinatura:
+        <div style="border-bottom: 1px solid black; width: 40%;"></div>
+        </div>
 
+    </div>
     <div class="row">
     <div class="col-sm-6">
         <?php if($linhaChamado->getUsado() == false && ($_SESSION['nivel_acesso'] == 1 || $_SESSION['nivel_acesso'] == 2)){ ?>

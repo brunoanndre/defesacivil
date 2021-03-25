@@ -7,7 +7,7 @@
         <th>Origem</th>
         <th>Solicitante</th>
         <th>Agente</th>
-        <th>Responsável</th>
+        <th>Distribuição</th>
         <th>Endereço</th>
         <th>Descrição</th>
     </tr></thead>

@@ -57,10 +57,6 @@ session_start();
 $id_usuario = $_SESSION['id_usuario'];
 $dataAtual = date('d-m-Y H:i:s');
 
-
-var_dump($origem);
-die;
-
 if($endereco_principal == "Logradouro"){
 	$cep = str_replace("-","",$cep);
 	$linhaendereco = $enderecodao->buscarEndereco($logradouro,$numero);	

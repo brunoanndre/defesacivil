@@ -105,7 +105,14 @@ $(document).ready(function() {
             "zeroRecords": "Nenhuma interdição encontrada",
             "info": "Mostrando página _PAGE_ de _PAGES_",
             "infoEmpty": "Nenhuma interdição registrada",
-            "infoFiltered": "(filtered from _MAX_ total records)"
+            "infoFiltered": "(filtered from _MAX_ total records)",
+            "sSearch": "Pesquisar",
+            "oPaginate": {
+        "sNext": "Próximo",
+        "sPrevious": "Anterior",
+        "sFirst": "Primeiro",
+        "sLast": "Último"
+    },
         }
     } );
 } );

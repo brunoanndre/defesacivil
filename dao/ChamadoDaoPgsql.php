@@ -14,7 +14,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
 
     public function buscarConsulta($p){
         if($p == 'normal'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,chamado.data_hora as dataa) as dataa,
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa) as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa,chamado_logradouro_id, 
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao, logradouro
             FROM chamado 
@@ -48,7 +48,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                 }
         }
         if($p == 'usado_false'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,chamado.data_hora as dataa,
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao, logradouro
             FROM chamado 
@@ -84,7 +84,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                 }
         }
         if($p == 'usado_true'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,chamado.data_hora as dataa) as dataa,
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa) as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao, logradouro
             FROM chamado 
@@ -119,7 +119,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
         }
 
         if($p == 'usado_true_cancelado_false'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,chamado.data_hora as dataa) as dataa,
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa) as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa,chamado_logradouro_id,logradouro,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao
             FROM chamado 
@@ -154,7 +154,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
         }
 
         if($p == 'usado_cancelado_true'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,chamado.data_hora as dataa) as dataa,
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa) as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id,logradouro,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao
             FROM chamado 
