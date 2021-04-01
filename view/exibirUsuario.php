@@ -43,7 +43,7 @@
     <input type="hidden" name="id_usuario" value="<?php echo $id_usuario; ?>">
     <input type="submit" value="Editar" class="btn btn-default">
     </form>
-    <form action="excluir_usuario.php" method="post" onsubmit="return confirm('Você realmente deseja excluir o usuário? Essa exclusão será permanente');">
+    <form action="excluir_usuario.php" method="post" onsubmit="return confirm('Você realmente deseja excluir o usuário?');">
         <input type="hidden" name="id" value="<?php echo $id_usuario; ?>">
         <input type="submit" value="Excluir" class="btn btn-default">
     </form>

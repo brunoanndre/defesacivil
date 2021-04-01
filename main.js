@@ -317,8 +317,9 @@ function SubmitFormData() {
     }
     xmlhttp.onreadystatechange=function() {
         if (this.readyState==4 && this.status==200) {
-            document.getElementById(id).innerHTML=this.responseText;
-            if(this.responseText == 'Pessoa cadastrado com sucesso'){
+            this.responseText = 'Pessoa cadastrada com sucesso'
+            document.getElementById('alertpessoasucesso').innerHTML=this.responseText;
+            if(this.responseText == 'Pessoa cadastrada com sucesso'){
                 document.getElementById(id).style.color="#00FF00";
                 document.getElementById(id_input).value = nome_pessoa;
             }else

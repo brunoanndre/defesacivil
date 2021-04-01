@@ -170,10 +170,15 @@
         <?php if(!$linhaOcorrencia->getIdPessoa1() && !$linhaOcorrencia->getIdPessoa2()){ ?>
             <span class="titulo printHide">Nenhuma pessoa foi cadastrada</span><br>
         <?php }else{ ?>
-            <span class="titulo">Solicitante 1: <a href="" class="open-AddBookDialog" data-toggle="modal" data-id="pessoa_nome1"></span><span><?php echo $linhaPessoa1->getNome(); ?></span></a>
-
+            <div class="row">
+                <span class="titulo">Solicitante 1: <a href="" class="open-AddBookDialog printHide" data-toggle="modal" data-id="pessoa_nome1"></span><span><?php echo $linhaPessoa1->getNome(); ?></span></a><span class="printShow"><?php echo $linhaPessoa1->getNome(); ?></span>
+                <span class="titulo printShow">Contato: </span><span class="printShow"><?php echo $linhaPessoa1->getCelular(); ?></span>
+            </div>
             <?php if($linhaOcorrencia->getIdPessoa2() != ""){ ?>
-                <span class="titulo">Solicitante 2: <a href="" class="open-AddBookDialog" data-toggle="modal" data-id="pessoa_nome2"></span><span><?php echo $linhaPessoa2->getNome(); ?></span></a>
+                <div class="row">
+                    <span class="titulo">Solicitante 2: <a href="" class="open-AddBookDialog printHide" data-toggle="modal" data-id="pessoa_nome2"></span><span><?php echo $linhaPessoa2->getNome(); ?></span></a><span class="printShow"><?php echo $linhaPessoa2->getNome(); ?></span>
+                    <span class="titulo printShow">Contato: </span><span class="printShow"><?php echo $linhaPessoa2->getCelular(); ?></span>
+                </div>
             <?php } 
         }?>
 <?php

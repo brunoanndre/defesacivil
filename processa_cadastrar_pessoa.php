@@ -12,7 +12,7 @@
     $email = addslashes($_GET['email_pessoa']);
 
     if($nome != null){
-        $response = 'Pessoa cadastrado com sucesso';
+        $response = 'Pessoa cadastrada com sucesso';
         if(strlen($erros) == 0){
             $novapessoa = new Pessoa();
             $novapessoa->setNome($nome);

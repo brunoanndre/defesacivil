@@ -115,9 +115,17 @@
             <?php if($idpessoa){ ?>
             <?php 
             $linhaPessoa1 = $pessoadao->buscarPeloID($idpessoa);
+            $contato =  $linhaPessoa1->getCelular();
+            if( $contato == ''){
+                $contato = $linhaPessoa1->getTelefone();
+            }
             ?>
-            <span class="titulo">Pessoa atendida: </span> <a href="" class="open-AddBookDialog" data-toggle="modal" data-id="pessoa_nome1"><span><?php echo $linhaChamado->getNomePessoa(); ?></span></a>
-            <?php }else{ ?>
+            
+            <div class="row">
+            <span class="titulo">Pessoa atendida: </span> <a href="" class="open-AddBookDialog printHide" data-toggle="modal" data-id="pessoa_nome1"><span><?php echo $linhaChamado->getNomePessoa();?></span></a><span class="printShow"><?php echo $linhaChamado->getNomePessoa(); ?></span>
+            <span class="titulo printShow">Contato: </span> <span class="printShow"><?php echo $contato ?></span>
+            </div>
+            <?php  }else{ ?>
             Nenhuma pessoa cadastrada.
             <?php } ?>
         </nav>
@@ -205,12 +213,14 @@ if($linhaPessoa1 !== null){ ?>
             </a>
         </div>
     </div>
-    <?php }?>
+
+
     <div class="print-img-area printShow">
         <?php for($i = 0; $i < 3; $i++){
         echo '<img class="image-print-chamado"  src="data:image/png;base64,' . $fotos[$i] .'">';
         } ?>
     </div>
+    <?php }?>
     <div class="printShoww">
         <div style="margin-top:20px; display:flex;">
         Assinatura:

@@ -83,7 +83,7 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <span>CEP:</span>
-                        <input id="cep" name="cep" type="text" class="form-control" ng-model="cep" maxlength="8" onchange="verificaCep(this.value)">
+                        <input id="cep" name="cep" type="text" class="form-control" ng-model="cep" maxlength="8" onchange="verificaCep(this.value)" <?php if($_POST['id_chamado']> 0){ ?> value=" <?php echo $_POST['cep']; } ?>">
                         <span id="erroCep" class="alertErro hide">CEP inválido.</span>
                     </div>
                     <div class="col-sm-8">
@@ -94,31 +94,32 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-sm-4">
                         <span>Bairro: <span style="color:red;">*</span>
                         <!--<input id="bairro" name="bairro" type="text" class="form-control">-->
-                        <select id="bairro" name="bairro" class="form-control">
-                            <option value="Centro">Centro</option>
-                            <option value="Nações">Nações</option>
-                            <option value="Pioneiros">Pioneiros</option>
-                            <option value="Estados">Estados</option>
-                            <option value="Ariribá">Ariribá</option>
-                            <option value="Praia dos Amores">Praia dos Amores</option>
-                            <option value="Municípios">Municípios</option>
-                            <option value="Vila Real">Vila Real</option>
-                            <option value="Jardim Iate Clube">Jardim Iate Clube</option>
-                            <option value="Várzea do Ranchinho">Várzea do Ranchinho</option>
-                            <option value="Barra">Barra</option>
-                            <option value="Parque Bandeirantes">Parque Bandeirantes</option>
-                            <option value="Nova Esperança">Nova Esperança</option>
-                            <option value="São Judas Tadeu">São Judas Tadeu</option>
-                            <option value="Região das Praias">Região das Praias</option>
+                        <select id="bairro" name="bairro" class="form-control" selec>
+                            <option <?php if($_POST['bairro'] == 'Centro'){ echo 'selected';} ?> value="Centro">Centro</option>
+                            <option <?php if($_POST['bairro'] == 'Nações'){ echo 'selected'; }?> value="Nações">Nações</option>
+                            <option <?php if($_POST['bairro'] == 'Pioneiros'){ echo 'selected';} ?> value="Pioneiros">Pioneiros</option>
+                            <option <?php if($_POST['bairro'] == 'Estados'){ echo 'selected'; }?> value="Estados">Estados</option>
+                            <option <?php if($_POST['bairro'] == 'Ariribá'){ echo 'selected'; }?> value="Ariribá">Ariribá</option>
+                            <option <?php if($_POST['bairro'] == 'Praia dos Amores'){ echo 'selected';} ?> value="Praia dos Amores">Praia dos Amores</option>
+                            <option <?php if($_POST['bairro'] == 'Municípios'){ echo 'selected'; }?> value="Municípios">Municípios</option>
+                            <option <?php if($_POST['bairro'] == 'Vila Real'){ echo 'selected'; }?> value="Vila Real">Vila Real</option>
+                            <option <?php if($_POST['bairro'] == 'Jardim Iate Clube'){ echo 'selected';} ?> value="Jardim Iate Clube">Jardim Iate Clube</option>
+                            <option <?php if($_POST['bairro'] == 'Várzea do Ranchinho'){ echo 'selected'; }?> value="Várzea do Ranchinho">Várzea do Ranchinho</option>
+                            <option <?php if($_POST['bairro'] == 'Barra'){ echo 'selected'; }?> value="Barra">Barra</option>
+                            <option <?php if($_POST['bairro'] == 'Parque Bandeirantes'){ echo 'selected'; }?> value="Parque Bandeirantes">Parque Bandeirantes</option>
+                            <option <?php if($_POST['bairro'] == 'Nova Esperança'){ echo 'selected';} ?> value="Nova Esperança">Nova Esperança</option>
+                            <option <?php if($_POST['bairro'] == 'São Judas Tadeu'){ echo 'selected'; }?> value="São Judas Tadeu">São Judas Tadeu</option>
+                            <option <?php if($_POST['bairro'] == 'Região das Praias'){ echo 'selected'; }?> value="Região das Praias">Região das Praias</option>
                         </select>
                     </div>
                     <div class="col-sm-8">
                         Logradouro: <span style="color:red;">*</span>
-                        <input id="logradouro" name="logradouro" type="text" class="form-control" ng-required="sel_endereco=='Logradouro'">
+                        <input id="logradouro" name="logradouro" type="text" class="form-control" ng-required="sel_endereco=='Logradouro'" <?php if($_POST['id_chamado'] > 0){ ?> value=" <?php echo $_POST['logradouro']; } ?>">
                         <?php if(isset($_GET['logradouro'])){ ?>
                             <span class="alertErro">Erro ao cadastrar logradouro.</span>
                         <?php } ?>
@@ -127,15 +128,16 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <span>Número: </span><span style="color:red;">*</span>
-                        <input id="complemento" name="complemento" type="text" class="form-control" ng-required="sel_endereco=='Logradouro'">
+                        <input id="complemento" name="complemento" type="text" class="form-control" ng-required="sel_endereco=='Logradouro'" <?php if($_POST['id_chamado'] > 0){ ?> value=" <?php echo $_POST['numero']; } ?>">
                     </div>
                     <div class="col-sm-8">
                         <span>Referência: </span>
-                        <input name="referencia" type="text" class="form-control">
+                        <input name="referencia" type="text" class="form-control" <?php if($_POST['id_chamado' != '']){ ?> value=" <?php echo $_POST['referencia']; } ?>">
                     </div>
                 </div>
             </div>
         <hr>
+
             <!--<div>
                 Agente principal: <span style="color:red;">*</span>
                 <input id="agente_principal" name="agente_principal" type="text" class="form-control" onkeyup="showResult(this.value,this.id)" value="<?php //echo $_POST['agente_principal']; ?>" required>
@@ -184,10 +186,11 @@
                     <select name="ocorr_origem" class="form-control" ng-model="sel_origem" ng-init="sel_origem='telefone'" required>
                     <option value="Telefone Base">Telefone Base</option>
                     <option value="Ouvidoria">Ouvidoria</option>
+                    <option value="199">199</option>
                     <option value="Secretaria de Obras">Secretaria de Obras</option>
                     <option value="Secretaria do Meio Ambiente">Secretaria do Meio Ambiente</opntion>
                     <option value="Secretaria da Saúde">Secretaria da Saúde</option>
-                    <option value="Outro">Outro</option>
+                    <option value="Outro">Outro (Especificar)</option>
                     </select>
 
                     <div ng-show="sel_origem == 'Outro'">
@@ -202,7 +205,8 @@
             <div class="row">
                 <div class="col-sm-12">
                     <span>Solicitante 1:</span>
-                    <input id="pessoa_atendida_1" name="pessoa_atendida_1" autocomplete="off" type="text" class="form-control inline" style="width:93%;" value="<?php echo $_POST['pessoa1']; echo $pessoa_atendida_1; ?>" onkeyup="showResult(this.value,this.id)">
+                    <span id="alertpessoasucesso" class="alert-sucess" style="color: greenyellow;"></span>
+                    <input id="pessoa_atendida_1" name="pessoa_atendida_1" autocomplete="off" type="text" class="form-control inline" style="width:93%;" value="<?php echo $_POST['pessoa1']; echo $pessoa_atendida_1; echo $_POST['pessoa_atendida_1']; ?>" onkeyup="showResult(this.value,this.id)" >
                     <button type="button" class="btn-default btn-small inline" data-toggle="modal" data-target="#pessoasModal"><span class="glyphicon glyphicon-plus"></span></button>
                     <div class="autocomplete" id="livesearchpessoa_atendida_1"></div>
                     <div id="resultpessoa_atendida_1"></div>

@@ -50,10 +50,11 @@
                 <select name="origem_chamado" class="form-control" ng-model="sel_origem" ng-init="sel_origem='telefone'" required>
                 <option value="Telefone Base">Telefone Base</option>
                 <option value="Ouvidoria">Ouvidoria</option>
+                <option value="199">199</option>
                 <option value="Secretaria de Obras">Secretaria de Obras</option>
                 <option value="Secretaria do Meio Ambiente">Secretaria do Meio Ambiente</opntion>
                 <option value="Secretaria da Saúde">Secretaria da Saúde</option>
-                <option value="Outro">Outro</option>
+                <option value="Outro">Outros (Especificar)</option>
                 </select>
 
                 <div ng-show="sel_origem == 'Outro'">
@@ -71,9 +72,10 @@
             <?php //} ?>
             <div class="row">
                 <div class="col-sm-12">
-                    Solicitante:
+                    Solicitante:<br>
+                    <span id="alertpessoasucesso" class="alert-sucess" style="color: greenyellow;"></span>
                     <input id="pessoa_nome" name="nome_chamado" autocomplete="off" type="text" class="form-control inline" style="width:93%;" onkeyup="showResult(this.value,this.id)">
-                    <button type="button" class="btn-default btn-small inline open-AddBookDialog" data-toggle="modal" data-id="pessoa_nome"><span class="glyphicon glyphicon-plus"></span></button>
+                    <button type="button" class="btn-default btn-small inline" data-toggle="modal" data-target="#pessoasModal"><span class="glyphicon glyphicon-plus"></span></button>
                     <div class="autocomplete" id="livesearchpessoa_nome"></div>
                     <div id="resultpessoa_nome"></div>
 
@@ -95,9 +97,7 @@
                             echo '<tr><td colspan="5" class="text-center">Nenhum usuário encontrado</td></tr>';
                         }
                         foreach($consulta_usuarios as $item){
-                            if(strcmp($item->getId(),$_SESSION['id_usuario']) != 0){
-                                echo '<option value='.$item->getId().'>'.$item->getNome().'</option>'; 
-                            }
+                            echo '<option value='.$item->getId().'>'.$item->getNome().'</option>'; 
                         }
                     ?>
                 </select>

@@ -68,6 +68,7 @@ class Chamado{
         return $this->logradouro;
     }
     public function setLogradouro($logradouro){
+        $logradouro = preg_replace("/&([a-z])[a-z]+;/i", "$1", htmlentities(trim($logradouro)));
         $this->logradouro = strtoupper($logradouro);
     }
 
