@@ -85,6 +85,17 @@ if($endereco_principal == "Logradouro"){
 
 	$longitude = null;
 	$latitude = null;
+}else{
+	$linhaCordenada = $enderecodao->buscarCoordenada($latitude,$longitude);
+
+	if($linhaCordenada == false){
+		$e = New Endereco();
+		$e->setLatitude($latitude);
+		$e->setLongitude($longitude);
+
+		$id_coordenada = $enderecodao->adicionarCoordenada($e);
+
+	}
 }
 
 
@@ -120,24 +131,23 @@ if(strlen($erros) > 0){
     header('location:index.php?pagina=cadastrarChamado&erroDB'.$erros);
 //caso esteja tudo certo, procede com a inserção no banco de dados
 }else{
-
 	//insere o chamado no banco de dados
 	$c = new Chamado();
 	$c->setData($timestamp);
 	$c->setOrigem($origem);
 	$c->setPessoaId($pessoa_atendida);
 	$c->setLogradouroId($logradouro_id);
+	$c->setIdCoordenada($id_coordenada);
 	$c->setDescricao($descricao);
 	$c->setEnderecoPrincipal($endereco_principal);
-	$c->setLatitude($latitude);
-	$c->setLongitude($longitude);
 	$c->setAgenteId($id_usuario);
 	$c->setPrioridade($prioridade);
 	$c->setDistribuicao($distribuicao);
 	$c->setNomePessoa($nome);
 	$c->setFotos($pg_array);
 
-	$id_chamado = $chamadodao->adicionar($c);
+		$id_chamado = $chamadodao->adicionar($c);
+		
 
 	if($id_chamado !== false){
 

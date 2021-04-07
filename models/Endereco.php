@@ -7,6 +7,8 @@ class Endereco{
     private $bairro;
     private $logradouro;
     private $numero;
+    private $longitude;
+    private $latitude;
     private $referencia;
 
     public function getId(){
@@ -58,11 +60,28 @@ class Endereco{
     public function setReferencia($referencia){
         $this->referencia = strtoupper($referencia);
     }
+
+    public function getLatitude(){
+        return $this->latitude;
+    }
+    public function setLatitude($latitude){
+        $this->latitude = trim($latitude);
+    }
+
+    public function getLongitude(){
+        return $this->longitude;
+    }
+    public function setLongitude($longitude){
+        $this->longitude = trim($longitude);
+    }
 }
 
 interface EnderecoDAO{
     public function buscarEndereco($logradouro,$numero);
     public function buscarPeloId($id);
     public function adicionar(Endereco $e);
+    public function buscarCoordenada($latitude,$longitude);
+    public function buscarIdCoordenada($id);
+    public function adicionarCoordenada(Endereco $e);
     public function adicionarLog($logradouro_id, $id_usuario, $dataAtual);
 }

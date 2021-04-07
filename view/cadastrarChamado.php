@@ -206,7 +206,7 @@
             Fotos:
             <input id="imgInp" name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
         </div>
-        <div class="gallery"></div>
+        <div id="idGallery" class="gallery"></div>
         <hr>
         <div class="div-btn-cadastrar">
             <input type="submit" class="btn-cadastrar btn-default btn-md" value="Cadastrar">
@@ -250,7 +250,7 @@
                                     <span id="erroCelular" class="alertErro hide">Celular inválido.</span>
                                 </div>
                                 <div class="col-sm-6">
-                                    Telefone: 
+                                    Fixo: 
                                     <input id="telefone_pessoa" name="telefone_pessoa" type="text" class="form-control" pattern="\([0-9]{2}\)\s[0-9]{4}\-[0-9]{4}" title="(XX) XXXX-XXXX" onchange="verificaTelefone(this.value)">
                                     <span id="erroTelefone" class="alertErro hide">Telefone inválido.</span>
                                 </div>
@@ -281,7 +281,7 @@
                     <div id="googleMap" style="width:100%;height:400px;"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="submitFormData" onclick="SubmitFormData()" data-dismiss="modal">Confirmar</button>
+                    <button type="button" id="submitFormData" onclick="myMap()" data-dismiss="modal">Confirmar</button>
                 </div>
             </div>
         </div>

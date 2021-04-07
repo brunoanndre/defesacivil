@@ -56,6 +56,14 @@ body{
     font-family: 'Open Sans', sans-serif;
 }
 
+
+.mapModal{
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .head-alertas{
     font-size: 30px;
     font-weight: bold;
@@ -690,6 +698,7 @@ i{
     .page-break-auto{
         page-break-before: auto;
     }
+
 
     .row,
     .printWrap{

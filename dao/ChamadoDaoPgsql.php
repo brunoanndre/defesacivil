@@ -49,17 +49,17 @@ class ChamadoDaoPgsql implements ChamadoDAO{
         }
         if($p == 'usado_false'){
             $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa,
-            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id,
+            chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id, chamado.endereco_principal,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao, logradouro
             FROM chamado 
             INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario)
-            INNER JOIN endereco_logradouro el ON chamado_logradouro_id = el.id_logradouro WHERE chamado.usado = false  ORDER BY id_chamado DESC ");
+            FULL OUTER JOIN endereco_logradouro el ON chamado_logradouro_id = el.id_logradouro WHERE chamado.usado = false
+             ORDER BY id_chamado DESC ");
             
             $sql->execute();
 
             if($sql->rowCount() > 0 ){
                 $linha = $sql->fetchAll(PDO::FETCH_ASSOC);
-
                 foreach($linha as $item){
                     $c = new Chamado();
                     $c->setId($item['id_chamado']);
@@ -71,6 +71,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                     $c->setNomePessoa($item['nome_pessoa']);
                     $c->setUsado($item['usado']);
                     $c->setCancelado($item['cancelado']);
+                    $c->setEnderecoPrincipal($item['endereco_principal']);
                     $c->setNomeAgente($item['usuario']);
                     $c->setDistribuicao($item['distribuicao']);
                     $c->setLogradouro($item['logradouro']);
@@ -192,9 +193,9 @@ class ChamadoDaoPgsql implements ChamadoDAO{
 
     public function adicionar(Chamado $c){
         $sql = $this->pdo->prepare("INSERT INTO chamado (data_hora,origem,pessoa_id,chamado_logradouro_id,
-        descricao,endereco_principal,latitude,longitude, agente_id, prioridade, distribuicao, nome_pessoa, fotos)
+        descricao,endereco_principal, agente_id, prioridade, distribuicao, nome_pessoa, fotos, id_coordenada)
         VALUES (:timestamp,:origem,:pessoa_atendida,:logradouro_id,:descricao,
-        :endereco_principal,:latitude,:longitude, :id_usuario, :prioridade, :distribuicao, :nome,:fotos)");
+        :endereco_principal, :id_usuario, :prioridade, :distribuicao, :nome,:fotos, :id_coordenada)");
         $sql->bindValue(":timestamp", $c->getData());
         $sql->bindValue(":origem", $c->getOrigem());
         if($c->getPessoaId() == false){
@@ -202,19 +203,18 @@ class ChamadoDaoPgsql implements ChamadoDAO{
         }else{
             $sql->bindValue(":pessoa_atendida", $c->getPessoaId());
         }
-        $sql->bindValue(":logradouro_id", $c->getLogradouroId());
+        if($c->getEnderecoPrincipal() == 'Logradouro'){
+            $sql->bindValue(":logradouro_id", $c->getLogradouroId());
+        }else{
+            $sql->bindValue(":logradouro_id", null, PDO::PARAM_NULL);
+        }
+        if($c->getEnderecoPrincipal() == 'Coordenada'){
+            $sql->bindValue(':id_coordenada', $c->getIdCoordenada());
+        }else{
+            $sql->bindValue(":id_coordenada", null, PDO::PARAM_NULL);
+        }
         $sql->bindValue(":descricao", $c->getDescricao());
         $sql->bindValue(":endereco_principal", $c->getEnderecoPrincipal());
-        if($c->getLatitude() == false){
-            $sql->bindValue(":latitude", null, PDO::PARAM_NULL);
-        }else{
-            $sql->bindValue(":latitude", $c->getLatitude());
-        }
-        if($c->getLongitude() == false){
-            $sql->bindValue(":longitude", null, PDO::PARAM_NULL);
-        }else{
-            $sql->bindValue(":longitude", $c->getLongitude());
-        } 
         $sql->bindValue(":id_usuario", $c->getAgenteId());
         $sql->bindValue(":prioridade", $c->getPrioridade());
         $sql->bindValue(":distribuicao", $c->getDistribuicao());
@@ -224,13 +224,17 @@ class ChamadoDaoPgsql implements ChamadoDAO{
         }else{
             $sql->bindValue(":fotos", $c->getFotos());
         }
+    
 
         if($sql->execute()){
-            $id = $this->pdo->lastInsertId();
-            return $id;
+                $id = $this->pdo->lastInsertId();
+                return $id;
         }else{
             return false;
         }
+            
+               
+            
     }
 
     public function adicionarLog($id_usuario, $id_chamado, $dataAtual){
@@ -257,8 +261,6 @@ class ChamadoDaoPgsql implements ChamadoDAO{
             $c->setDescricao($linha['descricao']);
             $c->setEnderecoPrincipal($linha['endereco_principal']);
             $c->setLogradouroId($linha['chamado_logradouro_id']);
-            $c->setLatitude($linha['latitude']);
-            $c->setLongitude($linha['longitude']);
             $c->setPessoaId($linha['pessoa_id']);
             $c->setUsado($linha['usado']);
             $c->setAgenteId($linha['agente_id']);
@@ -268,6 +270,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
             $c->setCancelado($linha['cancelado']);
             $c->setMotivo($linha['motivo']);
             $c->setFotos($linha['fotos']);
+            $c->setIdCoordenada($linha['id_coordenada']);
 
             return $c;
         }else{

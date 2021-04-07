@@ -87,7 +87,12 @@
                     echo '<td>'.$item->getId().'</td>';
                     echo '<td>'.$item->getData().'</td>';
                     echo '<td>'.$item->getOrigem().'</td>';
-                    echo '<td>'.$item->getLogradouro().'</td>';
+                    if($item->getEnderecoPrincipal() == 'Coordenada'){
+                        echo '<td> Coordenada </td> ';
+                    }else{
+                        echo '<td>'.$item->getLogradouro().'</td>';
+                    }
+
                     echo '<td>'.$linhaDistribuicao->getNome().'</td>';
                     echo '<td>'.$item->getNomePessoa().'</td>';
                     echo '<td class="elimina-tabela">'.$item->getDescricao().'</td></tr>';

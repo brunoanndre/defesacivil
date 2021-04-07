@@ -106,17 +106,27 @@ function verificaCpf(cpf){
 }
 
 function verificaCelular(telefone){
-    if(/\([0-9]{2}\)[\s][0-9]{4,5}-[0-9]{4}/.test(telefone))
+    
+    if(telefone.length > 0){
+        if(/\([0-9]{2}\)[\s][0-9]{4,5}-[0-9]{4}/.test(telefone))
         $("#erroCelular").addClass("hide");
     else
         $("#erroCelular").removeClass("hide");
+    }else{
+        $("#erroCelular").addClass("hide");
+    }
 }
 
 function verificaTelefone(telefone){
-    if(/\([0-9]{2}\)\s[0-9]{4}\-[0-9]{4}/.test(telefone))
+    if(telefone.length > 0){
+        if(/\([0-9]{2}\)\s[0-9]{4}\-[0-9]{4}/.test(telefone))
         $("#erroTelefone").addClass("hide");
-    else
+        else
         $("#erroTelefone").removeClass("hide");
+    }else{
+        $("#erroTelefone").addClass("hide");
+    }
+
 }
 
 function verificaSenha(senha){
@@ -594,10 +604,12 @@ function formatarDataInterdicao(){
 $(function() {
     // Previsualizar as imagens no cadastro
     var imagesPreview = function(input, placeToInsertImagePreview) {
-
+        
         if (input.files) {
             var filesAmount = input.files.length;
-
+            if(input.files.length > 0 ){
+                $("div.gallery").html("");
+            }
             for (i = 0; i < filesAmount; i++) {
                 var reader = new FileReader();
 
@@ -615,3 +627,18 @@ $(function() {
         imagesPreview(this, 'div.gallery');
     });
 });
+
+
+function abrirMapa(){
+    let map = document.getElementById('map');
+
+    if(map.classList.contains('hide')){
+        map.classList.remove('hide');
+    }
+}
+
+function fecharMapa(){
+    let map = document.getElementById('map');
+
+        map.classList.add('hide')
+}

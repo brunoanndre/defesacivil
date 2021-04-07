@@ -43,8 +43,7 @@ $ativo = true;
 if($ocorr_origem == 'Outro'){
 	$ocorr_origem = filter_input(INPUT_POST,'ocorr_origem2');
 }
-var_dump($ocorr_origem);
-die;
+
 $base64_array = array();
 
 

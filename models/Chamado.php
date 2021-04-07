@@ -9,8 +9,7 @@ class Chamado{
     private $endereco_principal;
     private $logradouro_id;
     private $logradouro;
-    private $latitude;
-    private $longitude;
+    private $id_coordenada;
     private $pessoa_id;
     private $usado;
     private $agente_id;
@@ -72,20 +71,6 @@ class Chamado{
         $this->logradouro = strtoupper($logradouro);
     }
 
-    public function getLatitude(){
-        return $this->latitude;
-    }
-    public function setLatitude($latitude){
-        $this->latitude = trim($latitude);
-    }
-
-    public function getLongitude(){
-        return $this->longitude;
-    }
-    public function setLongitude($longitude){
-        $this->longitude = trim($longitude);
-    }
-
     public function getPessoaId(){
         return $this->pessoa_id;
     }
@@ -98,6 +83,13 @@ class Chamado{
     }
     public function setUsado($usado){
         $this->usado = $usado;
+    }
+
+    public function getIdCoordenada(){
+        return $this->id_coordenada;
+    }
+    public function setIdCoordenada($id_coordenada){
+        $this->id_coordenada = trim($id_coordenada);
     }
 
     public function getAgenteId(){

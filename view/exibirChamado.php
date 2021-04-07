@@ -22,6 +22,9 @@
         $id_logradouro = $linhaChamado->getLogradouroId();
 
         $linhaLogradouro = $enderecodao->buscarPeloId($id_logradouro);
+    }else{
+        $id_coordenada = $linhaChamado->getIdCoordenada();
+        $linhaCoordenada = $enderecodao->buscarIdCoordenada($id_coordenada);
     }
 
 
@@ -64,12 +67,12 @@
             <h3 class="chamadoTitlePrint printShow">Registro de chamado</h3>
             <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho printShow" style="width: 120px;">
         </div>
-
         <h3 class="text-center printHide">Registro de chamado</h3>
         <button class="printHide" style="background-color: white; border:none;" onclick="print()"><img src="images/print.png" style="width: 50px; height:auto"></button>
         <h4 class="printHide">Endereço</h4>
         <h2 class="printShow titulo" style="margin-bottom: 10px;">Endereço</h3>
         <span class="titulo hide">Endereço principal: </span><span class="hide" id="coordenada_principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaChamado->getEnderecoPrincipal(); ?>'"><?php echo $linhaChamado->getEnderecoPrincipal(); ?></span>
+        <?php if($linhaChamado->getEnderecoPrincipal() == 'Logradouro'){ ?>
         <div style="margin-bottom: none;" ng-show="sel_endereco == 'Logradouro'">
             <div class="row">
                 <div class="col-sm-7"><span class="titulo">CEP: </span><?php echo $linhaLogradouro->getCep(); ?></div>
@@ -82,15 +85,18 @@
             </div>
             <nav><span class="titulo">Referência: </span><?php echo $linhaLogradouro->getReferencia(); ?></nav><br>
         </div>
+        <?php };
+        if($linhaChamado->getEnderecoPrincipal() == 'Coordenada'){?>
         <div style="margin-bottom: none;" ng-show="sel_endereco == 'Coordenada'">
             <nav>
-                <span class="titulo">Latitude: </span><span id="latitude" ><?php echo $linhaChamado->getLatitude(); ?></span>
+                <span class="titulo">Latitude: </span><span id="latitude" ><?php echo $linhaCoordenada->getLatitude() ?></span>
             </nav>
             <nav class="inline">
-                <span class="titulo">Longitude: </span><span id="longitude" ><?php echo $linhaChamado->getLongitude(); ?></span>
+                <span class="titulo">Longitude: </span><span id="longitude" ><?php echo $linhaCoordenada->getLongitude() ?></span>
             </nav>
-            <button type="button" class="btn-default btn-small inline open-AddBookDialog" style="position:relative;left:5%" data-toggle="modal" data-id="map"><span class="glyphicon glyphicon-map-marker"></span></button>
+            <button type="button" class="btn-default btn-small inline printHide" onclick="abrirMapa()"><span class="glyphicon glyphicon-map-marker"></span></button>
         </div>
+        <?php }?>
     <hr>
         <h4 class="printHide">Ocorrência</h4>
         <h2 class="printShow titulo" style="margin-bottom: 10px;">Ocorrência</h3>
@@ -228,6 +234,19 @@ if($linhaPessoa1 !== null){ ?>
         </div>
 
     </div>
+    <div class="hide mapModal" id="map" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" onclick="fecharMapa()" class="close">&times;</button>
+                    <h5 class="modal-title">Mapa</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="googleMap" style="width:100%;height:400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
     <div class="col-sm-6">
         <?php if($linhaChamado->getUsado() == false && ($_SESSION['nivel_acesso'] == 1 || $_SESSION['nivel_acesso'] == 2)){ ?>
@@ -243,14 +262,16 @@ if($linhaPessoa1 !== null){ ?>
             <form action="index.php?pagina=cadastrarOcorrencia" method="post">
                 <input name="id_chamado" type="hidden" value="<?php echo $id_chamado; ?>">
                 <input name="endereco_principal" type="hidden" value="<?php echo $linhaChamado->getEnderecoPrincipal(); ?>">
+                <?php if($linhaChamado->getEnderecoPrincipal() == 'Logradouro'){ ?>
                 <input name="cep" type="hidden" value="<?php echo $linhaLogradouro->getCep(); ?>">
                 <input name="cidade" type="hidden" value="<?php echo $linhaLogradouro->getCidade(); ?>">
                 <input name="bairro" type="hidden" value="<?php echo $linhaLogradouro->getBairro(); ?>">
                 <input name="logradouro" type="hidden" value="<?php echo $linhaLogradouro->getLogradouro(); ?>">
                 <input name="numero" type="hidden" value="<?php echo $linhaLogradouro->getNumero() ?>">
                 <input name="referencia" type="hidden" value="<?php echo $linhaLogradouro->getReferencia(); ?>">
-                <input name="latitude" type="hidden" value="<?php echo $linhaChamado->getLatitude(); ?>">
-                <input name="longitude" type="hidden" value="<?php echo $linhaChamado->getLongitude(); ?>">
+                <?php }else{ ?>
+                <input name="id_coordenada" type="hidden" value="<?php echo $id_coordenada; ?>">
+                <?php } ?>
                 <input name="data_ocorrencia" type="hidden" value="<?php echo date("Y-m-d", strtotime($linhaChamado->getData())); ?>">
                 <input name="descricao" type="hidden" value="<?php echo $linhaChamado->getDescricao(); ?>">
                 <input name="ocorr_origem" type="hidden" value="<?php echo $linhaChamado->getOrigem(); ?>">

@@ -75,4 +75,49 @@ class EnderecoDaoPgsql implements EnderecoDAO{
         $sql->bindValue(":dataAtual", $dataAtual);
         $sql->execute();
     }
+
+    public function buscarCoordenada($latitude, $longitude){
+        $sql = $this->pdo->prepare("SELECT * FROM endereco_coordenada WHERE latitude = :latitude AND longitude = :longitude");
+        $sql->bindValue(":latitude", $latitude);
+        $sql->bindValue(":longitude", $longitude);
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            $linha = $sql->fetch(PDO::FETCH_ASSOC);
+            return $linha;
+        }else{
+            return false;
+        }
+    }
+
+    public function adicionarCoordenada(Endereco $e){
+        $sql = $this->pdo->prepare("INSERT INTO endereco_coordenada (latitude, longitude) VALUES
+         (:latitude, :longitude)");
+         $sql->bindValue(":latitude", $e->getLatitude());
+         $sql->bindValue(":longitude", $e->getLongitude());
+         
+         if($sql->execute()){
+             $id = $this->pdo->lastInsertId();
+             return $id;
+         }else{
+             return false;
+         }
+    }
+
+    public function buscarIdCoordenada($id){
+        $sql = $this->pdo->prepare("SELECT * FROM endereco_coordenada WHERE id_coordenada = :id");
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            $linha = $sql->fetch(PDO::FETCH_ASSOC);
+            $e = New Endereco();
+            $e->setLatitude($linha['latitude']);
+            $e->setLongitude($linha['longitude']);
+
+            return $e;
+        }else{
+            return false;
+        }
+    }
 }
