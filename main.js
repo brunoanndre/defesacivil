@@ -146,12 +146,6 @@ function verificaConfirmaSenha(confirmaSenha){
     }
 }
 
-function validarFormCadastroChamado(){
-    if($("#livesearchagente").html() == "Usuário não encontrado." || $("#livesearchpessoa_nome").html() == "Pessoa não encontrada."){
-        alert("Existe campo(s) infomado(s) incorretamente.");
-        return false;
-    }
-}
 
 function validarFormCadastroUsuario(){
     if(!$("#erroCpf").hasClass("hide") || !$("#erroTelefone").hasClass("hide")
@@ -283,7 +277,10 @@ $(document).on("click", ".open-AddBookDialog", function () {
     }else if(element_id = 'pessoa_nome2'){
         $(".modal-body #id_pessoa").val( element_id );
         $('#pessoa2Modal').modal('show');
-    }else{
+    }else if(element_id = 'excluirFoto'){
+        $("#excluirModal").modal('show');
+    }
+    else{
         $(".modal-body #id_pessoa").val( element_id );
         $('#pessoasModal').modal('show');
     }
@@ -316,6 +313,7 @@ function SubmitFormData() {
     var outros_documentos = $("#outros_documentos").val();
 
     var id="result"+id_input;
+
     
     //$.post("processa_cadastrar_pessoa.php", { nome_pessoa: nome_pessoa, email_pessoa: email_pessoa,
     //    telefone_pessoa: telefone_pessoa, cpf_pessoa: cpf_pessoa, outros_documentos:outros_documentos, nome_salvar: nome_pessoa });
@@ -641,4 +639,34 @@ function fecharMapa(){
     let map = document.getElementById('map');
 
         map.classList.add('hide')
+}
+
+function modalFoto(value,id){
+    document.getElementById('excluirModal').classList.remove('modal')
+    document.getElementById('excluirModal').classList.remove('fade')
+    document.getElementById(id).classList.add('hide');
+    document.getElementById('pegarIdFoto').value = id;
+}
+
+function fecharModalFoto(){
+    let id = document.getElementById('pegarIdFoto').value;
+    document.getElementById(id).classList.remove('hide');
+    document.getElementById('excluirModal').classList.add('modal')
+    document.getElementById('excluirModal').classList.add('fade')
+}
+
+function excluirFoto(){
+    let id = document.getElementById('pegarIdFoto').value;
+    document.getElementById('excluirModal').classList.add('modal')
+    document.getElementById('excluirModal').classList.add('fade')
+    document.getElementById('idFotoParaExcluir').value = id;
+
+}
+
+function corrigeTelefone(){
+   let telefone = document.getElementById('telefone_pessoa').value;
+    if(telefone.length == 1){
+        let telefoneNovo = '';
+        document.getElementById('telefone_pessoa').value = telefoneNovo;
+    }
 }

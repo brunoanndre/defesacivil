@@ -29,6 +29,7 @@ $descricao = addslashes($_POST['descricao']);
 $prioridade = addslashes($_POST['prioridade']);
 $distribuicao = addslashes($_POST['distribuicao']);
 
+
 if($origem == 'Outro'){
 	$origem = filter_input(INPUT_POST, 'origem_chamado2');
 }
@@ -50,7 +51,6 @@ foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
 $pg_array = '{' . join(',', $base64_array) . '}';
 
 $erros='';
-
 
 session_start();
 
@@ -102,10 +102,7 @@ if($endereco_principal == "Logradouro"){
 
 if(strlen($nome) > 0){ //se a pessoa foi informada, busca a mesma no BD 
 	$pessoa_atendida = $pessoadao->buscarPeloNome($nome);
-		if($pessoa_atendida == 0 || $pessoa_atendida == null){ //pessoa nao encontrada
-			$erros = $erros.'&nome';
-		}
-}
+	}
 
 /*if(strlen($distribuicao) == 0 || $distribuicao == null){ //se o agente foi informado, busca o mesmo no BD
 //	$result = pg_query($connection, "SELECT * FROM usuario WHERE nome = '$distribuicao'");
@@ -123,7 +120,6 @@ if(strlen($nome) > 0){ //se a pessoa foi informada, busca a mesma no BD
 }*/
 
 $timestamp = $dataAtual;
-
 
 
 if(strlen($erros) > 0){
@@ -153,9 +149,9 @@ if(strlen($erros) > 0){
 
 		$chamadodao->adicionarLog($id_usuario,$id_chamado,$dataAtual);
 		
-		header('location:index.php?pagina=cadastrarChamado&sucesso');
+		header('location:index.php?pagina=exibirChamado&id='. $id_chamado .'&sucesso');
 	}else
 		//echo pg_last_error();
 		header('location:index.php?pagina=cadastrarChamado&erroDB');
 }
-header('location:index.php?pagina=cadastrarChamado&sucesso');
+header('location:index.php?pagina=exibirChamado&id='. $id_chamado .'&sucesso');

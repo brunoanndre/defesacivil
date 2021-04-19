@@ -81,6 +81,8 @@ interface EnderecoDAO{
     public function buscarPeloId($id);
     public function adicionar(Endereco $e);
     public function buscarCoordenada($latitude,$longitude);
+    public function editarLogradouro(Endereco $e);
+    public function editarCoordenada(Endereco $e);
     public function buscarIdCoordenada($id);
     public function adicionarCoordenada(Endereco $e);
     public function adicionarLog($logradouro_id, $id_usuario, $dataAtual);

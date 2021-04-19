@@ -67,6 +67,7 @@
                     echo '<tr><td colspan="5" class="text-center">Nenhum chamado encontrado</td></tr>';
                 }
                 foreach($consulta_chamados as $item){
+
                     $linhaDistribuicao = $usuariodao->findById($item->getDistribuicao());
 
                     if($item->getUsado() == true){

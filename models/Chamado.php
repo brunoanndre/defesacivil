@@ -154,4 +154,6 @@ interface ChamadoDAO{
     public function buscarPeloId($id);
     public function adicionar(Chamado $c);
     public function adicionarLog($id_usuario,$id_chamado, $dataAtual);
+    public function excluirFoto($id,$fotos);
+    public function editar(Chamado $c);
 }

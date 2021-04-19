@@ -28,6 +28,7 @@
     }
 
 
+
     $id_agente = $linhaChamado->getAgenteId();
     if($id_agente != ""){
         $linhaAgente = $usuariodao->findById($id_agente);
@@ -46,10 +47,21 @@
 
     $fotos = explode(',', $string);
 
+        
 ?>
 
 <div class="container positioning">
 <div class="jumbotron campo_cadastro">
+<?php if(isset($_GET['sucesso'])) { ?>
+        <div class="alert alert-success" role="alert">
+            Chamado cadastrado com sucesso.
+        </div>
+    <?php } ?>
+    <?php if(isset($_GET['sucessoEdit'])) { ?>
+        <div class="alert alert-success" role="alert">
+            Chamado alterado com sucesso.
+        </div>
+    <?php } ?>
     <div class="box">
         <div class="row cabecalho">
             <div class="col-sm-6 printHide">
@@ -105,8 +117,8 @@
             <span class="titulo">Data e hora: </span>
             <span><?php echo date("d/m/Y H:i", strtotime($linhaChamado->getData())); ?></span><br>
             <span class="titulo">Origem: </span><span id="ocorr_origem"><?php echo $linhaChamado->getOrigem(); ?></span><br>
-            <span class="titulo">Descrição: </span><br>
-            <textarea name="descricao" rows="5" readonly class="readtextarea"><?php echo $linhaChamado->getDescricao(); ?></textarea><br>
+            <span class="titulo">Descrição: </span><br> <span class="printShow"><?php echo $linhaChamado->getDescricao() ?></span>
+            <textarea name="descricao" rows="5" readonly class="readtextarea printHide"><?php echo $linhaChamado->getDescricao(); ?></textarea><br>
             <span class="titulo">Distribuído para:</span>
             <?php if($linhaChamado->getDistribuicao() != NULL){ ?>
             <span class="printShoww"> <?php echo $linhaDistribuicao->getNome(); ?></span><a id="distribuicao" class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaChamado->getDistribuicao(); ?>"><?php echo $linhaDistribuicao->getNome(); ?></a>
@@ -118,25 +130,29 @@
         <h4 class="printHide">Solicitante</h4>
         <h2 class="printShow titulo" style="margin-bottom: 10px;">Solicitante</h3>
         <nav>
-            <?php if($idpessoa){ ?>
+            <?php if($linhaChamado->getNomePessoa() !== ''){ ?>
             <?php 
-            $linhaPessoa1 = $pessoadao->buscarPeloID($idpessoa);
-            $contato =  $linhaPessoa1->getCelular();
-            if( $contato == ''){
-                $contato = $linhaPessoa1->getTelefone();
-            }
+                if($idpessoa){
+                    $linhaPessoa1 = $pessoadao->buscarPeloID($idpessoa);
+                    $contato =  $linhaPessoa1->getCelular();
+                    $telefone = $linhaPessoa1->getTelefone();
+                    if( $contato == ''){
+                        $contato = $linhaPessoa1->getTelefone();
+                    }
+                }
+                
             ?>
             
             <div class="row">
-            <span class="titulo">Pessoa atendida: </span> <a href="" class="open-AddBookDialog printHide" data-toggle="modal" data-id="pessoa_nome1"><span><?php echo $linhaChamado->getNomePessoa();?></span></a><span class="printShow"><?php echo $linhaChamado->getNomePessoa(); ?></span>
-            <span class="titulo printShow">Contato: </span> <span class="printShow"><?php echo $contato ?></span>
+            <span class="titulo">Pessoa atendida: </span> <?php if($idpessoa){?>  <a href="" class="open-AddBookDialog printHide" data-toggle="modal" onclick="corrigeTelefone()" data-id="pessoa_nome1"><span><?php echo $linhaChamado->getNomePessoa();?></span></a><?php } else{?><span class="printHide"><?php echo $linhaChamado->getNomePessoa();?></span><?php } ?><span class="printShow"><?php echo $linhaChamado->getNomePessoa(); ?></span>
+            <?php if($idpessoa){ ?><span class="titulo printShow">Contato: </span> <span class="printShow"><?php echo $contato ?></span><?php } ?>
             </div>
             <?php  }else{ ?>
             Nenhuma pessoa cadastrada.
             <?php } ?>
         </nav>
     <hr style="margin-bottom:0;">
-    <?php
+    <?php 
 if($linhaPessoa1 !== null){ ?>
 <div class="modal fade" id="pessoa1Modal" role="dialog">
         <div class="modal-dialog modal-lg">
@@ -172,8 +188,8 @@ if($linhaPessoa1 !== null){ ?>
                                     
                                 </div>
                                 <div class="col-sm-6">
-                                    Telefone: 
-                                    <?php echo'<input id="telefone_pessoa" name="telefone_pessoa" type="text" class="form-control" value="'.$linhaPessoa1->getTelefone().'" disabled>'?>
+                                    Telefone Fixo: 
+                                    <?php echo ' <input id="telefone_pessoa" name="telefone_pessoa" type="text" class="form-control" value=" ' . $linhaPessoa1->getTelefone() . ' " disabled>'?>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -188,43 +204,48 @@ if($linhaPessoa1 !== null){ ?>
     <?php } ?>
     <?php if(($fotos[0]) != "" && $fotos[0] != null){?>
         <div class="box printHide">
-        <div id="myCarousel" class="carousel slide limite" data-ride="carousel">
-            <!-- Indicators -->
-            <ol class="carousel-indicators printHide">
-                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                <?php $i = 1; while($i < sizeof($fotos)){ ?>
-                    <li data-target="#myCarousel" data-slide-to="<?php echo $i; ?>"></li>
-                <?php $i+=1; } ?>
-            </ol>
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner">
-                <div class="item active">
-                    <img src="data:image/png;base64,<?php echo $fotos[0]; ?>" alt="img1" style="width:100%;">
-                </div>
-                <?php $i = 1; while($i < sizeof($fotos)){ ?>
-                    <div class="item">
-                        <img src="data:image/png;base64,<?php echo $fotos[$i]; ?>" alt="img<?php echo $i; ?>" style="width:100%;">
+            <div id="myCarousel" class="carousel slide limite" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators printHide">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <?php $i = 1; while($i < sizeof($fotos)){ ?>
+                        <li data-target="#myCarousel" data-slide-to="<?php echo $i; ?>"></li>
+                    <?php $i+=1; } ?>
+                </ol>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img src="data:image/png;base64,<?php echo $fotos[0]; ?>" alt="img1" style="width:100%;">
                     </div>
-                <?php $i+=1; } ?>
-                
+                    <?php $i = 1; while($i < sizeof($fotos)){ ?>
+                        <div class="item">
+                            <img src="data:image/png;base64,<?php echo $fotos[$i]; ?>" alt="img<?php echo $i; ?>" style="width:100%;">
+                        </div>
+                    <?php $i+=1; } ?>
+                    
+                </div>
+                <!-- Left and right controls -->
+                <a class="left carousel-control printHide" href="#myCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control printHide" href="#myCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
-            <!-- Left and right controls -->
-            <a class="left carousel-control printHide" href="#myCarousel" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="right carousel-control printHide" href="#myCarousel" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-                <span class="sr-only">Next</span>
-            </a>
         </div>
-    </div>
-
-
     <div class="print-img-area printShow">
-        <?php for($i = 0; $i < 3; $i++){
-        echo '<img class="image-print-chamado"  src="data:image/png;base64,' . $fotos[$i] .'">';
-        } ?>
+        <?php if(sizeof($fotos) <= 3){
+            for($i = 0; $i < sizeof($fotos); $i++){
+                echo '<img class="image-print-chamado"  src="data:image/png;base64,' . $fotos[$i] .'">';
+            }
+        }else{
+            for($i = 0; $i < 3; $i++){
+                echo '<img class="image-print-chamado"  src="data:image/png;base64,' . $fotos[$i] .'">';
+                }
+        }  
+ ?>
     </div>
     <?php }?>
     <div class="printShoww">
@@ -248,7 +269,7 @@ if($linhaPessoa1 !== null){ ?>
         </div>
     </div>
     <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-5">
         <?php if($linhaChamado->getUsado() == false && ($_SESSION['nivel_acesso'] == 1 || $_SESSION['nivel_acesso'] == 2)){ ?>
         <form action="cancelarChamado.php" method="post">
             <!--<input name="id_chamado" type="hidden" value="<?php //echo $id_chamado; ?>">
@@ -257,7 +278,11 @@ if($linhaPessoa1 !== null){ ?>
         </form>
         <?php } ?>
     </div>
+        <div class="col-sm-2">
+        <a href="index.php?pagina=editarChamado&id=<?php echo $id_chamado; ?>"><button class="btn btn-default">Editar</button></a>
+        </div>
     <div class="col-sm-3">
+  
         <?php if($linhaChamado->getUsado() == false){ ?>
             <form action="index.php?pagina=cadastrarOcorrencia" method="post">
                 <input name="id_chamado" type="hidden" value="<?php echo $id_chamado; ?>">

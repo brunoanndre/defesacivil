@@ -85,7 +85,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                 }
         }
         if($p == 'usado_true'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa) as dataa,
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao, logradouro
             FROM chamado 
@@ -115,7 +115,6 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                 return $array;
             }else{
                     return false;
-                    die;
                 }
         }
 
@@ -150,11 +149,11 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                 return $array;
             }else{
                     return false;
-                    die;
                 }
         }
 
         if($p == 'usado_cancelado_true'){
+
             $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id,logradouro,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao
@@ -185,7 +184,6 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                 return $array;
             }else{
                     return false;
-                    die;
                 }
         }
     }
@@ -224,7 +222,6 @@ class ChamadoDaoPgsql implements ChamadoDAO{
         }else{
             $sql->bindValue(":fotos", $c->getFotos());
         }
-    
 
         if($sql->execute()){
                 $id = $this->pdo->lastInsertId();
@@ -277,5 +274,50 @@ class ChamadoDaoPgsql implements ChamadoDAO{
             return false;
         }
 
+    }
+
+    public function excluirFoto($id,$fotos){
+        $sql = $this->pdo->prepare('UPDATE chamado SET fotos = :fotos WHERE id_chamado = :id');
+        $sql->bindValue(":fotos", $fotos);
+        $sql->bindValue(":id", $id);
+        
+        if($sql->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function editar(Chamado $c){
+        $sql = $this->pdo->prepare("UPDATE chamado SET origem = :origem, descricao = :descricao, 
+        endereco_principal = :enderecoPrincipal, chamado_logradouro_id = :idLogradouro, 
+        pessoa_id = :idPessoa,fotos= :fotos, prioridade = :prioridade, distribuicao = :distribuicao, nome_pessoa = :nomePessoa, id_coordenada = :idCoordenada
+        WHERE id_chamado = :idChamado");
+
+        $sql->bindValue(":origem", $c->getOrigem());
+        $sql->bindValue(":idChamado", $c->getId());
+        $sql->bindValue(":descricao", $c->getDescricao());
+        $sql->bindValue(":enderecoPrincipal", $c->getEnderecoPrincipal());
+        $sql->bindValue(":idLogradouro", $c->getLogradouroId());
+        if($c->getPessoaId() == ""){
+            $sql->bindValue(":idPessoa", null, PDO::PARAM_NULL);
+        }else{
+            $sql->bindValue(":idPessoa", $c->getPessoaId());
+        }
+        $sql->bindValue(":fotos", $c->getFotos());
+        $sql->bindValue(":prioridade", $c->getPrioridade());
+        $sql->bindValue(":distribuicao", $c->getDistribuicao());
+        $sql->bindValue(":nomePessoa", $c->getNomePessoa());
+        if($c->getIdCoordenada() == "" || $c->getIdCoordenada() == null){
+            $sql->bindValue(":idCoordenada", null, PDO::PARAM_NULL);
+        }else{
+            $sql->bindValue(":idCoordenada", $c->getIdCoordenada());
+        }
+
+        if($sql->execute()){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

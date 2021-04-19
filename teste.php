@@ -1,12 +1,20 @@
-<input type="file" accept="image/*" multiple="multiple" onchange="loadFile(event)">
-<img id="output"/>
-<script>
-  var loadFile = function(event) {
-    var reader = new FileReader();
-    reader.onload = function(){
-      var output = document.getElementById('output');
-      output.src = reader.result;
-    };
-    reader.readAsDataURL(event.target.files[0]);
-  };
-</script>
+<?php 
+
+    include 'database.php';
+
+    try{
+        $sql = $pdo->prepare("alter table chamado add constraint fk_chamado_coordenada foreign key (id_coordenada) references endereco_coordenada(id_coordenada)");
+      $sql->execute();
+
+      $sql = $pdo->prepare("select * from chamado");
+      $sql->execute();
+
+      $lista = $sql->fetch(PDO::FETCH_ASSOC);
+      echo '<pre>';
+      var_dump($lista);
+      die;
+    }catch(PDOException $e){
+      echo $e;
+    }
+
+  ?>

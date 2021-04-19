@@ -79,9 +79,9 @@
                     <div class="autocomplete" id="livesearchpessoa_nome"></div>
                     <div id="resultpessoa_nome"></div>
 
-                    <?php if(isset($_GET['nome'])){ ?>
+                    <!--<?php //if(isset($_GET['nome'])){ ?>
                         <span class="alertErro">Pessoa não encontrada, por favor faça um novo cadastro.</span>
-                    <?php } ?>
+                    <?php //} ?> -->
                 </div>
                 <!--<div class="col-sm-2">
                     <br>

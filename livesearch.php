@@ -4,7 +4,7 @@
     //get the q parameter from URL
     $q=$_GET["q"];
     $id_input="'".$_GET['id']."'";
-
+ 
     if(substr($_GET['id'],0,1) == "a"){
         $sql = $pdo->prepare("SELECT nome, ativo FROM usuario u 
         INNER JOIN dados_login d ON u.id_usuario = d.id_usuario WHERE nome ILIKE '$q%'  AND u.nivel_acesso != '4' AND ativo = 'true' LIMIT 5");
