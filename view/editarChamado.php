@@ -28,13 +28,19 @@
 
     $string = $linhaChamado->getFotos();
 
-    $string = str_replace('{','',$string);
-    $string = str_replace('}','',$string);
+    $barras = array("{","}");
+    $string = str_replace($barras,'',$string);
 
     $fotos = explode(',', $string);
 
-    $consulta_usuarios = $usuariodao->buscarUsuariosAtivos();
+    if($linhaChamado->getPossuiFotos() == false){
+        $possui_fotos = 0;
+    }else{
+        $possui_fotos = 1;
+    }
 
+
+    $consulta_usuarios = $usuariodao->buscarUsuariosAtivos();
 
 ?>
 
@@ -230,7 +236,7 @@
         <hr>
             <div>
                 Descrição: <span style="color:red;">*</span>
-                <textarea id="descricao" name="descricao" class="form-control" cols="30" rows="3" maxlength="750" required> <?php echo $linhaChamado->getDescricao(); ?></textarea>
+                <textarea id="descricao" name="descricao" class="form-control" cols="30" rows="3" maxlength="750" required><?php echo $linhaChamado->getDescricao(); ?></textarea>
             </div>
         <hr>
             <div>
@@ -244,11 +250,7 @@
             </div>
         </div>
         <hr>
-        <div>
-            Fotos:
-
-            <input id="imgInp" name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
-        </div>
+        Fotos:
         <div style="margin-top: 20px;">
         <?php if(($fotos[0]) != "" && $fotos[0] != null){?>
         <div class="box printHide">
@@ -287,6 +289,11 @@
             </div>
         </div>
         <?php }?>
+        <div>
+            Adicionar fotos:
+            <input name="possui_fotos" type="hidden" value="<?php echo $possui_fotos; ?>">
+            <input id="imgInp" name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
+        </div>
         <div id="idGallery" class="gallery"></div>
         <hr>
         <div class="row" style="display:flex; justify-content:center;">

@@ -20,6 +20,7 @@ class Chamado{
     private $cancelado;
     private $motivo;
     private $fotos;
+    private $possui_fotos;
 
     public function getId(){
         return $this->id;
@@ -147,6 +148,13 @@ class Chamado{
     public function setFotos($fotos){
         $this->fotos = $fotos;
     }
+
+    public function getPossuiFotos(){
+        return $this->possui_fotos;
+    }
+    public function setPossuiFotos($possui_fotos){
+        $this->possui_fotos = $possui_fotos;
+    }
 }
 
 interface ChamadoDAO{
@@ -154,6 +162,7 @@ interface ChamadoDAO{
     public function buscarPeloId($id);
     public function adicionar(Chamado $c);
     public function adicionarLog($id_usuario,$id_chamado, $dataAtual);
-    public function excluirFoto($id,$fotos);
+    public function excluirFoto($id,$fotos,$possui_fotos);
     public function editar(Chamado $c);
+    public function buscaFotos($i);
 }

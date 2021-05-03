@@ -15,6 +15,8 @@
 
 
     //BUSCA O ENDEREÇO NO BD
+
+
     if($linhaOcorrencia->getEnderecoPrincipal() == "Logradouro"){
         $id_logradouro = $linhaOcorrencia->getLogradouroid();
         $linhaLogradouro = $enderecodao->buscarPeloId($id_logradouro);
@@ -61,10 +63,13 @@
 
     $string = $linhaOcorrencia->getFotos();
 
-    $string = str_replace('{','',$string);
-    $string = str_replace('}','',$string);
+    $barras = array("{","}");
+    $string = str_replace($barras,'',$string);
+    
 
     $fotos = explode(',', $string);
+
+    $linhaCoordenada = $enderecodao->buscarIdCoordenada($linhaOcorrencia->getIdCoordenada());
 
 
 ?>
@@ -76,6 +81,9 @@
                 Ocorrencia alterada com sucesso.
             </div>
     <?php } ?>
+    <?php if(isset($_GET['sucessocad'])){ ?>
+            <div class="alert alert-success" role="alert">Ocorrencia cadastrada com sucesso.</div>
+        <?php } ?>
     <?php if(isset($_GET['sucessoInterdicao'])){ ?>
             <div class="alert alert-success" role="alert">
                 Desinterditado com sucesso.
@@ -109,7 +117,8 @@
         <h4 class="printHide">Endereço</h4>
         <h3 class="printShow">Endereço</h3>
         <hr>
-        <span class="titulo printHide">Endereço principal: </span><span class="printHide" id="coordenada_principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?>'"><?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?></span>
+        <span class="titulo printHide">Localizar por: </span><span class="printHide" id="coordenada_principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?>'"><?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?></span>
+        <?php if($linhaOcorrencia->getEnderecoPrincipal() == "Logradouro"){ ?>
         <div ng-show="sel_endereco == 'Logradouro'">
             <div class="row">
                 <div class="col-sm-7"><span class="titulo">CEP: </span><?php echo $linhaLogradouro->getCep(); ?></div>
@@ -120,15 +129,16 @@
                 <div class="col-sm-7"><span class="titulo">Referência:</span><?php echo $linhaLogradouro->getReferencia(); ?></div>
             </div>
         </div>
+        <?php } ?>
         <?php if($linhaOcorrencia->getEnderecoPrincipal() == "Coordenada"){  ?>
         <div ng-show="sel_endereco == 'Coordenada'">
             <nav>
-                <span class="titulo">Latitude: </span><span id="latitude" ><?php echo $linhaOcorrencia->getLatitude(); ?></span>
+                <span class="titulo">Latitude: </span><span id="latitude" ><?php echo $linhaCoordenada->getLatitude(); ?></span>
             </nav>
             <nav class="inline">
-                <span class="titulo">Longitude: </span><span id="longitude" ><?php echo $linhaOcorrencia->getLongitude(); ?></span>
+                <span class="titulo">Longitude: </span><span id="longitude" ><?php echo $linhaCoordenada->getLongitude(); ?></span>
             </nav>
-            <button type="button" class="btn-default btn-small inline open-AddBookDialog" style="position:relative;left:5%" data-toggle="modal" data-id="map"><span class="glyphicon glyphicon-map-marker"></span></button>
+            <button type="button" class="btn-default btn-small inline printHide" onclick="abrirMapa(), myMap()"><span class="glyphicon glyphicon-map-marker"></span></button>
         </div>
         <?php }?>
     </div>
@@ -282,7 +292,6 @@ if($linhaPessoa2 !== null){ ?>
         </div>
     </div>
     <?php } ?>
-
     <div class="box">
         <h4 class="printHide">Tipo</h4>
         <h4 class="printShow">Tipo</h4>
@@ -314,15 +323,16 @@ if($linhaPessoa2 !== null){ ?>
         <span class="titulo">Ativa: </span><span id="ativa"><?php echo ($linhaOcorrencia->getAtivo() == 't') ? 'Sim':'Não'; ?></span><br>
         <span class="titulo">Data de alteração: </span><span id="data_alteracao"><?php echo date("d/m/Y", strtotime($linhaOcorrencia->getDataAlteracao())); ?></span><br>
         <span class="titulo">Usuário que realizou a alteração: </span><span class="printShoww"><?php echo $usuario_editor->getNome(); ?></span><a id="usuario_criador" class="printHide" href="?pagina=exibirUsuario&id=<?php echo  $usuario_editor->getId(); ?>"><?php echo $usuario_editor->getNome(); ?></a><br>
-        <span class="titulo">Ocorrência de referência: </span>
-            <?php if($linhaOcorrencia->getReferencia() == null){ ?>
+        <span class="titulo">Chamado de referência: </span>
+            <?php if($linhaOcorrencia->getChamadoId() == null){ ?>
                 <span id="ocorr_referencia"><?php echo 'Não possui'; ?></span><br>
             <?php }else{ ?>
-            <span class="printShoww"><?php echo $linhaOcorrencia->getReferencia();?></span>
-                <a class="printHide" id="ocorr_referencia" href="?pagina=exibirOcorrencia&id=<?php echo $linhaOcorrencia->getReferencia(); ?>"><?php echo $linhaOcorrencia->getReferencia(); ?></a><br>
+            <span class="printShoww"><?php echo $linhaOcorrencia->getChamadoId();?></span>
+                <a class="printHide" id="ocorr_referencia" href="?pagina=exibirChamado&id=<?php echo $linhaOcorrencia->getChamadoId(); ?>"><?php echo $linhaOcorrencia->getChamadoId(); ?></a><br>
             <?php }?>
         <br>
-    </div>
+    </div>  
+
     <?php if($linhaOcorrencia->getPossuiFotos() == true){ ?>
     <div class="box printHide">
         <div id="myCarousel" class="carousel slide limite" data-ride="carousel">
@@ -362,11 +372,18 @@ if($linhaPessoa2 !== null){ ?>
         echo '<img class="image-print" src="data:image/png;base64,' . $fotos[$i] .'">';
         } ?>
     </div>
-    <div class="modal fade" id="map" role="dialog">
+    
+    <div class="printShoww" style="display: flex; flex-direction:column; align-items:center;">
+        <div style="margin-bottom: 1px solid black;">
+        <span class="printShow" style="margin-top:40px;">_____________________</span>
+        </div>
+       <span class="printShow" >Assinatura</span>
+    </div>
+    <div class="hide mapModal" id="map" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" onclick="fecharMapa()" class="close">&times;</button>
                     <h5 class="modal-title">Mapa</h5>
                 </div>
                 <div class="modal-body">
@@ -375,67 +392,33 @@ if($linhaPessoa2 !== null){ ?>
             </div>
         </div>
     </div>
-    <div class="printShoww" style="display: flex; flex-direction:column; align-items:center;">
-        <div style="margin-bottom: 1px solid black;">
-        <span class="printShow" style="margin-top:40px;">_____________________</span>
-        </div>
-       <span class="printShow" >Assinatura</span>
-    </div>
     <?php if($linhaOcorrencia->getAtivo() == true){ ?>
-        <form action="index.php?pagina=editarOcorrencia"   method="post">
-            <input name="id_ocorrencia" type="hidden" value="<?php echo $id_ocorrencia; ?>">
-            <input name="chamado_id" type="hidden" value="<?php echo $linhaOcorrencia->getChamadoId(); ?>">
-            <input name="endereco_principal" type="hidden" value="<?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?>">
-            <input name="cep" type="hidden" value="<?php echo $linhaLogradouro->getCep(); ?>">
-            <input name="cidade" type="hidden" value="<?php echo $linhaLogradouro->getCidade(); ?>">
-            <input name="bairro" type="hidden" value="<?php echo $linhaLogradouro->getBairro(); ?>">
-            <input name="logradouro" type="hidden" value="<?php echo $linhaLogradouro->getLogradouro(); ?>">
-            <input name="numero" type="hidden" value="<?php echo $linhaLogradouro->getNumero()?>">
-            <input name="id_logradouro" type="hidden" value="<?php  echo $id_logradouro;?>">
-            <input name="referencia" type="hidden" value="<?php echo $linhaLogradouro->getReferencia(); ?>">
-            <input name="latitude" type="hidden" value="<?php echo $linhaOcorrencia->getLatitude(); ?>">
-            <input name="longitude" type="hidden" value="<?php echo $linhaOcorrencia->getLongitude(); ?>">
-            <input name="agente_principal" type="hidden" value="<?php echo $linhaAgentePrincipal->getNome(); ?>">
-            <?php if($linhaAgente1 !== NULL){ ?>
-            <input name="agente_apoio1" type="hidden" value="<?php echo $linhaAgente1->getNome(); ?>">
-            <?php }?>
-            <?php if($linhaAgente2 !== NULL){ ?>
-            <input name="agente_apoio2" type="hidden" value="<?php echo $linhaAgente2->getNome(); ?>">
-            <?php }?>
-            <input name="data_lancamento" type="hidden" value="<?php echo $linhaOcorrencia->getDataAlteracao(); ?>">
-            <input name="data_ocorrencia" type="hidden" value="<?php echo $linhaOcorrencia->getData(); ?>">
-            <input name="titulo" type="hidden" value="<?php echo $linhaOcorrencia->getTitulo(); ?>">
-            <input name="ocorr_descricao" type="hidden" value="<?php echo $linhaOcorrencia->getDescricao(); ?>">
-            <input name="ocorr_origem" type="hidden" value="<?php echo $linhaOcorrencia->getOrigem(); ?>">
-            <input name="pessoa1" type="hidden" value="<?php echo $linhaOcorrencia->getPessoa1(); ?>">
-            <input name="pessoa2" type="hidden" value="<?php echo $linhaOcorrencia->getPessoa2(); ?>">
-            <input name="ocorr_cobrade" type="hidden" value="<?php echo $linhaOcorrencia->getCobrade(); ?>"> 
-            <input name="possui_fotos" type="hidden" value="<?php echo $linhaOcorrencia->getPossuiFotos(); ?>">
-            <input name="prioridade" type="hidden" value="<?php echo $linhaOcorrencia->getPrioridade(); ?>">
-            <input name="analisado" type="hidden" value="<?php echo $linhaOcorrencia->getAnalisado(); ?>">
-            <input name="congelado" type="hidden" value="<?php echo $linhaOcorrencia->getCongelado(); ?>">
-            <input name="encerrado" type="hidden" value="<?php echo $linhaOcorrencia->getEncerrado(); ?>">
-            <a class="printHide" href="index.php?pagina=consultarOcorrencia.php" style="text-decoration:none; color:#000000;"><input class="btn btn-default printHide" style="left:25%;" value="Voltar" type="button"></a>
-            <input type="submit" class="btn btn-default btn-md printHide" style="position:relative;left:30%; color:#000000;" value="Editar Ocorrencia">
-        </form>
+            <a class="printHide" href="index.php?pagina=consultarOcorrencia" style="text-decoration:none; color:#000000;"><input class="btn btn-default printHide" style="left:25%;" value="Voltar" type="button"></a>
+            <a href="index.php?pagina=editarOcorrencia&id=<?php echo $id_ocorrencia; ?>"><input type="button" class="btn btn-default btn-md printHide" style="position:relative;left:30%; color:#000000;" value="Editar Ocorrencia"></a>
         <?php if(!$id_interdicao){ ?>
             <form action="index.php?pagina=cadastrarInterdicao" method="post">
                 <input name="id_ocorrencia" type="hidden" value="<?php echo $id_ocorrencia; ?>">
                 <input name="titulo_ocorrencia" type="hidden" value="<?php echo $linhaOcorrencia->getTitulo(); ?>">
                 <input name="endereco_principal" type="hidden" value="<?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?>">
+                <?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){ ?>
                 <input name="cep" type="hidden" value="<?php echo $linhaLogradouro->getCep(); ?>">
                 <input name="cidade" type="hidden" value="<?php echo $linhaLogradouro->getCidade(); ?>">
                 <input name="bairro" type="hidden" value="<?php echo $linhaLogradouro->getBairro(); ?>">
                 <input name="logradouro" type="hidden" value="<?php echo $linhaLogradouro->getLogradouro(); ?>">
                 <input name="numero" type="hidden" value="<?php echo $linhaLogradouro->getNumero() ?>">
                 <input name="referencia" type="hidden" value="<?php echo $linhaLogradouro->getReferencia(); ?>">
-                <input name="latitude" type="hidden" value="<?php echo $linhaOcorrencia->getLatitude(); ?>">
-                <input name="longitude" type="hidden" value="<?php echo $linhaOcorrencia->getLongitude(); ?>">
+                <?php } ?>
+                <?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Coordenada'){ ?>
+                <input name="latitude" type="hidden" value="<?php echo $linhaCoordenada->getLatitude(); ?>">
+                <input name="longitude" type="hidden" value="<?php echo $linhaCoordenada->getLongitude(); ?>">
+                <input name="id_coordenada" type="hidden" value="<?php $linhaCoordenada->getId() ?>">
+                <?php } ?>
                 <input type="submit" class="btn btn-default btn-md btn-interdicao-g printHide" style="left:65%; color:#000000;  "value="Gerar Interdição">
             </form>
         <?php }else{ ?>
             <a href="index.php?pagina=exibirInterdicao&id=<?php echo $id_interdicao; ?>" class="btn btn-default btn-md btn-interdicao printHide">Verificar Interdição</a>
         <?php } ?>
     <?php } ?>
+    
 </div>
 </div>

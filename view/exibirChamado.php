@@ -17,7 +17,7 @@
 
     $linhaChamado = $chamadodao->buscarPeloId($id_chamado);
     $idpessoa = $linhaChamado->getPessoaId();
-    
+
     if($linhaChamado->getEnderecoPrincipal() == "Logradouro"){
         $id_logradouro = $linhaChamado->getLogradouroId();
 
@@ -42,12 +42,18 @@
 
     $string = $linhaChamado->getFotos();
 
-    $string = str_replace('{','',$string);
-    $string = str_replace('}','',$string);
+    $barras = array("{","}");
+    $string = str_replace($barras,'',$string);
 
     $fotos = explode(',', $string);
 
-        
+    if($linhaChamado->getPossuiFotos() == false){
+        $possui_fotos = false;
+    }else{
+        $possui_fotos = true;
+    }
+
+
 ?>
 
 <div class="container positioning">
@@ -144,7 +150,7 @@
             ?>
             
             <div class="row">
-            <span class="titulo">Pessoa atendida: </span> <?php if($idpessoa){?>  <a href="" class="open-AddBookDialog printHide" data-toggle="modal" onclick="corrigeTelefone()" data-id="pessoa_nome1"><span><?php echo $linhaChamado->getNomePessoa();?></span></a><?php } else{?><span class="printHide"><?php echo $linhaChamado->getNomePessoa();?></span><?php } ?><span class="printShow"><?php echo $linhaChamado->getNomePessoa(); ?></span>
+            <span class="titulo">Pessoa atendida: </span> <?php if($idpessoa){?> <a href="" id="editNomeShow" class="open-AddBookDialog printHide hidden" data-toggle="modal" onclick="corrigeTelefone()" data-id="pessoa_nome1"><span><?php echo $linhaChamado->getNomePessoa();?></span></a> <a href="" class="open-AddBookDialog printHide editNomeHide" data-toggle="modal" onclick="corrigeTelefone()" data-id="pessoa_nome1"><span><?php echo $linhaChamado->getNomePessoa();?></span></a><?php } else{?><span class="printHide"><?php echo $linhaChamado->getNomePessoa();?></span><?php } ?><span class="printShow"><?php echo $linhaChamado->getNomePessoa(); ?></span>
             <?php if($idpessoa){ ?><span class="titulo printShow">Contato: </span> <span class="printShow"><?php echo $contato ?></span><?php } ?>
             </div>
             <?php  }else{ ?>
@@ -159,49 +165,62 @@ if($linhaPessoa1 !== null){ ?>
             <div class="modal-content">
                 <div class="modal-header">
                     <span>Dados da pessoa</span>
+
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                     <div class="modal-body">
+                    <span id="sucessoEditPessoa" class="alert-sucess" style="color: greenyellow;"></span>
+                    <span id="falhaEditPessoa" class="alert-danger" style="color: red;"></span>
                         <nav>
                             <input id="id_pessoa" type="hidden" value="">
+                            <input id="pessoa_id" type="hidden" value="<?php echo $linhaChamado->getPessoaId() ?>">
                             <div class="row">
                                 <div class="col-sm-12">
                                     Nome:
-                                   <?php echo '<input id="nome_pessoa" name="nome_pessoa" type="text" class="form-control" value=" '.$linhaPessoa1->getNome() . ' " disabled > '  ?>
+                                   <?php echo '<input id="nome_pessoa" name="nome_pessoa" type="text" class="form-control" value=" '.$linhaPessoa1->getNome() . ' " readonly > '  ?>
                                 </div>
                             </div>   
                             <span id="erroNome" class="alertErro hide">Nome inválido.</span>
                             <div class="row">
                                 <div class="col-sm-6">
                                     CPF:
-                                    <?php echo '<input id="cpf_pessoa" name="cpf_pessoa" type="text" class="form-control" value="'.$linhaPessoa1->getCPF().'" disabled>' ?>
+                                    <?php echo '<input id="cpf_pessoa" name="cpf_pessoa" type="text" class="form-control" value="'.$linhaPessoa1->getCPF().'" readonly>' ?>
                                 </div>
                                 <div class="col-sm-6">
                                     Outros documentos:
-                                    <?php echo '<input id="outros_documentos" name="outros_documentos" class="form-control" type="text" value="'.$linhaPessoa1->getOutrosDocumentos().'" disabled>' ?>
+                                    <?php echo '<input id="outros_documentos" name="outros_documentos" class="form-control" type="text" value="'.$linhaPessoa1->getOutrosDocumentos().'" readonly>' ?>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
                                     Celular: 
-                                    <?php echo ' <input id="celular_pessoa" name="celular_pessoa" type="text" class="form-control" value="'. $linhaPessoa1->getCelular() .'" disabled >'?>
+                                    <?php echo ' <input id="celular_pessoa" name="celular_pessoa" type="text" class="form-control" value="'. $linhaPessoa1->getCelular() .'" readonly >'?>
                                     
                                 </div>
                                 <div class="col-sm-6">
                                     Telefone Fixo: 
-                                    <?php echo ' <input id="telefone_pessoa" name="telefone_pessoa" type="text" class="form-control" value=" ' . $linhaPessoa1->getTelefone() . ' " disabled>'?>
+                                    <?php echo ' <input id="telefone_pessoa" name="telefone_pessoa" type="text" class="form-control" value=" ' . $linhaPessoa1->getTelefone() . ' " readonly>'?>
                                 </div>
                             </div>
                             <div class="form-group">
                                 Email:
-                                <?php echo'<input id="email_pessoa" name="email_pessoa" type="email" class="form-control" value="'.$linhaPessoa1->getEmail().'" disabled>' ?>
+                                <?php echo'<input id="email_pessoa" name="email_pessoa" type="email" class="form-control" value="'.$linhaPessoa1->getEmail().'" readonly>' ?>
                             </div>
+                            <div class="col-sm-6">
+                        </div>
                         </nav>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-sm-6">
+                            <button id="editar_pessoa" class="btn btn-default" onclick="editarPessoa()">Editar</button>
+                            <button id="salvar_pessoa" class="btn btn-default hidden" onclick="salvarEditPessoa()">Salvar</button>
+                        </div>
                     </div>
             </div>
         </div>
     </div>
-    <?php } ?>
+    <?php }
+   ?>
     <?php if(($fotos[0]) != "" && $fotos[0] != null){?>
         <div class="box printHide">
             <div id="myCarousel" class="carousel slide limite" data-ride="carousel">
@@ -249,7 +268,7 @@ if($linhaPessoa1 !== null){ ?>
     </div>
     <?php }?>
     <div class="printShoww">
-        <div style="margin-top:20px; display:flex;">
+        <div style="margin-top:20px; display:flex; justify-content:center;">
         Assinatura:
         <div style="border-bottom: 1px solid black; width: 40%;"></div>
         </div>
@@ -278,9 +297,11 @@ if($linhaPessoa1 !== null){ ?>
         </form>
         <?php } ?>
     </div>
-        <div class="col-sm-2">
+    <?php if($linhaChamado->getUsado() == false){ ?>
+        <div class="col-sm-2 printHide">
         <a href="index.php?pagina=editarChamado&id=<?php echo $id_chamado; ?>"><button class="btn btn-default">Editar</button></a>
         </div>
+    <?php } ?>
     <div class="col-sm-3">
   
         <?php if($linhaChamado->getUsado() == false){ ?>
@@ -296,7 +317,10 @@ if($linhaPessoa1 !== null){ ?>
                 <input name="referencia" type="hidden" value="<?php echo $linhaLogradouro->getReferencia(); ?>">
                 <?php }else{ ?>
                 <input name="id_coordenada" type="hidden" value="<?php echo $id_coordenada; ?>">
+                <input name="latitude" type="hidden" value="<?php echo $linhaCoordenada->getLatitude(); ?>">
+                <input name="longitude" type="hidden" value="<?php echo $linhaCoordenada->getLongitude(); ?>">
                 <?php } ?>
+
                 <input name="data_ocorrencia" type="hidden" value="<?php echo date("Y-m-d", strtotime($linhaChamado->getData())); ?>">
                 <input name="descricao" type="hidden" value="<?php echo $linhaChamado->getDescricao(); ?>">
                 <input name="ocorr_origem" type="hidden" value="<?php echo $linhaChamado->getOrigem(); ?>">

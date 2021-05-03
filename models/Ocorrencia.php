@@ -5,8 +5,7 @@ class Ocorrencia{
     private $chamado_id;
     private $id;
     private $endereco_principal;
-    private $latitude;
-    private $longitude;
+    private $id_coordenada;
     private $logradouro_id;
     private $cep;
     private $cidade;
@@ -65,18 +64,11 @@ class Ocorrencia{
         $this->endereco_principal = trim($e);
     }
 
-    public function getLatitude(){
-        return $this->latitude;
+    public function getIdCoordenada(){
+        return $this->id_coordenada;
     }
-    public function setLatitude($la){
-        $this->latitude = $la;
-    }
-
-    public function getLongitude(){
-        return $this->longitude;
-    }
-    public function setLongitude($lo){
-        $this->longitude = $lo;
+    public function setIdCoordenada($id_coordenada){
+        $this->id_coordenada = $id_coordenada;
     }
     
     public function getLogradouroid(){
@@ -279,9 +271,8 @@ class Ocorrencia{
 interface OcorrenciaDAO{
     public function buscarPeloId($id);
     public function adicionar(Ocorrencia $o);
-    public function remover($id);
+    public function excluirFoto($id,$fotos,$possui_fotos);
     public function editarOcorrencia(Ocorrencia $o);
-    public function editarEndereco(Ocorrencia $o);
     public function buscaFotos($i);
     public function buscaCobrade($c);
     public function buscaInterdicao($i);

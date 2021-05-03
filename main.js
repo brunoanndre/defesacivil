@@ -342,6 +342,7 @@ function SubmitFormData() {
 
 function myMap(position) {
     if($('#latitude').html()){
+
         var latitude = parseFloat($('#latitude').html());
         var longitude = parseFloat($('#longitude').html());
         var myLatLng = {lat: latitude, lng: longitude};
@@ -669,4 +670,58 @@ function corrigeTelefone(){
         let telefoneNovo = '';
         document.getElementById('telefone_pessoa').value = telefoneNovo;
     }
+}
+
+function editarPessoa(){
+    document.getElementById('editar_pessoa').classList.add('hidden');
+    document.getElementById('salvar_pessoa').classList.remove('hidden');
+    document.getElementById('nome_pessoa').removeAttribute('readonly');
+    document.getElementById('cpf_pessoa').removeAttribute('readonly');
+    document.getElementById('outros_documentos').removeAttribute('readonly');
+    document.getElementById('celular_pessoa').removeAttribute('readonly');
+    document.getElementById('telefone_pessoa').removeAttribute('readonly');
+    document.getElementById('email_pessoa').removeAttribute('readonly');
+}
+
+function salvarEditPessoa() {
+    
+    var id_pessoa = $("#pessoa_id").val();
+    var nome_pessoa = $("#nome_pessoa").val();
+    var email_pessoa = $("#email_pessoa").val();
+    var celular_pessoa = $("#celular_pessoa").val();
+    var telefone_pessoa = $("#telefone_pessoa").val();
+    var cpf_pessoa = $("#cpf_pessoa").val();
+    var outros_documentos = $("#outros_documentos").val();
+ 
+    //$.post("processa_cadastrar_pessoa.php", { nome_pessoa: nome_pessoa, email_pessoa: email_pessoa,
+    //    telefone_pessoa: telefone_pessoa, cpf_pessoa: cpf_pessoa, outros_documentos:outros_documentos, nome_salvar: nome_pessoa });
+    if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    } else {  // code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function() {
+        if (this.readyState==4 && this.status==200) {
+            alert(this.response)
+            if(this.response == 'Sucesso'){
+                document.getElementById('sucessoEditPessoa').innerHTML = 'Dados alterados com sucesso!';
+                document.getElementById('editar_pessoa').classList.remove('hidden');
+                document.getElementById('salvar_pessoa').classList.add('hidden');
+                document.getElementById('nome_pessoa').readOnly = true;
+                document.getElementById('cpf_pessoa').readOnly = true;
+                document.getElementById('outros_documentos').readOnly = true;
+                document.getElementById('celular_pessoa').readOnly = true;
+                document.getElementById('telefone_pessoa').readOnly = true;
+                document.getElementById('email_pessoa').readOnly = true;
+            }else{
+                document.getElementById('falhaEditPessoa').innerHTML = 'Ocorreu uma falha para alterar os dados.';
+            }
+            
+        }
+    }
+    xmlhttp.open("GET","processa_editar_pessoa.php?nome_pessoa="+nome_pessoa+"&email_pessoa="+email_pessoa+"&celular_pessoa="+celular_pessoa+"&telefone_pessoa="+telefone_pessoa+"&cpf_pessoa="+cpf_pessoa+"&outros_documento="+outros_documentos+"&id_pessoa="+id_pessoa,true);
+    xmlhttp.send();
+
+    $('#pessoasModal').modal('hide');
 }

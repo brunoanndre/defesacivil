@@ -1,21 +1,22 @@
 <?php
-    include 'dao/ChamadoDaoPgsql.php';
 
-    $chamadodao = new ChamadoDaoPgsql($pdo);
+    require_once 'dao/OcorrenciaDaoPgsql.php';
+
+    $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
 
     $idFoto = $_POST['idFotoExcluir'];
-    $id_chamado = filter_input(INPUT_POST, 'id_chamado');
- 
+    $id_ocorrencia = filter_input(INPUT_POST, 'id_ocorrencia');
 
-    $linhaChamado = $chamadodao->buscarPeloId($id_chamado);
-    $fotos = $linhaChamado->getFotos();
+
+    $linhaOcorrencia = $ocorrenciadao->buscarPeloId($id_ocorrencia);
+    $fotos = $linhaOcorrencia->getFotos();
 
     $barras = array("{","}");
     $fotos = str_replace($barras,"",$fotos);
     $fotosArray = explode(",",$fotos);
 
     unset($fotosArray[$idFoto]);
-
+    
     if(sizeof($fotosArray) == 0){
         $fotosString == 'null';
         $possui_fotos = 'false';
@@ -25,6 +26,6 @@
         $possui_fotos = 'true';
     }
 
-    if($chamadodao->excluirFoto($id_chamado,$fotosString, $possui_fotos) == true){
-        header('Location:index.php?pagina=editarChamado&id='.$id_chamado);
+    if($ocorrenciadao->excluirFoto($id_ocorrencia,$fotosString,$possui_fotos) == true){
+        header('Location:index.php?pagina=editarOcorrencia&id='.$id_ocorrencia);
     }

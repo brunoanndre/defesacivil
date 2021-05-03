@@ -39,6 +39,8 @@ $cobrade_subgrupo = $_POST['cobrade_subgrupo'];
 $cobrade_tipo = $_POST['cobrade_tipo'];
 $cobrade_subtipo = $_POST['cobrade_subtipo'];
 $prioridade = addslashes($_POST['prioridade']);
+$id_coordenada = $_POST['id_coordenada'];
+
 $ativo = true;
 if($ocorr_origem == 'Outro'){
 	$ocorr_origem = filter_input(INPUT_POST,'ocorr_origem2');
@@ -57,15 +59,17 @@ foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
 	$binary = file_get_contents($temp);
 	$base64 = base64_encode($binary);
 	array_push($base64_array, $base64);
+
 }
 
 $pg_array = '{' . join(',', $base64_array) . '}';
-
+	
 if ($pg_array == "{}") {
 	$possui_fotos = "false";
 } else {
 	$possui_fotos = "true";
 }
+
 
 $analisado = 'false';
 $congelado = 'false';
@@ -105,12 +109,12 @@ if ($cobrade_categoria == 0) {
 	if (strlen($cobrade) > 5 || substr($cobrade, 0, 1) == '0' || substr($cobrade, 1, 2) == '0' || substr($cobrade, 2, 3) == '0')
 		$erros = $erros . '&cobrade';
 }
-
 //seleciona o endereço no BD, caso ele nao exista entao cria um novo
 $logradouro_id = NULL;
+
 if ($endereco_principal == "Logradouro") {
 	$cep = str_replace("-", "", $cep);
-
+	$id_coordenada = null;
 	if ($enderecodao->buscarEndereco($logradouro, $numero) === false) {
 		$novoEndereco = New Endereco();
 		$novoEndereco->setCep($cep);
@@ -119,7 +123,7 @@ if ($endereco_principal == "Logradouro") {
 		$novoEndereco->setLogradouro($logradouro);
 		$novoEndereco->setNumero($numero);
 		$novoEndereco->setReferencia($referencia);
-		
+
 		$logradouro_id = $enderecodao->adicionar($novoEndereco);
 
 		if (!$ocorrenciadao)
@@ -128,9 +132,17 @@ if ($endereco_principal == "Logradouro") {
 
 	//INSERIR NO LOG DE ENDEREÇO
 	$enderecodao->adicionarLog($logradouro_id, $id_criador,$dataAtual);
-	
-	$longitude = NULL;
-	$latitude = NULL;
+
+}else{
+	$linhaCordenada = $enderecodao->buscarCoordenada($latitude,$longitude);
+	$logradouro_id = null;
+	if($linhaCordenada == false){
+		$e = New Endereco();
+		$e->setLatitude($latitude);
+		$e->setLongitude($longitude);
+
+		$id_coordenada = $enderecodao->adicionarCoordenada($e);
+	}
 }
 
 
@@ -210,8 +222,7 @@ if (strlen($erros) > 0) {
 	$novaOcorrencia = New Ocorrencia();
 	$novaOcorrencia->setChamadoId($chamado_id);
 	$novaOcorrencia->setEnderecoPrincipal($endereco_principal);
-	$novaOcorrencia->setLatitude($latitude);
-	$novaOcorrencia->setLongitude($longitude);
+	$novaOcorrencia->setIdCoordenada($id_coordenada);
 	$novaOcorrencia->setLogradouroId($logradouro_id);
 	$novaOcorrencia->setIdCriador($id_criador);
 	$novaOcorrencia->setApoio1($agente_apoio_1);
@@ -235,19 +246,24 @@ if (strlen($erros) > 0) {
 	$novaOcorrencia->setUsuarioEditor($id_criador);
 	$novaOcorrencia->setAtivo($ativo);
 
-	$adicionar = $ocorrenciadao->adicionar($novaOcorrencia);
+	try{
+		$id_ocorrencia = $ocorrenciadao->adicionar($novaOcorrencia);
+	}catch(PDOException $e){
+		echo $e->getMessage();
+	}
 
-	if($adicionar == false) {
+
+	if($id_ocorrencia == false) {
 		header('location:index.php?pagina=cadastrarOcorrencia&erroDB');
 	} else {
 		if ($chamado_id != NULL) {
 			if ($ocorrenciadao->encerraChamadoAtivo($chamado_id) == false) {
 				header('location:index.php?pagina=cadastrarOcorrencia&erroDB');
 			} else {
-				header('location:index.php?pagina=cadastrarOcorrencia&sucesso');
+				header('location:index.php?pagina=exibirOcorrencia&id='. $id_ocorrencia . '&sucessocad');
 			}
 		} else {
-			header('location:index.php?pagina=cadastrarOcorrencia&sucesso');
+			header('location:index.php?pagina=exibirOcorrencia&id='. $id_ocorrencia . '&sucessocad');
 		}
 	}
 }

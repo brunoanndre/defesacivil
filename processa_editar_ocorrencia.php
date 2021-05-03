@@ -40,7 +40,7 @@ $cobrade_subgrupo = $_POST['cobrade_subgrupo'];
 $cobrade_tipo = $_POST['cobrade_tipo'];
 $cobrade_subtipo = $_POST['cobrade_subtipo'];
 $natureza = addslashes($_POST['natureza']);
-$possui_fotos = addslashes($_POST['possui_fotos']);
+$possui_fotos = filter_input(INPUT_POST, 'possui_fotos');
 $cobrade_descricao = addslashes($_POST['cobrade_descricao']);
 $prioridade = addslashes($_POST['prioridade']);
 $analisado = addslashes($_POST['analisado']);
@@ -49,7 +49,8 @@ $encerrado = addslashes($_POST['encerrado']);
 $id_logradouro = addslashes($_POST['id_logradouro']);
 session_start();
 $usuario_editor = $_SESSION['id_usuario'];
-
+$id_coordenada = $_POST['id_coordenada'];
+$imginpt = $_POST['files[]'];
 $base64_array = array();
 
 
@@ -65,19 +66,21 @@ foreach($_FILES["files"]["tmp_name"] as $key=>$tmp_name){
 }
 
 if(count($base64_array) > 0){
-
 	if($possui_fotos == 1){
 		$possui_fotos = 'true';
-		$pg_array = join(',',$base64_array).'}';
-
 		$string = $ocorrenciadao->buscaFotos($id_ocorrencia);
-		
-		$string = str_replace('}','',$string);
-
-		$pg_array = $string.','.$pg_array;
+        $barras = array("{","}");
+        $fotos = str_replace($barras,"",$string);
+        $fotosArray = explode(",",$fotos);
+        for($i= 0; $i < sizeof($base64_array); $i++){
+            array_push($fotosArray,$base64_array[$i]);
+        }
+        $fotosString = implode(",", $fotosArray);
+        $pg_array = '{' . $fotosString . '}';
 	}else{
-		$possui_fotos = true;
-		$pg_array = '{'.join('',$base64_array).'}';
+        $fotosString = implode(",", $base64_array);
+        $pg_array = '{' . $fotosString . '}';
+		$possui_fotos = 'true';
 	}
 }else{
 
@@ -121,11 +124,17 @@ if($cobrade_categoria == 0){
 }
 
 
-//seleciona o endereço no BD, caso ele nao exista entao cria um novo
-$logradouro_id = null;
 
 if($endereco_principal == "Logradouro"){
+	$cep = str_replace("-", "", $cep);
 //VERIFICA SE TEM O ENDEREÇO NO BD, SE NÃO TIVE INSERE
+
+	$id_coordenada = null;
+
+	if($id_logradouro == "" || $id_logradouro == null){
+		$id_logradouro = 0;
+	}
+
 	if($enderecodao->buscarPeloId($id_logradouro) == false){
 		$novoendereco = new Endereco();
 		$novoendereco->setCep($cep);
@@ -135,20 +144,50 @@ if($endereco_principal == "Logradouro"){
 		$novoendereco->setNumero($numero);
 		$novoendereco->setReferencia($referencia);
 
-		$enderecodao->adicionar($novoendereco);
+		$id_logradouro = $enderecodao->adicionar($novoendereco);
 		
-		if($enderecodao->adicionar($novoendereco) == true){
-			$linha = $enderecodao->buscarEndereco($logradouro,$numero);
-		}else{
+		if($id_logradouro == false){
 			$erros = $erros.'&logradouro';
 		}
-	}
-	$endereco = $enderecodao->buscarPeloId($id_logradouro);
+	}else{
 
-	$logradouro_id = $endereco->getId();
-	$longitude = null;
-	$latitude = null;
+		$novoendereco = new Endereco();
+		$novoendereco->setCep($cep);
+		$novoendereco->setCidade($cidade);
+		$novoendereco->setBairro($bairro);
+		$novoendereco->setLogradouro($logradouro);
+		$novoendereco->setNumero($numero);
+		$novoendereco->setReferencia($referencia);
+		$novoendereco->setId($id_logradouro);
+		
+		$enderecodao->editarLogradouro($novoendereco);
+
+	}
+}else{
+	$linhaCordenada = $enderecodao->buscarCoordenada($latitude,$longitude);
+
+	$id_logradouro = null;
+	if($linhaCordenada == false){
+		$e = New Endereco();
+		$e->setLatitude($latitude);
+		$e->setLongitude($longitude);
+
+		$id_coordenada = $enderecodao->adicionarCoordenada($e);
+	}else{
+		if($linhaCordenada['latitude'] !== $latitude){
+			$e = New Endereco();
+			$e->setLatitude($latitude);
+			$e->setLongitude($longitude);
+	
+			$id_coordenada = $enderecodao->adicionarCoordenada($e);
+		}else{
+			$id_coordenada = $linhaCordenada['id_coordenada'];
+		}
+
+	}
 }
+
+
 
 //busca o agente informado no banco de dados
 
@@ -190,7 +229,7 @@ if(strlen($pessoa_atendida_1) > 0){ //se a pessoa foi informada, busca a mesma n
 		}
 }else //pessoa nao foi informada
 	$pessoa_atendida_1 = '';
-
+	
 if(strlen($pessoa_atendida_2) > 0){ //se a pessoa foi informada, busca a mesma no BD
 	if($pessoadao->buscarPeloNome($pessoa_atendida_2) == false){//pessoa nao encontrada
 		$erros = $erros.'&pessoa_atendida_2';
@@ -213,9 +252,8 @@ if(strlen($erros) > 0){
 	$novaocorrencia = new Ocorrencia();
 	$novaocorrencia->setChamadoId($chamado_id);
 	$novaocorrencia->setEnderecoPrincipal($endereco_principal);
-	$novaocorrencia->setLatitude($latitude);
-	$novaocorrencia->setLongitude($longitude);
-	$novaocorrencia->setLogradouroId($logradouro_id);
+	$novaocorrencia->setIdCoordenada($id_coordenada);
+	$novaocorrencia->setLogradouroId($id_logradouro);
 	$novaocorrencia->setIdCriador($agente_principal);
 	$novaocorrencia->setApoio1($agente_apoio_1);
 	$novaocorrencia->setApoio2($agente_apoio_2);
@@ -241,18 +279,7 @@ if(strlen($erros) > 0){
 	
 	$atualizaocorrencia = $ocorrenciadao->editarOcorrencia($novaocorrencia);
 
-
-	$cepbd = str_replace('-','',$cep);
-	$novaocorrencia->setCep($cepbd);
-	$novaocorrencia->setCidade($cidade);
-	$novaocorrencia->setBairro($bairro);
-	$novaocorrencia->setLogradouro($logradouro);
-	$novaocorrencia->setNumero($numero);
-	$novaocorrencia->setReferencia($referencia);
-
-	$atualizaendereco = $ocorrenciadao->editarEndereco($novaocorrencia);
-
-	if(!$atualizaocorrencia && !$atualizaendereco){
+	if(!$atualizaocorrencia){
 		header('location:index.php?pagina=editarOcorrencia&id='.$id_ocorrencia.'&erroDB');
 	}else{
 		//echo pg_last_error();

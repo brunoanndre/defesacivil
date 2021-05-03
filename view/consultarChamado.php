@@ -32,6 +32,7 @@
         }
         $consulta_chamados = $chamadodao->buscarConsulta($parametro);
     }
+
 ?>
 
 <div>

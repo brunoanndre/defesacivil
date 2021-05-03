@@ -65,4 +65,5 @@ interface PessoaDAO{
     public function buscarPeloID($i);
     public function buscarPeloNome($n);
     public function adicionarLogPessoa($ip,$iu,$d);
+    public function editar(Pessoa $p);
 }

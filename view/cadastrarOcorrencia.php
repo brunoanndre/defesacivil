@@ -26,9 +26,7 @@
 <div class="container positioning">
 <div class="jumbotron campo_cadastro">
     <form method="post" action="processa_cadastrar_ocorrencia.php" enctype="multipart/form-data" onsubmit="return validarFormCadastroOcorrencia()">
-        <?php if(isset($_GET['sucesso'])){ ?>
-            <div class="alert alert-success" role="alert">Ocorrencia cadastrada com sucesso.</div>
-        <?php } ?>
+
         <?php if(isset($_GET['erroDB'])){ ?>
             <div class="alert alert-danger" role="alert">Falha ao cadastrar ocorrencia.</div>
         <?php } ?>
@@ -83,7 +81,7 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <span>CEP:</span>
-                        <input id="cep" name="cep" type="text" class="form-control" ng-model="cep" maxlength="8" onchange="verificaCep(this.value)" <?php if($_POST['id_chamado']> 0){ ?> value=" <?php echo $_POST['cep']; } ?>">
+                        <input id="cep" name="cep" type="text" autocomplete="off" class="form-control" ng-model="cep" maxlength="8" onchange="verificaCep(this.value)" <?php if($_POST['id_chamado']> 0){ ?> value=" <?php echo $_POST['cep']; } ?>">
                         <span id="erroCep" class="alertErro hide">CEP inválido.</span>
                     </div>
                     <div class="col-sm-8">
@@ -183,7 +181,7 @@
             <div>
                 <?php if($_POST['ocorr_origem'] == ""){ ?>
                     Origem: <span style="color:red;">*</span>
-                    <select name="ocorr_origem" class="form-control" ng-model="sel_origem" ng-init="sel_origem='telefone'" required>
+                    <select name="ocorr_origem" class="form-control" ng-model="sel_origem" ng-init="sel_origem='Telefone Base'" required>
                     <option value="Telefone Base">Telefone Base</option>
                     <option value="Ouvidoria">Ouvidoria</option>
                     <option value="199">199</option>
@@ -408,6 +406,7 @@
             </div>
         </div>
         <div class="div-btn-cadastrar">
+        <input class="hidden" name="id_coordenada" value="<?php echo $_POST['id_coordenada'] ?>">
         <input type="submit" class="btn-cadastrar btn-default btn-md" value="Cadastrar">
         </div>
     </form>

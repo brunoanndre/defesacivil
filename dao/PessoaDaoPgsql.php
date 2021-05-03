@@ -32,6 +32,24 @@ class PessoaDaoPgsql implements PessoaDAO{
         }
     }
 
+    public function editar(Pessoa $p){
+        $sql = $this->pdo->prepare('UPDATE pessoa SET nome = :nome, cpf = :cpf, outros_documentos = :outros, celular = :celular, email = :email, telefone = :telefone
+        WHERE id_pessoa = :id');
+        $sql->bindValue(':nome', $p->getNome());
+        $sql->bindValue(':cpf', $p->getCPF());
+        $sql->bindValue(":outros", $p->getOutrosDocumentos());
+        $sql->bindValue(":celular", $p->getCelular());
+        $sql->bindValue(':email', $p->getEmail());
+        $sql->bindValue(':telefone', $p->getTelefone());
+        $sql->bindValue(':id', $p->getID());
+
+        if($sql->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function buscarPeloID($i){
         $sql = $this->pdo->prepare("SELECT * FROM pessoa WHERE id_pessoa = :id_pessoa");
         $sql->bindValue(":id_pessoa", $i);

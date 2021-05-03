@@ -191,9 +191,9 @@ class ChamadoDaoPgsql implements ChamadoDAO{
 
     public function adicionar(Chamado $c){
         $sql = $this->pdo->prepare("INSERT INTO chamado (data_hora,origem,pessoa_id,chamado_logradouro_id,
-        descricao,endereco_principal, agente_id, prioridade, distribuicao, nome_pessoa, fotos, id_coordenada)
+        descricao,endereco_principal, agente_id, prioridade, distribuicao, nome_pessoa, fotos, id_coordenada,possui_fotos)
         VALUES (:timestamp,:origem,:pessoa_atendida,:logradouro_id,:descricao,
-        :endereco_principal, :id_usuario, :prioridade, :distribuicao, :nome,:fotos, :id_coordenada)");
+        :endereco_principal, :id_usuario, :prioridade, :distribuicao, :nome,:fotos, :id_coordenada,:possui_fotos)");
         $sql->bindValue(":timestamp", $c->getData());
         $sql->bindValue(":origem", $c->getOrigem());
         if($c->getPessoaId() == false){
@@ -222,6 +222,8 @@ class ChamadoDaoPgsql implements ChamadoDAO{
         }else{
             $sql->bindValue(":fotos", $c->getFotos());
         }
+        $sql->bindValue(":possui_fotos", $c->getPossuiFotos());
+
 
         if($sql->execute()){
                 $id = $this->pdo->lastInsertId();
@@ -268,6 +270,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
             $c->setMotivo($linha['motivo']);
             $c->setFotos($linha['fotos']);
             $c->setIdCoordenada($linha['id_coordenada']);
+            $c->setPossuiFotos($linha['possui_fotos']);
 
             return $c;
         }else{
@@ -276,9 +279,22 @@ class ChamadoDaoPgsql implements ChamadoDAO{
 
     }
 
-    public function excluirFoto($id,$fotos){
-        $sql = $this->pdo->prepare('UPDATE chamado SET fotos = :fotos WHERE id_chamado = :id');
-        $sql->bindValue(":fotos", $fotos);
+    public function buscaFotos($i){
+            $sql = $this->pdo->prepare("SELECT fotos FROM chamado WHERE id_chamado = :id");
+            $sql->bindValue(":id", $i);
+            $sql->execute();
+
+            return $sql->fetch()['fotos'];
+    }
+
+    public function excluirFoto($id,$fotos, $possui_fotos){
+        $sql = $this->pdo->prepare('UPDATE chamado SET fotos = :fotos, possui_fotos = :possui_fotos WHERE id_chamado = :id');
+        if($fotos == 'null'){
+            $sql->bindValue(":fotos", null, PDO::PARAM_NULL);
+        }else{
+            $sql->bindValue(":fotos", $fotos);
+        }
+        $sql->bindValue(":possui_fotos", $possui_fotos);
         $sql->bindValue(":id", $id);
         
         if($sql->execute()){
@@ -289,35 +305,45 @@ class ChamadoDaoPgsql implements ChamadoDAO{
     }
 
     public function editar(Chamado $c){
+
         $sql = $this->pdo->prepare("UPDATE chamado SET origem = :origem, descricao = :descricao, 
         endereco_principal = :enderecoPrincipal, chamado_logradouro_id = :idLogradouro, 
-        pessoa_id = :idPessoa,fotos= :fotos, prioridade = :prioridade, distribuicao = :distribuicao, nome_pessoa = :nomePessoa, id_coordenada = :idCoordenada
+        pessoa_id = :idPessoa,fotos= :fotos, possui_fotos = :possui_fotos, prioridade = :prioridade, distribuicao = :distribuicao, nome_pessoa = :nomePessoa, id_coordenada = :idCoordenada
         WHERE id_chamado = :idChamado");
+    
 
-        $sql->bindValue(":origem", $c->getOrigem());
-        $sql->bindValue(":idChamado", $c->getId());
-        $sql->bindValue(":descricao", $c->getDescricao());
-        $sql->bindValue(":enderecoPrincipal", $c->getEnderecoPrincipal());
-        $sql->bindValue(":idLogradouro", $c->getLogradouroId());
-        if($c->getPessoaId() == ""){
-            $sql->bindValue(":idPessoa", null, PDO::PARAM_NULL);
-        }else{
-            $sql->bindValue(":idPessoa", $c->getPessoaId());
-        }
-        $sql->bindValue(":fotos", $c->getFotos());
-        $sql->bindValue(":prioridade", $c->getPrioridade());
-        $sql->bindValue(":distribuicao", $c->getDistribuicao());
-        $sql->bindValue(":nomePessoa", $c->getNomePessoa());
-        if($c->getIdCoordenada() == "" || $c->getIdCoordenada() == null){
-            $sql->bindValue(":idCoordenada", null, PDO::PARAM_NULL);
-        }else{
-            $sql->bindValue(":idCoordenada", $c->getIdCoordenada());
-        }
+            $sql->bindValue(":origem", $c->getOrigem());
+            $sql->bindValue(":idChamado", $c->getId());
+            $sql->bindValue(":descricao", $c->getDescricao());
+            $sql->bindValue(":possui_fotos", $c->getPossuiFotos());
+            $sql->bindValue(":enderecoPrincipal", $c->getEnderecoPrincipal());
+            if($c->getLogradouroId() == "" || $c->getLogradouroId() == null){
+                $sql->bindValue(":idLogradouro", null , PDO::PARAM_NULL);
+            }else{
+                $sql->bindValue(":idLogradouro", $c->getLogradouroId());
+            }
+            if($c->getPessoaId() == ""){
+                $sql->bindValue(":idPessoa", null, PDO::PARAM_NULL);
+            }else{
+                $sql->bindValue(":idPessoa", $c->getPessoaId());
+            }
+            $sql->bindValue(":fotos", $c->getFotos());
+            $sql->bindValue(":prioridade", $c->getPrioridade());
+            $sql->bindValue(":distribuicao", $c->getDistribuicao());
+            $sql->bindValue(":nomePessoa", $c->getNomePessoa());
+            if($c->getIdCoordenada() == "" || $c->getIdCoordenada() == null){
+                $sql->bindValue(":idCoordenada", null, PDO::PARAM_NULL);
+            }else{
+                $sql->bindValue(":idCoordenada", $c->getIdCoordenada());
+            }
 
-        if($sql->execute()){
-            return true;
-        }else{
-            return false;
-        }
+                if($sql->execute()){
+                    return true;
+                }else{
+                    return false;
+                }
+
+
     }
+    
 }

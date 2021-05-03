@@ -50,6 +50,12 @@ foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
 
 $pg_array = '{' . join(',', $base64_array) . '}';
 
+if ($pg_array == "{}") {
+	$possui_fotos = "false";
+} else {
+	$possui_fotos = "true";
+}
+
 $erros='';
 
 session_start();
@@ -60,7 +66,7 @@ $dataAtual = date('d-m-Y H:i:s');
 if($endereco_principal == "Logradouro"){
 	$cep = str_replace("-","",$cep);
 	$linhaendereco = $enderecodao->buscarEndereco($logradouro,$numero);	
-
+	$id_coordenada = null;
 	if($linhaendereco == false){
 		$e = new Endereco();
 		$e->setCep($cep);
@@ -87,7 +93,7 @@ if($endereco_principal == "Logradouro"){
 	$latitude = null;
 }else{
 	$linhaCordenada = $enderecodao->buscarCoordenada($latitude,$longitude);
-
+	$logradouro_id = null;
 	if($linhaCordenada == false){
 		$e = New Endereco();
 		$e->setLatitude($latitude);
@@ -141,6 +147,7 @@ if(strlen($erros) > 0){
 	$c->setDistribuicao($distribuicao);
 	$c->setNomePessoa($nome);
 	$c->setFotos($pg_array);
+	$c->setPossuiFotos($possui_fotos);
 
 		$id_chamado = $chamadodao->adicionar($c);
 		

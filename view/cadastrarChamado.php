@@ -47,7 +47,7 @@
             </div>
             <div>
                 Origem: <span style="color:red;">*</span>
-                <select name="origem_chamado" class="form-control" ng-model="sel_origem" ng-init="sel_origem='telefone'" required>
+                <select name="origem_chamado" class="form-control" ng-model="sel_origem" ng-init="sel_origem='Telefone Base'" required>
                 <option value="Telefone Base">Telefone Base</option>
                 <option value="Ouvidoria">Ouvidoria</option>
                 <option value="199">199</option>

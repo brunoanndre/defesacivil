@@ -123,20 +123,21 @@ class EnderecoDaoPgsql implements EnderecoDAO{
 
     public function editarLogradouro(Endereco $e){
         $sql = $this->pdo->prepare("UPDATE endereco_logradouro SET cep = :cep, cidade = :cidade, bairro = :bairro, logradouro = :logradouro, numero = :numero, referencia = :referencia
-        WHERE id_logradouro = :idLogradouro");
+        WHERE id_logradouro = :id_logradouro");
         $sql->bindValue(":cep", $e->getCep());
         $sql->bindValue(":cidade", $e->getCidade());
         $sql->bindValue(":bairro", $e->getBairro());
         $sql->bindValue(":logradouro", $e->getLogradouro());
         $sql->bindValue(":numero", $e->getNumero());
         $sql->bindValue(":referencia", $e->getReferencia());
-        $sql->bindValue(":idLogradouro", $e->getId());
+        $sql->bindValue(":id_logradouro", $e->getId());
 
-        if($sql->execute()){
-            return true;
-        }else{
-            return false;
-        }
+        
+            if($sql->execute()){
+                return true;
+            }else{
+                return false;
+            }
     }
 
     public function editarCoordenada(Endereco $e){
@@ -145,11 +146,15 @@ class EnderecoDaoPgsql implements EnderecoDAO{
         $sql->bindValue(":latitude", $e->getLatitude());
         $sql->bindValue(":longitude", $e->getLongitude());
         $sql->bindValue(":idCoordenada", $e->getId());
-        
-        if($sql->execute()){
-            return true;
-        }else{
-            return false;
+  
+        try{
+            if($sql->execute()){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(PDOException $e){
+            echo $e->getMessage();
         }
     }
 }
