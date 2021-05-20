@@ -119,9 +119,13 @@
         <h4 class="printHide">Ocorrência</h4>
         <h2 class="printShow titulo" style="margin-bottom: 10px;">Ocorrência</h3>
         <nav>
-            <span class="titulo">Criador:</span><span><a class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaChamado->getAgenteId(); ?>    "><?php echo $linhaAgente->getNome(); ?></a></span><br>
+            <span class="titulo">Criador: <span class="printShoww"><?php echo  $linhaAgente->getNome();?></span></span><span><a class="printHide" href="?pagina=exibirUsuario&id=<?php echo $linhaChamado->getAgenteId(); ?>"><?php echo $linhaAgente->getNome(); ?></a></span><br>
             <span class="titulo">Data e hora: </span>
             <span><?php echo date("d/m/Y H:i", strtotime($linhaChamado->getData())); ?></span><br>
+            <?php if($linhaChamado->getUsado() == true){ ?>
+                <span class="titulo">Data do atendimento:</span>
+                <span><?php echo date("d/m/Y", strtotime($linhaChamado->getDataAtendimento() ))?></span><br>
+            <?php } ?>
             <span class="titulo">Origem: </span><span id="ocorr_origem"><?php echo $linhaChamado->getOrigem(); ?></span><br>
             <span class="titulo">Descrição: </span><br> <span class="printShow"><?php echo $linhaChamado->getDescricao() ?></span>
             <textarea name="descricao" rows="5" readonly class="readtextarea printHide"><?php echo $linhaChamado->getDescricao(); ?></textarea><br>
@@ -146,11 +150,11 @@
                         $contato = $linhaPessoa1->getTelefone();
                     }
                 }
-                
+        
             ?>
             
             <div class="row">
-            <span class="titulo">Pessoa atendida: </span> <?php if($idpessoa){?> <a href="" id="editNomeShow" class="open-AddBookDialog printHide hidden" data-toggle="modal" onclick="corrigeTelefone()" data-id="pessoa_nome1"><span><?php echo $linhaChamado->getNomePessoa();?></span></a> <a href="" class="open-AddBookDialog printHide editNomeHide" data-toggle="modal" onclick="corrigeTelefone()" data-id="pessoa_nome1"><span><?php echo $linhaChamado->getNomePessoa();?></span></a><?php } else{?><span class="printHide"><?php echo $linhaChamado->getNomePessoa();?></span><?php } ?><span class="printShow"><?php echo $linhaChamado->getNomePessoa(); ?></span>
+            <span class="titulo">Pessoa atendida: </span> <?php if($idpessoa){?>  <a href="" class="open-AddBookDialog printHide" data-toggle="modal" onclick="corrigeTelefone()" data-id="pessoa_nome1"><span id="pessoaNome"><?php echo $linhaPessoa1->getNome();?></span></a><?php } else{ ?><span class="printHide"><?php if($linhaChamado->getNomePessoa() != ''){ echo $linhaChamado->getNomePessoa();}?></span><?php } ?><span class="printShow"><?php echo $linhaChamado->getNomePessoa(); ?></span>
             <?php if($idpessoa){ ?><span class="titulo printShow">Contato: </span> <span class="printShow"><?php echo $contato ?></span><?php } ?>
             </div>
             <?php  }else{ ?>
@@ -163,6 +167,7 @@ if($linhaPessoa1 !== null){ ?>
 <div class="modal fade" id="pessoa1Modal" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
+
                 <div class="modal-header">
                     <span>Dados da pessoa</span>
 
@@ -173,7 +178,8 @@ if($linhaPessoa1 !== null){ ?>
                     <span id="falhaEditPessoa" class="alert-danger" style="color: red;"></span>
                         <nav>
                             <input id="id_pessoa" type="hidden" value="">
-                            <input id="pessoa_id" type="hidden" value="<?php echo $linhaChamado->getPessoaId() ?>">
+                            <input name="idChamado" type="hidden" value="<?php echo $id_chamado; ?>">
+                            <input id="pessoa_id" name="pessoa_id" type="hidden" value="<?php echo $linhaChamado->getPessoaId() ?>">
                             <div class="row">
                                 <div class="col-sm-12">
                                     Nome:
@@ -212,10 +218,11 @@ if($linhaPessoa1 !== null){ ?>
                     </div>
                     <div class="modal-footer">
                         <div class="col-sm-6">
-                            <button id="editar_pessoa" class="btn btn-default" onclick="editarPessoa()">Editar</button>
-                            <button id="salvar_pessoa" class="btn btn-default hidden" onclick="salvarEditPessoa()">Salvar</button>
+                            <input type="button" id="editar_pessoa" class="btn btn-default" onclick="editarPessoa()" value="Editar">
+                            <button type="submit" id="salvar_pessoa" class="btn btn-default hidden" onclick="salvarEditPessoa()">Salvar</button>
                         </div>
                     </div>
+
             </div>
         </div>
     </div>

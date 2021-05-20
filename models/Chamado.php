@@ -21,6 +21,7 @@ class Chamado{
     private $motivo;
     private $fotos;
     private $possui_fotos;
+    private $dataAtendimento;
 
     public function getId(){
         return $this->id;
@@ -154,6 +155,13 @@ class Chamado{
     }
     public function setPossuiFotos($possui_fotos){
         $this->possui_fotos = $possui_fotos;
+    }
+
+    public function getDataAtendimento(){
+        return $this->dataAtendimento;
+    }
+    public function setDataAtendimento($dataAtendimento){
+        $this->dataAtendimento = trim($dataAtendimento);
     }
 }
 

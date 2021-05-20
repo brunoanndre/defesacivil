@@ -162,7 +162,11 @@
                             <option value="Parque Bandeirantes">Parque Bandeirantes</option>
                             <option value="Nova Esperança">Nova Esperança</option>
                             <option value="São Judas Tadeu">São Judas Tadeu</option>
-                            <option value="Região das Praias">Região das Praias</option>
+                            <option value="Estaleiro">Estaleiro</option>
+                            <option value="Estaleirinho">Estaleirinho</option>
+                            <option value="Laranjeiras">Laranjeiras</option>
+                            <option value="Pinho">Pinho</option>
+                            <option value="Taquaras">Taquaras</option>
                         </select>
                     </div>
                     <div class="col-sm-8">

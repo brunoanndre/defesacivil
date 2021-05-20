@@ -14,7 +14,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
 
     public function buscarConsulta($p){
         if($p == 'normal'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa) as dataa,
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy HH24:MI') as dataa) as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa,chamado_logradouro_id, 
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao, logradouro
             FROM chamado 
@@ -48,7 +48,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                 }
         }
         if($p == 'usado_false'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa,
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy HH24:MI') as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id, chamado.endereco_principal,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao, logradouro
             FROM chamado 
@@ -85,12 +85,12 @@ class ChamadoDaoPgsql implements ChamadoDAO{
                 }
         }
         if($p == 'usado_true'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa,
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy HH24:MI') as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao, logradouro
             FROM chamado 
             INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario)
-            INNER JOIN endereco_logradouro el ON chamado_logradouro_id = el.id_logradouro WHERE chamado.usado = true OR chamado.cancelado = true ORDER BY dataa DESC");
+            INNER JOIN endereco_logradouro el ON chamado_logradouro_id = el.id_logradouro WHERE chamado.usado = true OR chamado.cancelado = true ORDER BY id_chamado DESC");
             $sql->execute();
 
             if($sql->rowCount() > 0 ){
@@ -119,12 +119,12 @@ class ChamadoDaoPgsql implements ChamadoDAO{
         }
 
         if($p == 'usado_true_cancelado_false'){
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa,
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy HH24:MI') as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa,chamado_logradouro_id,logradouro,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao
             FROM chamado 
             INNER JOIN usuario ON (chamado.agente_id = usuario.id_usuario) 
-            INNER JOIN endereco_logradouro el ON chamado_logradouro_id = el.id_logradouro WHERE chamado.usado = true AND chamado.cancelado = false  ORDER BY dataa DESC");
+            INNER JOIN endereco_logradouro el ON chamado_logradouro_id = el.id_logradouro WHERE chamado.usado = true AND chamado.cancelado = false  ORDER BY id_chamado DESC");
             $sql->execute();
 
             if($sql->rowCount() > 0 ){
@@ -154,7 +154,7 @@ class ChamadoDaoPgsql implements ChamadoDAO{
 
         if($p == 'usado_cancelado_true'){
 
-            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy hh:ii') as dataa,
+            $sql = $this->pdo->prepare("SELECT chamado.id_chamado,TO_CHAR(chamado.data_hora, 'dd/mm/yyyy HH24:MI') as dataa,
             chamado.origem,chamado.descricao, chamado.prioridade, chamado.nome_pessoa, chamado_logradouro_id,logradouro,
             chamado.usado, chamado.cancelado, usuario.nome as usuario, chamado.distribuicao
             FROM chamado 
@@ -271,6 +271,8 @@ class ChamadoDaoPgsql implements ChamadoDAO{
             $c->setFotos($linha['fotos']);
             $c->setIdCoordenada($linha['id_coordenada']);
             $c->setPossuiFotos($linha['possui_fotos']);
+            $c->setUsado($linha['usado']);
+            $c->setDataAtendimento($linha['data_atendimento']);
 
             return $c;
         }else{
@@ -308,13 +310,17 @@ class ChamadoDaoPgsql implements ChamadoDAO{
 
         $sql = $this->pdo->prepare("UPDATE chamado SET origem = :origem, descricao = :descricao, 
         endereco_principal = :enderecoPrincipal, chamado_logradouro_id = :idLogradouro, 
-        pessoa_id = :idPessoa,fotos= :fotos, possui_fotos = :possui_fotos, prioridade = :prioridade, distribuicao = :distribuicao, nome_pessoa = :nomePessoa, id_coordenada = :idCoordenada
+        pessoa_id = :idPessoa, usado =:usado ,fotos= :fotos, possui_fotos = :possui_fotos, prioridade = :prioridade, distribuicao = :distribuicao, nome_pessoa = :nomePessoa, data_atendimento = :dataAtendimento ,id_coordenada = :idCoordenada
         WHERE id_chamado = :idChamado");
-    
-
             $sql->bindValue(":origem", $c->getOrigem());
             $sql->bindValue(":idChamado", $c->getId());
             $sql->bindValue(":descricao", $c->getDescricao());
+            $sql->bindValue(":usado", $c->getUsado());
+            if($c->getDataAtendimento() == true){
+                $sql->bindValue(":dataAtendimento", $c->getDataAtendimento());
+            }else{
+                $sql->bindValue(":dataAtendimento", null, pdo::PARAM_NULL);
+            }
             $sql->bindValue(":possui_fotos", $c->getPossuiFotos());
             $sql->bindValue(":enderecoPrincipal", $c->getEnderecoPrincipal());
             if($c->getLogradouroId() == "" || $c->getLogradouroId() == null){

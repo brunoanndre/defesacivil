@@ -1,3 +1,20 @@
+<?php 
+    require_once 'dao/OcorrenciaDaoPgsql.php';
+    require_once 'dao/EnderecoDaoPgsql.php';
+
+    $enderecodao = New EnderecoDaoPgsql($pdo);
+    $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
+    $id_ocorrencia = filter_input(INPUT_GET, 'id');
+    
+    $linhaOcorrencia = $ocorrenciadao->buscarPeloId($id_ocorrencia);
+
+    if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){
+        $linhaLogradouro = $enderecodao->buscarPeloId($linhaOcorrencia->getLogradouroid());
+    }else{
+        $linhaCoordenada = $enderecodao->buscarIdCoordenada($linhaOcorrencia->getIdCoordenada());
+    }
+?>
+
 <div class="container positioning">
 <div class="jumbotron campo_cadastro">
     <?php if(isset($_GET['erroDB'])){ ?>
@@ -24,41 +41,41 @@
         <h4>Dados ocorrência:</h4>
         </nav>
         <div class="row">
-            <div class="col-sm-4"><span class="titulo">Nº ocorrência: </span><span><?php echo $_POST['id_ocorrencia']; ?></span></div>
-            <div class="col-sm-8"><span class="titulo">Título: </span><span><?php echo $_POST['titulo_ocorrencia']; ?></span></div>
+            <div class="col-sm-4"><span class="titulo">Nº ocorrência: </span><span><?php echo $linhaOcorrencia->getId(); ?></span></div>
+            <div class="col-sm-8"><span class="titulo">Título: </span><span><?php echo $linhaOcorrencia->getTitulo(); ?></span></div>
         </div><hr>
         <div>
-            <span class="titulo">Endereço principal: </span><span ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $_POST['endereco_principal']; ?>'"><?php echo $_POST['endereco_principal']; ?></span>
+            <span class="titulo">Endereço principal: </span><span ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?>'"><?php echo $_POST['endereco_principal']; ?></span>
             <br>
         </div>
         <div ng-show="sel_endereco == 'Coordenada'">
             <div class="row">
                 <div class="col-sm-6">
-                    <span class="titulo">Latitude: </span><span><?php echo $_POST['latitude']; ?></span>
+                    <span class="titulo">Latitude: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Coordenada'){ echo $linhaCoordenada->getLatitude();} ?></span>
                 </div>
                 <div class="col-sm-6">
-                    <span class="titulo">Longitude: </span><span><?php echo $_POST['longitude']; ?></span>
+                    <span class="titulo">Longitude: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Coordenada'){ echo $linhaCoordenada->getLatitude();} ?></span>
                 </div>
             </div>
         </div>
         <div ng-show="sel_endereco == 'Logradouro'">
             <div class="row">
-                <div class="col-sm-3"><span class="titulo">CEP: </span><span><?php echo $_POST['cep']; ?></span></div>
-                <div class="col-sm-6"><span class="titulo">Logradouro: </span><span><?php echo $_POST['logradouro']; ?></span></div>
-                <div class="col-sm-3"><span class="titulo">Número: </span><span><?php echo $_POST['numero']; ?></span></div>
+                <div class="col-sm-3"><span class="titulo">CEP: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getCep();} ?></span></div>
+                <div class="col-sm-6"><span class="titulo">Logradouro: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getLogradouro();} ?></span></div>
+                <div class="col-sm-3"><span class="titulo">Número: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getNumero();} ?></span></div>
             </div>
             <div class="row">
-                <div class="col-sm-3"><span class="titulo">Bairro: </span><span><?php echo $_POST['bairro']; ?></span> </div>
-                <div class="col-sm-6"><span class="titulo">Cidade: </span><span><?php echo $_POST['cidade']; ?></span></div>
+                <div class="col-sm-3"><span class="titulo">Bairro: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getBairro();} ?></span> </div>
+                <div class="col-sm-6"><span class="titulo">Cidade: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getCidade();} ?></span></div>
             </div>
             <div>
-                <span class="titulo">Referência: </span><span><?php echo $_POST['referencia']; ?></span>
+                <span class="titulo">Referência: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getReferencia();} ?></span>
             </div><br>
         </div>
     </div>
     <form method="post" action="processa_cadastrar_interdicao.php" onsubmit="return validarFormCadastroInterdicao()">
         <div class="box">
-            <input type="hidden" name="id_ocorrencia" value="<?php echo $_POST['id_ocorrencia']; ?>">
+            <input type="hidden" name="id_ocorrencia" value="<?php echo $id_ocorrencia; ?>">
             <div class="row">
                 <div class="col-sm-4">
                     <span>Data: <span style="color:red;">*</span></span>

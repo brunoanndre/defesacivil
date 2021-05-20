@@ -4,7 +4,9 @@
     require_once 'dao/UsuarioDaoPgsql.php';
     require_once 'dao/PessoaDaoPgsql.php';
     require_once 'dao/EnderecoDaoPgsql.php';
+    require_once 'dao/NotificacaoDaoPgsql.php';
 
+    $notificacaodao = New NotificacaoDaoPgsql($pdo);
     $enderecodao = new EnderecoDaoPgsql($pdo);
     $pessoadao = New PessoaDaoPgsql($pdo);
     $usuariodao = New UsuarioDaoPgsql($pdo);
@@ -61,6 +63,9 @@
     //BUSCAR ID DA INTERDIÇÃO NO BD
     $id_interdicao = $ocorrenciadao->buscaInterdicao($id_ocorrencia);
 
+    //BUSCAR ID DA NOTIFICACAO NO BD
+    $id_notificacao = $notificacaodao->buscarIdNotificacao($id_ocorrencia);
+
     $string = $linhaOcorrencia->getFotos();
 
     $barras = array("{","}");
@@ -71,21 +76,20 @@
 
     $linhaCoordenada = $enderecodao->buscarIdCoordenada($linhaOcorrencia->getIdCoordenada());
 
-
 ?>
 
 <div class="container positioning">
 <div class="jumbotron campo_cadastro">
     <?php if(isset($_GET['sucesso'])){ ?>
-            <div class="alert alert-success" role="alert">
+            <div class="alert alert-success printHide" role="alert">
                 Ocorrencia alterada com sucesso.
             </div>
     <?php } ?>
     <?php if(isset($_GET['sucessocad'])){ ?>
-            <div class="alert alert-success" role="alert">Ocorrencia cadastrada com sucesso.</div>
+            <div class="alert alert-success printHide" role="alert">Ocorrencia cadastrada com sucesso.</div>
         <?php } ?>
     <?php if(isset($_GET['sucessoInterdicao'])){ ?>
-            <div class="alert alert-success" role="alert">
+            <div class="alert alert-success printHide" role="alert">
                 Desinterditado com sucesso.
             </div>
     <?php } ?>
@@ -163,8 +167,8 @@
             <span class="titulo">Titulo: </span><span id="ocorr_titulo"><?php echo $linhaOcorrencia->getTitulo(); ?></span><br>
             <span class="titulo">Origem: </span><span id="ocorr_origem"><?php echo $linhaOcorrencia->getOrigem(); ?></span><br>
         </div>
-            <span class="titulo">Descrição: </span><br>
-            <textarea id="ocorr_descricao" rows="5" readonly class="readtextarea"><?php echo $linhaOcorrencia->getDescricao(); ?></textarea><br>
+            <div class="row" style="margin: 0;"><span class="titulo">Descrição: </span><span class="printShow"><?php echo $linhaOcorrencia->getDescricao() ?></span></div>
+            <textarea id="ocorr_descricao" rows="5" readonly class="printHide readtextarea"><?php echo $linhaOcorrencia->getDescricao(); ?></textarea><br>
 
         <br>
     </div>
@@ -311,7 +315,7 @@ if($linhaPessoa2 !== null){ ?>
         <span class="titulo">Encerrado: </span><span id="ocorr_encerrado"><?php echo ($linhaOcorrencia->getEncerrado()== 1) ? 'Sim':'Não'; ?></span>
         <br><br>
     </div>
-    <div class="box page-break-auto">
+    <div class="box div-informacoes">
         <h4 class="printHide">Informações</h4>
         <h4 class="printShow">Informações</h4>
         <hr>
@@ -366,13 +370,14 @@ if($linhaPessoa2 !== null){ ?>
             </a>
         </div>
     </div>
+    <?php }
+    if($linhaOcorrencia->getPossuiFotos() == true){ ?>
+        <div class="print-img-area printShow page-break-always">
+            <?php for($i = 0; $i < sizeof($fotos); $i++){
+            echo '<img class="image-print" src="data:image/png;base64,' . $fotos[$i] .'">';
+            } ?>
+        </div>
     <?php } ?>
-    <div class="print-img-area printShow page-break-always">
-        <?php for($i = 0; $i < sizeof($fotos); $i++){
-        echo '<img class="image-print" src="data:image/png;base64,' . $fotos[$i] .'">';
-        } ?>
-    </div>
-    
     <div class="printShoww" style="display: flex; flex-direction:column; align-items:center;">
         <div style="margin-bottom: 1px solid black;">
         <span class="printShow" style="margin-top:40px;">_____________________</span>
@@ -392,33 +397,26 @@ if($linhaPessoa2 !== null){ ?>
             </div>
         </div>
     </div>
+
     <?php if($linhaOcorrencia->getAtivo() == true){ ?>
-            <a class="printHide" href="index.php?pagina=consultarOcorrencia" style="text-decoration:none; color:#000000;"><input class="btn btn-default printHide" style="left:25%;" value="Voltar" type="button"></a>
-            <a href="index.php?pagina=editarOcorrencia&id=<?php echo $id_ocorrencia; ?>"><input type="button" class="btn btn-default btn-md printHide" style="position:relative;left:30%; color:#000000;" value="Editar Ocorrencia"></a>
-        <?php if(!$id_interdicao){ ?>
-            <form action="index.php?pagina=cadastrarInterdicao" method="post">
-                <input name="id_ocorrencia" type="hidden" value="<?php echo $id_ocorrencia; ?>">
-                <input name="titulo_ocorrencia" type="hidden" value="<?php echo $linhaOcorrencia->getTitulo(); ?>">
-                <input name="endereco_principal" type="hidden" value="<?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?>">
-                <?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){ ?>
-                <input name="cep" type="hidden" value="<?php echo $linhaLogradouro->getCep(); ?>">
-                <input name="cidade" type="hidden" value="<?php echo $linhaLogradouro->getCidade(); ?>">
-                <input name="bairro" type="hidden" value="<?php echo $linhaLogradouro->getBairro(); ?>">
-                <input name="logradouro" type="hidden" value="<?php echo $linhaLogradouro->getLogradouro(); ?>">
-                <input name="numero" type="hidden" value="<?php echo $linhaLogradouro->getNumero() ?>">
-                <input name="referencia" type="hidden" value="<?php echo $linhaLogradouro->getReferencia(); ?>">
-                <?php } ?>
-                <?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Coordenada'){ ?>
-                <input name="latitude" type="hidden" value="<?php echo $linhaCoordenada->getLatitude(); ?>">
-                <input name="longitude" type="hidden" value="<?php echo $linhaCoordenada->getLongitude(); ?>">
-                <input name="id_coordenada" type="hidden" value="<?php $linhaCoordenada->getId() ?>">
-                <?php } ?>
-                <input type="submit" class="btn btn-default btn-md btn-interdicao-g printHide" style="left:65%; color:#000000;  "value="Gerar Interdição">
-            </form>
+        <div style="display: flex; justify-content:space-between"> 
+        <?php if(!$id_notificacao){ ?>
+            <a class="printHide" href="index.php?pagina=cadastrarNotificacao&id=<?php echo $id_ocorrencia; ?>"><input class="btn btn-default" value="Gerar notificação"></a>
         <?php }else{ ?>
+            <a class="printHide" href="index.php?pagina=exibirNotificacao&id=<?php echo $id_notificacao; ?>"><input class="btn btn-default" value="Verificar Interdição"></a>   
+            <a class="printHide" href="index.php?pagina=editarOcorrencia&id=<?php echo $id_ocorrencia; ?>"><input type="button" class="btn btn-default btn-md printHide" style="position:relative;left:30%; color:#000000;" value="Editar"></a>
+        <?php } ?>
+            <?php if(!$id_interdicao){ ?>
+ 
+                <a class="printHide" href="index.php?pagina=cadastrarInterdicao&id=<?php echo $id_ocorrencia; ?>"><input class="btn btn-default" value="Gerar interdição"></a>
+
+            <?php }else{ ?>
             <a href="index.php?pagina=exibirInterdicao&id=<?php echo $id_interdicao; ?>" class="btn btn-default btn-md btn-interdicao printHide">Verificar Interdição</a>
         <?php } ?>
+        </div>
     <?php } ?>
-    
+
+
+
 </div>
 </div>

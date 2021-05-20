@@ -6,6 +6,7 @@ include ('database.php');
 $email = addslashes($_POST['email']);
 $senha = $_POST['senha'];
 
+
 //seleciona a senha q existe no banco de dados
 $sql = $pdo->prepare("SELECT * FROM dados_login  WHERE email = :email AND ativo = TRUE");
 $sql->bindValue(":email", $email);

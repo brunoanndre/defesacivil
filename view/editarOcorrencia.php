@@ -166,7 +166,11 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                             <option <?php if($linhaEndereco->getBairro() == 'Parque Bandeirantes'){ echo 'selected'; }?> value="Parque Bandeirantes">Parque Bandeirantes</option>
                             <option <?php if($linhaEndereco->getBairro() == 'Nova Esperança'){ echo 'selected';} ?> value="Nova Esperança">Nova Esperança</option>
                             <option <?php if($linhaEndereco->getBairro() == 'São Judas Tadeu'){ echo 'selected'; }?> value="São Judas Tadeu">São Judas Tadeu</option>
-                            <option <?php if($linhaEndereco->getBairro() == 'Região das Praias'){ echo 'selected'; }?> value="Região das Praias">Região das Praias</option>
+                            <option <?php if($linhaEndereco->getBairro() == 'Estaleiro'){ echo 'selected'; }?> value="Estaleiro">Estaleiro</option>
+                            <option <?php if($linhaEndereco->getBairro() == 'Estaleirinho'){ echo 'selected'; }?> value="Estaleirinho">Estaleirinho</option>
+                            <option <?php if($linhaEndereco->getBairro() == 'Laranjeiras'){ echo 'selected'; }?> value="Laranjeiras">Laranjeiras</option>
+                            <option <?php if($linhaEndereco->getBairro() == 'Pinho'){ echo 'selected'; }?> value="Pinho">Pinho</option>
+                            <option <?php if($linhaEndereco->getBairro() == 'Taquaras'){ echo 'selected'; }?> value="Taquaras">Taquaras</option>
                         </select>
                     </div>
                     <div class="col-sm-8">
@@ -234,12 +238,12 @@ if($linhaOcorrencia->getPossuiFotos() == false){
             </div>
             <div>
                 Descrição:
-                <textarea id="descricao" name="descricao" class="form-control" cols="30" rows="5" maxlength = "100" ng-model="descricaoVal" ng-init="descricaoVal='<?php echo $linhaOcorrencia->getDescricao(); echo $linha['ocorr_descricao'];?>'"></textarea>
+                <textarea id="descricao" name="descricao" class="form-control" cols="30" rows="5" ng-model="descricaoVal" ng-init="descricaoVal='<?php echo $linhaOcorrencia->getDescricao(); echo $linha['ocorr_descricao'];?>'"></textarea>
             </div>
             <div>
                 <?php if($_POST['ocorr_origem'] == ""){ ?>
                     Origem: <span style="color:red;">*</span>
-                    <select name="ocorr_origem" class="form-control" ng-model="sel_origem" ng-init="sel_origem=''" required>
+                    <select name="ocorr_origem" class="form-control" ng-model="sel_origem" ng-init="sel_origem='<?php echo $linhaOcorrencia->getOrigem(); ?>'" required>
                     <option value="Telefone Base">Telefone Base</option>
                     <option value="Ouvidoria">Ouvidoria</option>
                     <option value="199">199</option>

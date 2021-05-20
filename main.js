@@ -692,7 +692,7 @@ function salvarEditPessoa() {
     var telefone_pessoa = $("#telefone_pessoa").val();
     var cpf_pessoa = $("#cpf_pessoa").val();
     var outros_documentos = $("#outros_documentos").val();
- 
+
     //$.post("processa_cadastrar_pessoa.php", { nome_pessoa: nome_pessoa, email_pessoa: email_pessoa,
     //    telefone_pessoa: telefone_pessoa, cpf_pessoa: cpf_pessoa, outros_documentos:outros_documentos, nome_salvar: nome_pessoa });
     if (window.XMLHttpRequest) {
@@ -703,7 +703,6 @@ function salvarEditPessoa() {
     }
     xmlhttp.onreadystatechange=function() {
         if (this.readyState==4 && this.status==200) {
-            alert(this.response)
             if(this.response == 'Sucesso'){
                 document.getElementById('sucessoEditPessoa').innerHTML = 'Dados alterados com sucesso!';
                 document.getElementById('editar_pessoa').classList.remove('hidden');
@@ -714,6 +713,7 @@ function salvarEditPessoa() {
                 document.getElementById('celular_pessoa').readOnly = true;
                 document.getElementById('telefone_pessoa').readOnly = true;
                 document.getElementById('email_pessoa').readOnly = true;
+                document.getElementById('pessoaNome').innerHTML = nome_pessoa;
             }else{
                 document.getElementById('falhaEditPessoa').innerHTML = 'Ocorreu uma falha para alterar os dados.';
             }
@@ -722,6 +722,4 @@ function salvarEditPessoa() {
     }
     xmlhttp.open("GET","processa_editar_pessoa.php?nome_pessoa="+nome_pessoa+"&email_pessoa="+email_pessoa+"&celular_pessoa="+celular_pessoa+"&telefone_pessoa="+telefone_pessoa+"&cpf_pessoa="+cpf_pessoa+"&outros_documento="+outros_documentos+"&id_pessoa="+id_pessoa,true);
     xmlhttp.send();
-
-    $('#pessoasModal').modal('hide');
 }

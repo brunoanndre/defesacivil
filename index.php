@@ -42,6 +42,8 @@ if(isset($_SESSION['nivel_acesso'])){
             case 'consultarInterdicao' : include 'view/consultarInterdicao.php'; break;
             case 'consultarOcorrencia' : include 'view/consultarOcorrencia.php'; break;
             case 'editarChamado' : include 'view/editarChamado.php'; break;
+            case 'cadastrarNotificacao' : include 'view/cadastrarNotificacao.php'; break;
+            case 'exibirNotificacao' : include 'view/exibirNotificacao.php'; break;
         }
     }else if($_SESSION['nivel_acesso'] == 2){
         switch($pagina){
@@ -65,6 +67,8 @@ if(isset($_SESSION['nivel_acesso'])){
             case 'consultarInterdicao' : include 'view/consultarInterdicao.php'; break;
             case 'consultarOcorrencia' : include 'view/consultarOcorrencia.php'; break;
             case 'editarChamado' : include 'view/editarChamado.php'; break;
+            case 'cadastrarNotificacao' : include 'view/cadastrarNotificacao.php'; break;
+            case 'exibirNotificacao' : include 'view/exibirNotificacao.php'; break;
         }
     }else if($_SESSION['nivel_acesso'] == 3){
         switch($pagina){
@@ -88,6 +92,8 @@ if(isset($_SESSION['nivel_acesso'])){
             case 'consultarInterdicao' : include 'view/consultarInterdicao.php'; break;
             case 'consultarOcorrencia' : include 'view/consultarOcorrencia.php'; break;
             case 'editarChamado' : include 'view/editarChamado.php'; break;
+            case 'cadastrarNotificacao' : include 'view/cadastrarNotificacao.php'; break;
+            case 'exibirNotificacao' : include 'view/exibirNotificacao.php'; break;
         }
     }else{
         include 'view/monitorarChamado.php';

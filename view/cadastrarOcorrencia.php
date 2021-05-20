@@ -112,7 +112,11 @@
                             <option <?php if($_POST['bairro'] == 'Parque Bandeirantes'){ echo 'selected'; }?> value="Parque Bandeirantes">Parque Bandeirantes</option>
                             <option <?php if($_POST['bairro'] == 'Nova Esperança'){ echo 'selected';} ?> value="Nova Esperança">Nova Esperança</option>
                             <option <?php if($_POST['bairro'] == 'São Judas Tadeu'){ echo 'selected'; }?> value="São Judas Tadeu">São Judas Tadeu</option>
-                            <option <?php if($_POST['bairro'] == 'Região das Praias'){ echo 'selected'; }?> value="Região das Praias">Região das Praias</option>
+                            <option <?php if($_POST['bairro'] == 'Estaleiro'){ echo 'selected'; }?> value="Estaleiro">Estaleiro</option>
+                            <option <?php if($_POST['bairro'] == 'Estaleirinho'){ echo 'selected'; }?> value="Estaleirinho">Estaleirinho</option>
+                            <option <?php if($_POST['bairro'] == 'Laranjeiras'){ echo 'selected'; }?> value="Laranjeiras">Laranjeiras</option>
+                            <option <?php if($_POST['bairro'] == 'Pinho'){ echo 'selected'; }?> value="Pinho">Pinho</option>
+                            <option <?php if($_POST['bairro'] == 'Taquaras'){ echo 'selected'; }?> value="Taquaras">Taquaras</option>
                         </select>
                     </div>
                     <div class="col-sm-8">

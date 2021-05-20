@@ -271,7 +271,7 @@
         public function buscarConsulta($parametro){
             if($parametro == 'normal'){
                 $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, 
-                TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY hh:ii') as data_ocorrencia,
+                TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY HH24:MI') as data_ocorrencia,
                 usuario.nome, cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao 
                 FROM ocorrencia 
                 INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario
@@ -301,7 +301,7 @@
 
             if($parametro == 'encerrada_false'){
                 $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, 
-                TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY hh:ii') as data_ocorrencia,
+                TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY HH24:MI') as data_ocorrencia,
                 usuario.nome, cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao
                 FROM ocorrencia 
                 INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario

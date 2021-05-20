@@ -77,7 +77,10 @@
             </div>
             <div>
                 Origem: <span style="color:red;">*</span>
-                <select name="origem_chamado" class="form-control" ng-model="sel_origem" ng-init="sel_origem='<?php echo $linhaChamado->getOrigem(); ?>'" required>
+                <select name="origem_chamado" class="form-control" ng-model="sel_origem" ng-init="sel_origem='<?php if($linhaChamado->getOrigem() == 'Telefone Base'){echo 'Telefone Base';}else if($linhaChamado->getOrigem() == 'Ouvidoria'){echo 'Ouvidoria';} 
+                else if($linhaChamado->getOrigem() == '199'){ echo '199';}else if($linhaChamado->getOrigem() == 'Secretaria de Obras'){echo 'Secretaria de Obras';}
+                else if($linhaChamado->getOrigem() == 'Secretaria do Meio Ambiente'){echo 'Secretaria do Meio Ambiente';}
+                else if($linhaChamado->getOrigem() == 'Secretaria da Saúde'){echo 'Secretaria da Saude';}else{ echo 'Outro';}  ?>'" required>
                 <option value="Telefone Base">Telefone Base</option>
                 <option value="Ouvidoria">Ouvidoria</option>
                 <option value="199">199</option>
@@ -211,7 +214,15 @@
                             <option <?php if($linhaChamado->getEnderecoPrincipal() == 'Logradouro'){ 
                                 if($linhaEndereco->getBairro() == 'São Judas Tadeu'){ echo 'selected'; }} ?>  value="São Judas Tadeu">São Judas Tadeu</option>
                             <option <?php if($linhaChamado->getEnderecoPrincipal() == 'Logradouro'){ 
-                                if($linhaEndereco->getBairro() == 'Região das Praias'){ echo 'selected'; }} ?>  value="Região das Praias">Região das Praias</option>
+                                if($linhaEndereco->getBairro() == 'Estaleiro'){ echo 'selected'; }} ?>  value="Estaleiro">Estaleiro</option>
+                            <option <?php if($linhaChamado->getEnderecoPrincipal() == 'Logradouro'){ 
+                                if($linhaEndereco->getBairro() == 'Estaleirinho'){ echo 'selected'; }} ?>  value="Estaleirinho">Estaleirinho</option>
+                            <option <?php if($linhaChamado->getEnderecoPrincipal() == 'Logradouro'){ 
+                                if($linhaEndereco->getBairro() == 'Laranjeiras'){ echo 'selected'; }} ?>  value="Laranjeiras">Laranjeiras</option>
+                            <option <?php if($linhaChamado->getEnderecoPrincipal() == 'Logradouro'){ 
+                                if($linhaEndereco->getBairro() == 'Pinho'){ echo 'selected'; }} ?>  value="Pinho">Pinho</option>
+                            <option <?php if($linhaChamado->getEnderecoPrincipal() == 'Logradouro'){ 
+                                if($linhaEndereco->getBairro() == 'Taquaras'){ echo 'selected'; }} ?>  value="Taquaras">Taquaras</option>
                         </select>
                     </div>
                     <div class="col-sm-8">
@@ -296,6 +307,23 @@
         </div>
         <div id="idGallery" class="gallery"></div>
         <hr>
+        <div class="row">
+            <div class="col-sm-6">
+                <label>Data do atendimento:</label>
+                <input type="date" name="dataAtendimento" class="form-control" value="<?php echo $linhaChamado->getDataAtendimento(); ?>">
+            </div> 
+            <div class="col-sm-6">
+                <label>Chamado encerrado:</label>
+                <div>
+                    <label class="radio-inline">
+                        <input type="radio" value="true" name="encerrado" <?php if($linhaChamado->getUsado() == true){echo 'checked';} ?>>Sim
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" value="false" name="encerrado" <?php if($linhaChamado->getUsado() == false){echo 'checked';} ?>>Não
+                    </label>
+                </div>
+            </div>
+        </div>
         <div class="row" style="display:flex; justify-content:center;">
             <div>
                 <a href="index.php?pagina=exibirChamado&id=<?php echo $id_chamado; ?>"><input style="margin-right: 20px; width:60px" class="btn btn-default" value="Voltar"></a>

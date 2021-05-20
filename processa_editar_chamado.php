@@ -1,6 +1,5 @@
 <?php
 
-
     require_once 'dao/ChamadoDaoPgsql.php';
     require_once 'dao/EnderecoDaoPgsql.php';
     require_once 'dao/PessoaDaoPgsql.php';
@@ -10,7 +9,7 @@
     $enderecodao = New EnderecoDaoPgsql($pdo);
 
     $origem = filter_input(INPUT_POST, 'origem_chamado');
-    if($origem == "Outros"){
+    if($origem == "Outro"){
         $origem = filter_input(INPUT_POST, 'origem_chamado2');
     }
     $nomePessoa = filter_input(INPUT_POST, 'nome_chamado');
@@ -30,6 +29,12 @@
     $idCoordenada = filter_input(INPUT_POST, 'id_coordenada');
     $idChamado = filter_input(INPUT_POST, 'id_chamado');
     $possui_fotos = filter_input(INPUT_POST, 'possui_fotos');
+    $encerrado = filter_input(INPUT_POST, 'encerrado');
+    $dataAtendimento = date("d/m/Y", strtotime( filter_input(INPUT_POST,'dataAtendimento')));
+
+    if($dataAtendimento == '31/12/1969'){
+        $dataAtendimento = '';
+    }
 
     $base64_array = array();
 
@@ -163,6 +168,7 @@ if(count($base64_array) > 0){
             $c->setId($idChamado);
             $c->setOrigem($origem);
             $c->setDistribuicao($distribuicao);
+            $c->setUsado($encerrado);
             $c->setDescricao($descricao);
             $c->setEnderecoPrincipal($enderecoPrincipal);
             $c->setIdCoordenada($idCoordenada);
@@ -171,6 +177,7 @@ if(count($base64_array) > 0){
             $c->setPessoaId($pessoa_atendida);
             $c->setPrioridade($prioridade);
             $c->setNomePessoa($nomePessoa);
+            $c->setDataAtendimento($dataAtendimento);
         try{
             $chamadodao->editar($c);
         }catch(PDOException $e){

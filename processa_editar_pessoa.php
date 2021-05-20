@@ -11,6 +11,7 @@
     $cpf = filter_input(INPUT_GET, 'cpf_pessoa');
     $outrosDocumentos = filter_input(INPUT_GET, 'outros_documentos');
     $id = filter_input(INPUT_GET, 'id_pessoa');
+    $idChamado = filter_input(INPUT_POST, 'idChamado');
 
     if($nome){
         $p = New Pessoa();
@@ -32,6 +33,4 @@
         $response = 'Informe o nome da pessoa';
     }
 
-    echo $response;
-
-
+echo $response;
