@@ -53,6 +53,9 @@ $(document).ready(function() {
 ?>
 
 <div>
+<div class="row">
+        <a href="index.php?pagina=cadastrarOcorrencia"><button style="background-color: #f38637;" class="btn btn-default atalhoCadastrarChamado">Cadastrar ocorrência</button></a>
+    </div>
 <h3 class="text-center">Consulta de ocorrências</h3>
     <div class="box">
         <form class="input-group" method="post" action="index.php?pagina=consultarOcorrencia&n=0">

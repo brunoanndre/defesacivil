@@ -107,12 +107,12 @@
                 </div>
             </div>
             <div class="printHide">
-                <h3 class="text-center">Registro de ocorrência</h3>
+                <h3 class="text-center"><?php echo 'Ocorrência Nº ' . $id_ocorrencia . '/' . date('Y'); ?></h3>
             </div>
         </div>
         <div class="printShow divPrintHeader row">
                 <img class="printShow" src="images/logo.jpg" style="width: 40px;">
-                <h3 class="ocorrenciaTitlePrint printShow">Registro de Ocorrência</h3>
+                <h3 class="ocorrenciaTitlePrint printShow"><?php echo 'Ocorrência Nº ' . $id_ocorrencia . '/' . date('Y'); ?></h3>
                 <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho printShow" style="width: 120px;">
         </div>
         <button class="printHide" style="background-color: white; border:none;" onclick="print()"><img src="images/print.png" style="width: 50px; height:auto"></button>
@@ -403,9 +403,9 @@ if($linhaPessoa2 !== null){ ?>
         <?php if(!$id_notificacao){ ?>
             <a class="printHide" href="index.php?pagina=cadastrarNotificacao&id=<?php echo $id_ocorrencia; ?>"><input class="btn btn-default" value="Gerar notificação"></a>
         <?php }else{ ?>
-            <a class="printHide" href="index.php?pagina=exibirNotificacao&id=<?php echo $id_notificacao; ?>"><input class="btn btn-default" value="Verificar Interdição"></a>   
-            <a class="printHide" href="index.php?pagina=editarOcorrencia&id=<?php echo $id_ocorrencia; ?>"><input type="button" class="btn btn-default btn-md printHide" style="position:relative;left:30%; color:#000000;" value="Editar"></a>
+            <a class="printHide" href="index.php?pagina=exibirNotificacao&id=<?php echo $id_notificacao; ?>"><input class="btn btn-default" value="Verificar Notificação"></a>   
         <?php } ?>
+        <a class="printHide" href="index.php?pagina=editarOcorrencia&id=<?php echo $id_ocorrencia; ?>"><input type="button" class="btn btn-default btn-md printHide" style="position:relative;left:30%; color:#000000;" value="Editar"></a>
             <?php if(!$id_interdicao){ ?>
  
                 <a class="printHide" href="index.php?pagina=cadastrarInterdicao&id=<?php echo $id_ocorrencia; ?>"><input class="btn btn-default" value="Gerar interdição"></a>

@@ -82,10 +82,10 @@
         </div>
         <div class="printShow divPrintHeader row">
             <img class="printShow" src="images/logo.jpg" style="width: 40px;">
-            <h3 class="chamadoTitlePrint printShow">Registro de chamado</h3>
+            <h3 class="chamadoTitlePrint printShow"> <?php echo 'Chamado Nº ' . $id_chamado  .'/'. date('Y'); ?></h3>
             <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho printShow" style="width: 120px;">
         </div>
-        <h3 class="text-center printHide">Registro de chamado</h3>
+        <h3 class="text-center printHide"><?php echo 'Chamado Nº ' . $id_chamado  .'/'. date('Y'); ?></h3>
         <button class="printHide" style="background-color: white; border:none;" onclick="print()"><img src="images/print.png" style="width: 50px; height:auto"></button>
         <h4 class="printHide">Endereço</h4>
         <h2 class="printShow titulo" style="margin-bottom: 10px;">Endereço</h3>
@@ -127,7 +127,11 @@
                 <span><?php echo date("d/m/Y", strtotime($linhaChamado->getDataAtendimento() ))?></span><br>
             <?php } ?>
             <span class="titulo">Origem: </span><span id="ocorr_origem"><?php echo $linhaChamado->getOrigem(); ?></span><br>
-            <span class="titulo">Descrição: </span><br> <span class="printShow"><?php echo $linhaChamado->getDescricao() ?></span>
+            <span class="titulo">Descrição: </span><br> 
+            <div class="row">
+            <span class="printShow"><?php echo $linhaChamado->getDescricao() ?></span>
+            </div>
+
             <textarea name="descricao" rows="5" readonly class="readtextarea printHide"><?php echo $linhaChamado->getDescricao(); ?></textarea><br>
             <span class="titulo">Distribuído para:</span>
             <?php if($linhaChamado->getDistribuicao() != NULL){ ?>

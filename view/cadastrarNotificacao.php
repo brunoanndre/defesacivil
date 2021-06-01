@@ -1,7 +1,9 @@
 <?php
     require_once 'dao/OcorrenciaDaoPgsql.php';
     require_once 'dao/EnderecoDaoPgsql.php';
+    require_once 'dao/UsuarioDaoPgsql.php';
 
+    $usuariodao = New UsuarioDaoPgsql($pdo);
     $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
     $enderecodao = New EnderecoDaoPgsql($pdo);
 
@@ -11,11 +13,15 @@
 
     $linhaEndereco = $enderecodao->buscarPeloId($linhaOcorrencia->getLogradouroid());
     $data = date('d/m/Y');
+    $consulta_usuarios = $usuariodao->buscarUsuariosAtivos();
 ?>
 <div class="container positioning">
     <div class="jumbotron campo_cadastro">
             <?php if(isset($_GET['erroDB'])){ ?>
                 <div class="alert alert-danger" role="alert">Falha ao cadastrar ocorrencia.</div>
+            <?php } ?>
+            <?php if(isset($_GET['campos'])){ ?>
+                <div class="alert alert-danger" role="alert">Preencha todos os campos.</div>
             <?php } ?>
             <div class="box">
                 <div class="row cabecalho">
@@ -90,8 +96,35 @@
                         <div class="col-sm-6">
                             <label>Data de emissão:</label>
                             <input type="date" class="form-control" name="data_emissao" autocomplete="off">
+                            <?php if(isset($_GET['data'])){ ?>
+                                <div class="alertErro" >Informe a data de emissão.</div>
+                            <?php } ?>
                         </div>
-                    </div><hr>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                                <label>Agente Notificante:</label>
+                                <select id="notificante" name="notificante" class="form-control" required>
+                    <?php
+                        session_start();
+                        echo '<option selected></option>';
+                        if($consulta_usuarios == false){
+                            echo '<tr><td colspan="5" class="text-center">Nenhum usuário encontrado</td></tr>';
+                        }
+                        foreach($consulta_usuarios as $item){
+                            echo '<option value='.$item->getId().'>'.$item->getNome().'</option>'; 
+                        }
+                    ?>
+                </select>
+                        </div>
+                        <div class="col-sm-6">
+                                <label>Pessoa notificada:</label>
+                                <input class="form-control" name="notificado" id="notificado" autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    
+                    <hr>
                     <h4 class="text-center">Descrição dos fatos</h4>
                     <div class="row">
                         <div class="col-sm-12">

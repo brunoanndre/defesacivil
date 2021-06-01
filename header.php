@@ -80,9 +80,10 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Consultar <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                        <li><a href="?pagina=consultarChamado">Chamado</a></li>
-                        <li><a href="?pagina=consultarOcorrencia">Ocorrência</a></li>
-                        <li><a href="?pagina=consultarInterdicao">Interdição</a></li>
+                        <li><a href="?pagina=consultarChamado">Chamados</a></li>
+                        <li><a href="?pagina=consultarOcorrencia">Ocorrências</a></li>
+                        <li><a href="?pagina=consultarInterdicao">Interdições</a></li>
+                        <li><a href="?pagina=consultarNotificacao">Notificações</a></li>
                         <?php if($_SESSION['nivel_acesso'] == 1){ ?>
                         <li><a href="?pagina=consultarUsuario">Usuários</a></li>
                         <?php } ?>

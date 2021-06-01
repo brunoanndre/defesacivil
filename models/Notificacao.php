@@ -65,4 +65,5 @@ interface NotificacaoDAO{
     public function editar(Notificacao $n);
     public function buscarIdNotificacao($id_ocorrencia);
     public function buscarPeloId($id);
+    public function buscarConsulta();
 }

@@ -723,3 +723,17 @@ function salvarEditPessoa() {
     xmlhttp.open("GET","processa_editar_pessoa.php?nome_pessoa="+nome_pessoa+"&email_pessoa="+email_pessoa+"&celular_pessoa="+celular_pessoa+"&telefone_pessoa="+telefone_pessoa+"&cpf_pessoa="+cpf_pessoa+"&outros_documento="+outros_documentos+"&id_pessoa="+id_pessoa,true);
     xmlhttp.send();
 }
+
+function habilitarEdicaoNotificacao(){
+    document.querySelector('#editarNotificacao').classList.add('hidden')
+    document.querySelector('#salvarNotificacao').classList.remove('hidden')
+    document.querySelector('#cidade').removeAttribute('readonly')
+    document.querySelector('#bairro').removeAttribute('disabled')
+    document.querySelector('#logradouro').removeAttribute('readonly')
+    document.querySelector('#numero').removeAttribute('readonly')
+    document.querySelector('#referencia').removeAttribute('readonly')
+    document.querySelector('#data_emissao').removeAttribute('readonly')
+    document.querySelector('#descricao').removeAttribute('readonly')
+    document.querySelector('#representante').removeAttribute('disabled')
+    document.querySelector('#notificado').removeAttribute('readonly')
+}

@@ -17,6 +17,9 @@
         </div>
     <?php } ?>
         <div class="box">
+        <div class="row">
+            <a href="index.php?pagina=cadastrarUsuario"><button style="background-color: #f38637;" class="btn btn-default atalhoCadastrarChamado">Cadastrar usuário</button></a>
+        </div>
         <h3 class="text-center">Consulta de usuários</h3>
         </div>
         <div class="box">

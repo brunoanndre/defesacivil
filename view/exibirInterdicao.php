@@ -14,6 +14,9 @@
     if($linha['ocorr_endereco_principal'] == 'Logradouro'){
         $id_logradouro = $linha['ocorr_logradouro_id'];
         $linhaLogradouro = $enderecodao->buscarPeloId($id_logradouro);
+    }else{
+        $id_coordenada = $ocorrenciadao->buscarPeloId($linha['id_coordenada']);
+        $linhaCoordenada = $enderecodao->buscarIdCoordenada($id_coordenada);
     }
 ?>
 
@@ -41,7 +44,7 @@
                     <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho">
                 </div>
             </div>
-            <h3 class="text-center">Registro de interdição</h3>
+            <h3 class="text-center"><?php echo 'Interdição Nº ' . $id_interdicao . '/' . date('Y'); ?></h3>
             <button class="printHide" style="background-color: white; border:none;" onclick="print()"><img src="images/print.png" style="width: 50px; height:auto"></button>
         </div>
     <div class="box">
@@ -59,10 +62,10 @@
         <div ng-show="sel_endereco == 'Coordenada'">
             <div class="row">
                 <div class="col-sm-5">
-                    <span class="titulo">Latitude: </span><span><?php echo $linha['ocorr_coordenada_latitude']; ?></span>
+                    <span class="titulo">Latitude: </span><span><?php if($linha['ocorr_endereco_principal'] == 'Coordenada'){ echo $linhaCoordenada->getLatitude(); } ?></span>
                 </div>
                 <div class="col-sm-5">
-                    <span class="titulo">Longitude: </span><span><?php echo $linha['ocorr_coordenada_longitude']; ?></span>
+                    <span class="titulo">Longitude: </span><span><?php if($linha['ocorr_endereco_principal'] == 'Coordenada'){ echo $linhaCoordenada->getLongitude(); } ?></span>
                 </div>
                 <div class="col-sm-2">
                     <button type="button" class="btn-default btn-small inline open-AddBookDialog" data-toggle="modal" data-id="map"><span class="glyphicon glyphicon-map-marker"></span></button>
@@ -76,8 +79,8 @@
                 <div class="col-sm-3"><span class="titulo">Número: </span><span><?php echo $linhaLogradouro->getNumero(); ?></span></div>
             </div>
             <div class="row">
-                <div class="col-sm-3"><span class="titulo">Bairro: </span><span><?php echo $linhaLogradouro->getBairro(); ?></span> </div>
-                <div class="col-sm-6"><span class="titulo">Cidade: </span><span><?php echo $linhaLogradouro->getCidade(); ?></span></div>
+                <div class="col-sm-5"><span class="titulo">Bairro: </span><span><?php echo $linhaLogradouro->getBairro(); ?></span> </div>
+                <div class="col-sm-5"><span class="titulo">Cidade: </span><span><?php echo $linhaLogradouro->getCidade(); ?></span></div>
             </div>
             <div>
                 <span class="titulo">Referência: </span><span><?php echo $linhaLogradouro->getReferencia(); ?></span>
@@ -121,7 +124,7 @@
         </div>
     </div>
     <?php if($linha['interdicao_ativa'] == 't'){ ?>
-        <?php echo '<a href="index.php?pagina=exibirOcorrencia&id='. $linha['id_ocorrencia'] . '"><input type="button" class="btn btn-default printHide" style="margin-left:40%" value="Voltar"></a>'?>
+        <?php echo '<a class="printHide" href="index.php?pagina=exibirOcorrencia&id='. $linha['id_ocorrencia'] . '"><input type="button" class="btn btn-default printHide" style="margin-left:40%" value="Voltar"></a>'?>
         <?php echo '<a class="printHide" href= "index.php?pagina=editarInterdicao&id='. $linha['id_interdicao'] . '"><input type="button"class=" btn btn-default printHide" value="Editar"></a>'?>
         <form action="desinterdicao.php" method="post">
             <input type="hidden" name="id_ocorrencia" value="<?php echo $linha['id_ocorrencia']; ?>">

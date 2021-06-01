@@ -41,8 +41,12 @@
             Chamado cancelado com sucesso.
         </div>
     <?php } ?>
+    <div class="row">
+        <a href="index.php?pagina=cadastrarChamado"><button style="background-color: #f38637;" class="btn btn-default atalhoCadastrarChamado">Cadastrar chamado</button></a>
+    </div>
 <h3 class="text-center">Consulta de chamados</h3>
 
+    
         <form class="input-group" method="post" action="index.php?pagina=consultarChamado&n=0">
             <span class="ocorrencias_encerradas">Encerrados: </span>
             <input name="finalizado" onchange="this.form.submit()" value="true" type="checkbox" <?php if($_POST['finalizado']==true)echo 'checked'; ?>>

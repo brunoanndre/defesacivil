@@ -236,7 +236,8 @@ body{
     font-size: 16px;
 }
 
-.img-cabecalho{
+.img-cabecalho,
+.img-cabecalho-not{
     float: right;
     width: 60%;
 }
@@ -674,6 +675,11 @@ i{
         left: 20px;
     }
 
+    .cbbls{
+        margin-right: 50%;
+        transform: translateX(36%);
+    }
+
     .printShow{
         display: block;
         position: relative;
@@ -710,6 +716,7 @@ i{
         margin: 5px;
     }
 
+
     .page-break-always{
         page-break-before: always;
     }
@@ -736,6 +743,10 @@ i{
 
     .printMargin{
         margin-top: 10px !important;
+    }
+
+    .notificacaoMargemLeft{
+        margin-left: 50px;
     }
 
     @page {
