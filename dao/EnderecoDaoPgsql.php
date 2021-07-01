@@ -42,6 +42,7 @@ class EnderecoDaoPgsql implements EnderecoDAO{
             $e->setLogradouro($linha['logradouro']);
             $e->setNumero($linha['numero']);
             $e->setReferencia($linha['referencia']);
+            $e->setComplemento($linha['complemento']);
 
             return $e;
         }else{
@@ -50,14 +51,15 @@ class EnderecoDaoPgsql implements EnderecoDAO{
     }
 
     public function adicionar(Endereco $e){
-        $sql = $this->pdo->prepare("INSERT INTO endereco_logradouro (cep,cidade,bairro,logradouro,numero,referencia) 
-		VALUES (:cep, :cidade, :bairro, :logradouro, :numero, :referencia)");
+        $sql = $this->pdo->prepare("INSERT INTO endereco_logradouro (cep,cidade,bairro,logradouro,numero,referencia,complemento) 
+		VALUES (:cep, :cidade, :bairro, :logradouro, :numero, :referencia, :complemento)");
         $sql->bindValue(":cep", $e->getCep());
         $sql->bindValue(":cidade", $e->getCidade());
         $sql->bindValue(":bairro", $e->getBairro());
         $sql->bindValue(":logradouro", $e->getLogradouro());
         $sql->bindValue(":numero", $e->getNumero());
         $sql->bindValue(":referencia", $e->getReferencia());
+        $sql->bindValue(":complemento", $e->getComplemento());
 
         if($sql->execute()){
             $id = $this->pdo->lastInsertId();
@@ -122,7 +124,7 @@ class EnderecoDaoPgsql implements EnderecoDAO{
     }
 
     public function editarLogradouro(Endereco $e){
-        $sql = $this->pdo->prepare("UPDATE endereco_logradouro SET cep = :cep, cidade = :cidade, bairro = :bairro, logradouro = :logradouro, numero = :numero, referencia = :referencia
+        $sql = $this->pdo->prepare("UPDATE endereco_logradouro SET cep = :cep, cidade = :cidade, bairro = :bairro, logradouro = :logradouro, numero = :numero, referencia = :referencia, complemento = :complemento
         WHERE id_logradouro = :id_logradouro");
         $sql->bindValue(":cep", $e->getCep());
         $sql->bindValue(":cidade", $e->getCidade());
@@ -131,6 +133,7 @@ class EnderecoDaoPgsql implements EnderecoDAO{
         $sql->bindValue(":numero", $e->getNumero());
         $sql->bindValue(":referencia", $e->getReferencia());
         $sql->bindValue(":id_logradouro", $e->getId());
+        $sql->bindValue(":complemento", $e->getComplemento());
 
         
             if($sql->execute()){

@@ -8,6 +8,15 @@ class Usuario{
     private $foto;
     private $telefone;
     private $nivel_acesso;
+    private $ativo;
+
+
+    public function setAtivo($ativo){
+        $this->ativo = trim($ativo);
+    }
+    public function getAtivo(){
+        return $this->ativo;
+    }
 
     public function getId(){
         return $this->id;
@@ -93,5 +102,6 @@ interface UsuarioDAO{
     public function updateSemFoto(Usuario $u);
     public function updateTelefone(Usuario $u);
     public function updateTelefoneFoto(Usuario $u);
-    public function delete($id);
+    public function deleteDadosLogin($id);
+    public function deleteUsuario($id);
 }

@@ -80,9 +80,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <label>Referência:</label>
                             <input name="referencia" class="form-control" autocomplete="off" value="<?php echo $linhaEndereco->getReferencia(); ?>">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Complemento:</label>
+                            <input id="complemento" name="complemento" class="form-control" autocomplete="off" value="<?php echo $linhaEndereco->getComplemento();?>" > 
                         </div>
                     </div>
                     <div class="row">
@@ -99,6 +103,10 @@
                             <?php if(isset($_GET['data'])){ ?>
                                 <div class="alertErro" >Informe a data de emissão.</div>
                             <?php } ?>
+                        </div>
+                        <div class="col-sm-6">
+                                <label>Data de vencimento</label>
+                                <input type="date" class="form-control" name="data_vencimento" autocomplete="off">
                         </div>
                     </div>
                     <div class="row">

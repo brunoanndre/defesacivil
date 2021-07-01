@@ -64,6 +64,10 @@ body{
     transform: translateX(-50%);
 }
 
+.pointer:hover{
+    cursor: pointer;
+}
+
 .head-alertas{
     font-size: 30px;
     font-weight: bold;
@@ -604,6 +608,55 @@ i{
 
 @media print{
 
+    .printAreaOcorrencia,
+    .printAreaNotificacao,
+    .printAreaChamado,
+    .printAreaInterdicao{
+        margin: 1cm;
+        border: 1px solid gray;
+        padding: 0.4cm;
+        padding-bottom: 0%;
+    }
+    .borderPrint{
+        border: 1px solid gray;
+        width: 50%;
+    }
+    .descricaoOcorrenciaPrint{
+        border: 1px solid gray;
+        width: 100%;
+        padding: 5px;
+    }
+
+    .printHeaderNotificacao{
+        display: flex;
+        margin-bottom: 0.5cm;
+        justify-content: space-between;
+    }
+
+    .borderPrint100{
+        border: 1px solid gray;
+        width: 100%;
+    }
+
+    .divHeaderNotificacaoTexto{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .pMarg{
+        margin: 0;
+        padding: 0;
+    }
+
+    .divDescricaoArea{
+        padding: 0.3cm;
+    }
+
+    .pad{
+        padding: 1cm;
+    }
+
     * {
         background:transparent !important;
         color:#000 !important;
@@ -616,7 +669,7 @@ i{
         body {
         margin:0;
         padding:0;
-        line-height: 1.4em;
+
         }
 
  
@@ -647,11 +700,12 @@ i{
         display: flex;
         justify-content: space-between;
         margin-bottom: 30px;
-
     }
     .ocorrenciaTitlePrint,
     .chamadoTitlePrint{
         margin-left: 60px;
+        display: flex;
+        align-self: center;
     }
 
     .print-interdicao-img{
@@ -701,19 +755,19 @@ i{
         width: 100%;
         flex-wrap: wrap;
         justify-content: center;
+        margin-bottom: 5px;
     }
     
     .image-print{
         max-height: 5cm;
         max-width: 5cm;
-        border: none;
-        margin: 10px;
+        margin: 3px;
     }
 
     .image-print-chamado{
-        max-width: 60px;
-        max-height: 200px;
-        margin: 5px;
+        max-width: 5cmp;
+        max-height: 5cm;
+        margin: 3px;
     }
 
 

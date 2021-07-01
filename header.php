@@ -87,6 +87,7 @@
                         <?php if($_SESSION['nivel_acesso'] == 1){ ?>
                         <li><a href="?pagina=consultarUsuario">Usuários</a></li>
                         <?php } ?>
+                        <li><a href="?pagina=consultarDocumentos">Documentos</a></li>
                         </ul>
                     </li>
 

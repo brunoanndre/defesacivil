@@ -10,6 +10,22 @@ class Notificacao{
     private $representante;
     private $notificado;
     private $descricao;
+    private $dataVencimento;
+    private $documentoAssinado;
+
+    public function setDocumentoAssinado($documentoAssinado){
+        $this->documentoAssinado = trim($documentoAssinado);
+    }
+    public function getDocumentoAssinado(){
+        return $this->documentoAssinado;
+    }
+
+    public function setDataVencimento($dataVencimento){
+        $this->dataVencimento = trim($dataVencimento);
+    }
+    public function getDataVencimento(){
+        return $this->dataVencimento;
+    }
 
     public function getIdEndereco(){
         return $this->idEndereco;

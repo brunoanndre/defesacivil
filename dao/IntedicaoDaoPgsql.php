@@ -127,7 +127,7 @@ class IntedicaoDaoPgsql implements InterdicaoDAO{
 
     public function buscarInterdicaoEOcorrencia($id){
         $sql = $this->pdo->prepare("SELECT interdicao.*,ocorrencia.id_ocorrencia,ocorrencia.ocorr_titulo,ocorrencia.ocorr_endereco_principal,
-        ocorrencia.id_coordenada, ocorrencia.ocorr_logradouro_id 
+        ocorrencia.id_coordenada, TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY') as data_ocorrencia ,ocorrencia.ocorr_logradouro_id 
         FROM interdicao 
         INNER JOIN ocorrencia ON (ocorrencia.id_ocorrencia=interdicao.id_ocorrencia) 
         WHERE id_interdicao=:id_interdicao");

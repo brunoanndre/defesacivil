@@ -6,14 +6,14 @@
     $interdicaodao = new IntedicaoDaoPgsql($pdo);
 
     //recebe dados do $_POST
-    $id_ocorrencia = addslashes($_POST['id_ocorrencia']);
-    $data = addslashes($_POST['data']);
-    $hora = addslashes($_POST['horario']);
-    $motivo = addslashes($_POST['motivo']);
-    $descricao_interdicao = addslashes($_POST['descricao_interdicao']);
-    $danos_aparentes = addslashes($_POST['danos_aparentes']);
-    $bens_afetados = addslashes($_POST['bens_afetados']);
-    $tipo = addslashes($_POST['tipo']);
+    $id_ocorrencia = filter_input(INPUT_POST, 'id_ocorrencia');
+    $data = filter_input(INPUT_POST, 'data');
+    $hora = filter_input(INPUT_POST, 'horario');
+    $motivo = filter_input(INPUT_POST, 'motivo');
+    $descricao_interdicao = filter_input(INPUT_POST, 'descricao_interdicao');
+    $danos_aparentes = filter_input(INPUT_POST, 'danos_aparentes');
+    $bens_afetados = filter_input(INPUT_POST, 'bens_afetados');
+    $tipo = filter_input(INPUT_POST, 'tipo');
 
     session_start();
     $id_usuario = $_SESSION['id_usuario'];

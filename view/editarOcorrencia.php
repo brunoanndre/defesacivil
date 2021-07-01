@@ -100,7 +100,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
             </div>
             <?php } ?>
             <div>
-                Endereço principal: <span style="color:red;">*</span>
+                <label>Endereço principal:</label> <span style="color:red;">*</span>
                 <br>
                 <label for="endereco_principal"></label>
                 <select name="endereco_principal" class="form-control endereco-principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaOcorrencia->getEnderecoPrincipal(); echo $linha['ocorr_endereco_principal']; ?>'" required>
@@ -116,11 +116,11 @@ if($linhaOcorrencia->getPossuiFotos() == false){
             <div ng-show="sel_endereco == 'Coordenada'">
                 <div class="row">
                     <div class="col-sm-4">
-                        <span>Latitude: <span style="color:red;">*</span></span>
+                        <label>Latitude:</label> <span style="color:red;">*</span>
                         <input id="latitude" name="latitude" autocomplete="off" type="text" class="form-control"  value="<?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Coordenada'){ echo $linhaEndereco->getLatitude();} ?>" onchange="verificaLatLgn()">
                     </div>
                     <div class="col-sm-4">
-                        Longitude: <span style="color:red;">*</span>
+                        <label>Longitude:</label> <span style="color:red;">*</span>
                         <input id="longitude" name="longitude" autocomplete="off" type="text" class="form-control"  value="<?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Coordenada'){ echo $linhaEndereco->getLatitude();} ?>">
                         
                     </div>
@@ -133,12 +133,12 @@ if($linhaOcorrencia->getPossuiFotos() == false){
             <div ng-show="sel_endereco == 'Logradouro'">
             <div class="row">
                     <div class="col-sm-4">
-                        <span>CEP:</span>
+                        <label>CEP:</label>
                         <input id="cep" name="cep" type="text" class="form-control"  onchange="verificaCep(this.value)" value="<?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){ echo $linhaEndereco->getCep(); } ?>">
                         <span id="erroCep" class="alertErro hide">CEP inválido.</span>
                     </div>
                     <div class="col-sm-8">
-                        <span>Cidade: </span><span style="color:red;">*</span>
+                        <label>Cidade:</label><span style="color:red;">*</span>
                         <!--<input id="cidade" name="cidade" type="text" class="form-control">-->
                         <select id="cidade" name="cidade" class="form-control">
                             <option value="Balneário Camboriú">Balneário Camboriú</option>
@@ -149,7 +149,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
 
                 <div class="row">
                     <div class="col-sm-4">
-                        <span>Bairro: <span style="color:red;">*</span>
+                        <label>Bairro:</label> <span style="color:red;">*</span>
                         <!--<input id="bairro" name="bairro" type="text" class="form-control">-->
                         <select id="bairro" name="bairro" class="form-control" selec>
                             <option <?php if($linhaEndereco->getBairro() == 'Centro'){ echo 'selected';} ?> value="Centro">Centro</option>
@@ -174,7 +174,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                         </select>
                     </div>
                     <div class="col-sm-8">
-                        Logradouro: <span style="color:red;">*</span>
+                        <label>Logradouro:</label> <span style="color:red;">*</span>
                         <input id="logradouro" name="logradouro" type="text" class="form-control" ng-required="sel_endereco=='Logradouro'" value="<?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){ echo $linhaEndereco->getLogradouro(); } ?>">
                         <?php if(isset($_GET['logradouro'])){ ?>
                             <span class="alertErro">Erro ao cadastrar logradouro.</span>
@@ -183,18 +183,25 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
-                        <span>Número: </span><span style="color:red;">*</span>
-                        <input id="complemento" name="complemento" type="text" class="form-control" ng-required="sel_endereco=='Logradouro'" value="<?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){ echo $linhaEndereco->getNumero(); } ?>">
+                        <label>Número:</label><span style="color:red;">*</span>
+                        <input id="numero" name="numero" type="text" class="form-control" ng-required="sel_endereco=='Logradouro'" value="<?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){ echo $linhaEndereco->getNumero(); } ?>">
                     </div>
                     <div class="col-sm-8">
-                        <span>Referência: </span>
+                        <label>Referência</label>
                         <input name="referencia" type="text" class="form-control" value="<?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){ echo $linhaEndereco->getReferencia(); } ?>">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                            <label>Complemento:</label>
+                            <input id="complemento" name="complemento" class="form-control" autocomplete="off" <?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){ ?> value="<?php echo $linhaEndereco->getComplemento(); } ?>">
+
                     </div>
                 </div>
             </div>
         <hr>
             <div>
-                Agente principal: <span style="color:red;">*</span>
+                <label>Agente principal:</label> <span style="color:red;">*</span>
                 <input id="agente_principal" name="agente_principal" autocomplete="off" type="text" class="form-control" value="<?php  echo $agente_principal->getNome() ;echo $linha['nome']; ?>" onkeyup="showResult(this.value,this.id)" required>
 
                 <div class="autocomplete" id="livesearchagente_principal"></div>
@@ -205,7 +212,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                     </span>
                 <?php } ?>
             <div>
-                Agente de apoio 1:
+                <label>Agente de apoio 1:</label>
                 <input id="agente_apoio_1" name="agente_apoio_1" autocomplete="off" type="text" class="form-control" value="<?php echo $_POST['agente_apoio1']; echo $agente_apoio_1['nome']; ?>" onkeyup="showResult(this.value,this.id)">
                 <div class="autocomplete" id="livesearchagente_apoio_1"></div>
             </div>
@@ -215,7 +222,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                 </span>
             <?php } ?>
             <div>
-                Agente de apoio 2:
+                <label>Agente de apoio 2:</label>
                 <input id="agente_apoio_2" name="agente_apoio_2" autocomplete="off" type="text" class="form-control" value="<?php echo $_POST['agente_apoio2']; echo $agente_apoio_2['nome'] ?>" onkeyup="showResult(this.value,this.id)">
                 <div class="autocomplete" id="livesearchagente_apoio_2"></div>
             </div>
@@ -226,44 +233,50 @@ if($linhaOcorrencia->getPossuiFotos() == false){
             <?php } ?>
         <hr>
             <div>
-                <span>Data de ocorrência: <span style="color:red;">*</span></span>
+                <label>Data de ocorrência:</label> <span style="color:red;">*</span>
                 <br>
                 <input id="data_ocorrencia" name="data_ocorrencia" autocomplete="off" type="date" class="form-control data" value="<?php echo $linhaOcorrencia->getData(); echo $linha['data_ocorrencia']; ?>" max="<?php echo date('Y-m-d'); ?>" required onchange="verificaData()">
             </div>
             <span id="erroData" class="alertErro hide">Data de lançamento inválida.</span>
             <div>
-                Titulo:
+                <label>Titulo:</label>
                 <textarea id="titulo" name="titulo" class="form-control titulobox" cols="30" rows="2" maxlength="120" ng-model="tituloVal" ng-init="tituloVal='<?php echo $linhaOcorrencia->getTitulo();echo $linha['ocorr_titulo'];?>'"?></textarea>
                 <span class="char-count">{{tituloVal.length || 0}}/120</span>
             </div>
             <div>
-                Descrição:
+                <label>Descrição:</label>
                 <textarea id="descricao" name="descricao" class="form-control" cols="30" rows="5" ng-model="descricaoVal" ng-init="descricaoVal='<?php echo $linhaOcorrencia->getDescricao(); echo $linha['ocorr_descricao'];?>'"></textarea>
             </div>
             <div>
                 <?php if($_POST['ocorr_origem'] == ""){ ?>
-                    Origem: <span style="color:red;">*</span>
-                    <select name="ocorr_origem" class="form-control" ng-model="sel_origem" ng-init="sel_origem='<?php echo $linhaOcorrencia->getOrigem(); ?>'" required>
-                    <option value="Telefone Base">Telefone Base</option>
-                    <option value="Ouvidoria">Ouvidoria</option>
-                    <option value="199">199</option>
-                    <option value="Secretaria de Obras">Secretaria de Obras</option>
-                    <option value="Secretaria do Meio Ambiente">Secretaria do Meio Ambiente</opntion>
-                    <option value="Secretaria da Saúde">Secretaria da Saúde</option>
-                    <option value="Outro">Outro (Especificar)</option>
+                    <label>Origem:</label> <span style="color:red;">*</span>
+                    <select name="ocorr_origem" class="form-control" required>
+                    <option <?php if($linhaOcorrencia->getOrigem() == 'Telefone Base') echo 'selected'; ?> value="Telefone Base">Telefone Base</option>
+                    <option <?php if($linhaOcorrencia->getOrigem() == 'Ouvidoria') echo 'selected'; ?> value="Ouvidoria">Ouvidoria</option>
+                    <option <?php if($linhaOcorrencia->getOrigem() == '199') echo 'selected'; ?> value="199">199</option>
+                    <option <?php if($linhaOcorrencia->getOrigem() == 'Secretaria de Obras') echo 'selected'; ?> value="Secretaria de Obras">Secretaria de Obras</option>
+                    <option <?php if($linhaOcorrencia->getOrigem() == 'Secretaria do Meio Ambiente') echo 'selected'; ?> value="Secretaria do Meio Ambiente">Secretaria do Meio Ambiente</opntion>
+                    <option <?php if($linhaOcorrencia->getOrigem() == 'Secretaria da Saúde') echo 'selected'; ?> value="Secretaria da Saúde">Secretaria da Saúde</option>
+                    <option <?php if($linhaOcorrencia->getOrigem() == 'Base') echo 'selected'; ?> value="Base">Base</option>
+                    <option <?php if($linhaOcorrencia->getOrigem() != 'Telefone Base' && $linhaOcorrencia->getOrigem() != 'Ouvidoria' && $linhaOcorrencia->getOrigem() != '199'
+                    && $linhaOcorrencia->getOrigem() != 'Secretaria de Obras' && $linhaOcorrencia->getOrigem() != 'Secretaria do Meio Ambiente' &&
+                    $linhaOcorrencia->getOrigem() != 'Secretaria da Saúde' && $linhaOcorrencia->getOrigem() != 'Base') echo 'selected'; ?> value="Outro">Outro (Especificar)</option>
                     </select>
-
-                    <div ng-show="sel_origem == 'Outro'">
-                    Descrição Origem:
-                    <input type="text" name="ocorr_origem2" class="form-control">
+                    <?php if($linhaOcorrencia->getOrigem() != 'Telefone Base' && $linhaOcorrencia->getOrigem() != 'Ouvidoria' && $linhaOcorrencia->getOrigem() != '199'
+                    && $linhaOcorrencia->getOrigem() != 'Secretaria de Obras' && $linhaOcorrencia->getOrigem() != 'Secretaria do Meio Ambiente' &&
+                    $linhaOcorrencia->getOrigem() != 'Secretaria da Saúde' && $linhaOcorrencia->getOrigem() != 'Base'){ ?>
+                    <div>
+                    <label>Descrição Origem:</label>
+                    <input type="text" name="ocorr_origem2" class="form-control" value="<?php echo $linhaOcorrencia->getOrigem(); ?>">
                     </div>
+                    <?php }?>
                 <?php } else { ?>
                     <input name="ocorr_origem" type="hidden" class="form-control" value="<?php echo $_POST['ocorr_origem']; ?>">
                 <?php } ?>
             </div>
         <hr>
             <div>
-                Pessoa atendida 1:
+                <label>Pessoa atendida 1:</label>
                 <br>
                 <input id="pessoa_atendida_1" name="pessoa_atendida_1" autocomplete="off" type="text" class="form-control inline" style="width:93%;" value="<?php echo $linhaOcorrencia->getPessoa1(); echo $pessoa_atendida_1; ?>" onkeyup="showResult(this.value,this.id)">
                 <button type="button" class="btn-default btn-small inline" data-toggle="modal" data-target="#pessoasModal"><span class="glyphicon glyphicon-plus"></span></button>
@@ -276,7 +289,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                 </span>
             <?php } ?>
             <div>
-                Pessoa atendida 2:
+                <label>Pessoa atendida 2:</label>
                 <br>
                 <input id="pessoa_atendida_2" name="pessoa_atendida_2" autocomplete="off" type="text" class="form-control inline" style="width:93%;" value="<?php echo $linhaOcorrencia->getPessoa2(); echo $pessoa_atendida_2['nome']; ?>" onkeyup="showResult(this.value,this.id)">
                 <button type="button" class="btn-default btn-small inline open-AddBookDialog" data-toggle="modal" data-id="pessoa_atendida_2"><span class="glyphicon glyphicon-plus"></span></button>
@@ -290,20 +303,20 @@ if($linhaOcorrencia->getPossuiFotos() == false){
             <?php } ?>
         <hr>
         <div>
-                Cobrade: 
+                <label>Cobrade:</label> 
                 <?php if(isset($_GET['cobrade'])){ ?>
                     <br><span class="alertErro">
                         Cobrade incorreto.
                     </span>
                 <?php }?>
                 <div class="cobrade">
-                    Categoria: <span style="color:red;">*</span><br>
+                    <label>Categoria:</label> <span style="color:red;">*</span><br>
                     <select name="cobrade_categoria" class="form-control cobrade-sub" ng-model="categoria" ng-init="categoria='<?php echo $linhaOcorrencia->getCobrade()[0]; ?>'">
                         <option value="1">Naturais</option>
                         <option value="2">Tecnológicos</option>
                         <option value="0">Sem cobrade</option>
                     </select>
-                    Grupo: <span style="color:red;" ng-hide="categoria == 0">*</span><br>
+                    <label>Grupo:</label> <span style="color:red;" ng-hide="categoria == 0">*</span><br>
                     <select name="cobrade_grupo" class="form-control cobrade-sub" ng-model="grupo" ng-disabled="categoria == 0" ng-init="grupo='<?php echo $linhaOcorrencia->getCobrade()[1]; ?>'">
                         <option ng-if="categoria==1" value="1">Geológico</option>
                         <option ng-if="categoria==1" value="2">Hidrológico</option>
@@ -316,7 +329,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                         <option ng-if="categoria==2" value="4">Desastres relacionados a obras civis</option>
                         <option ng-if="categoria==2" value="5">Desastres relacionados a transporte de passageiros e cargas não perigosas</option>
                     </select>
-                    Subgrupo: <span style="color:red;" ng-hide="grupo == 0">*</span><br>
+                    <label>Subgrupo:</label> <span style="color:red;" ng-hide="grupo == 0">*</span><br>
                     <select name="cobrade_subgrupo" class="form-control cobrade-sub" ng-model="subgrupo" ng-disabled="grupo == 0" ng-init="subgrupo='<?php echo $linhaOcorrencia->getCobrade()[2]; ?>'">
                         <option ng-if="grupo==1&&categoria==1" value="1">Terremoto</option>
                         <option ng-if="grupo==1&&categoria==1" value="2">Emanação vulcânica</option>
@@ -347,7 +360,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                         <option ng-if="grupo==5&&categoria==2" value="4">Transporte marítimo</option>
                         <option ng-if="grupo==5&&categoria==2" value="5">Transporte aquaviário</option>
                     </select>
-                    Tipo: <span style="color:red;" ng-hide="subgrupo == 0">*</span><br>
+                    <label>Tipo:</label> <span style="color:red;" ng-hide="subgrupo == 0">*</span><br>
                     <select name="cobrade_tipo" class="form-control cobrade-sub" ng-model="tipo" ng-disabled="subgrupo==0" ng-init="tipo='<?php echo $linhaOcorrencia->getCobrade()[3]; ?>'">
                         <option ng-if="subgrupo==1&&grupo==1&&categoria==1" value="1">Tremor de terra</option>
                         <option ng-if="subgrupo==1&&grupo==1&&categoria==1" value="2">Tsunami</option>
@@ -394,7 +407,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                         <option ng-if="grupo==4&&categoria==2" value="0"></option>
                         <option ng-if="grupo==5&&categoria==2" value="0"></option>
                     </select>
-                    Subtipo: <span style="color:red;" ng-hide="tipo==0 || categoria==2">*</span><br>
+                    <label>Subtipo:</label> <span style="color:red;" ng-hide="tipo==0 || categoria==2">*</span><br>
                     <select name="cobrade_subtipo" class="form-control cobrade-sub" ng-model="subtipo" ng-disabled="tipo==0 || categoria==2" ng-init="subtipo='<?php echo $linhaOcorrencia->getCobrade()[4];?>'">
                         <option ng-if="subgrupo==1&&grupo==1&&categoria==1" value="0"></option>
                         <option ng-if="subgrupo==2&&grupo==1&&categoria==1" value="0"></option>
@@ -440,7 +453,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
             <br>
             <br>     
             <div>
-                Fotos:
+                <label>Fotos:</label>
                 <input name="possui_fotos" type="hidden" value="<?php echo $possui_fotos; ?>">
                 <?php if($linhaOcorrencia->getPossuiFotos()){ ?>
                     <div class="box">
@@ -478,13 +491,13 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                         </div>
                     </div>
                     <?php } ?>
-                Adicionar fotos:
+                <label>Adicionar fotos:</label>
                 <input id="imgInp" name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
                 <div class="gallery"></div>
             </div>
         <hr>
             <div>
-                Prioridade: <span style="color:red;">*</span>
+                <label>Prioridade:</label> <span style="color:red;">*</span>
                 <label for="prioridade"></label>
                 <select name="prioridade" class="form-control" style="width:30%;" required ng-model="prioridade" ng-init="prioridade='<?php echo $linhaOcorrencia->getPrioridade(); echo $linha['ocorr_prioridade']; ?>'">
                     <option value="Baixa">Baixa</option>
@@ -495,7 +508,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
             <?php if($_SESSION['nivel_acesso'] == 1 || $_SESSION['nivel_acesso'] == 2){ ?>
                 <div class="row">
                     <div class="col-sm-4">
-                        <span>Analisado: <span style="color:red;">*</span></span><br>
+                        <label>Analisado:</label> <span style="color:red;">*</span><br>
                         <div style="display:inline;">
                             <label class="radio-inline">
                                 <input type="radio" value="true" id="analisado" name="analisado" <?php echo ($linhaOcorrencia->getAnalisado() == 1) ? 'checked':''; ?>>Sim
@@ -506,7 +519,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <span>Congelado: <span style="color:red;">*</span></span><br>
+                        <label>Congelado:</label><span style="color:red;">*</span><br>
                         <div>
                             <label class="radio-inline">
                                 <input type="radio" value="true" name="congelado" <?php echo ($linhaOcorrencia->getCongelado() == 1) ? 'checked':''; ?>>Sim
@@ -517,7 +530,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <span>Encerrado: <span style="color:red;">*</span></span><br>
+                        <label>Encerrado:</label> <span style="color:red;">*</span><br>
                         <div>
                             <label class="radio-inline">
                                 <input type="radio" value="true" name="encerrado" <?php echo ($linhaOcorrencia->getEncerrado() == 1) ? 'checked':''; ?>>Sim
@@ -530,18 +543,18 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                 </div>
             <?php }else{ ?>
 
-                <p>Status</p>
+                <label>Status</label>
                 <nav>
                     <input type="hidden" name="analisado" value="<?php echo ($linhaOcorrencia->getAnalisado() == true) ? "true":"false"; ?>">
-                    Analisado: <span><?php echo ($linhaOcorrencia->getAnalisado() == true) ? 'Sim':'Não'; ?></span>
+                    <label>Analisado:</label> <span><?php echo ($linhaOcorrencia->getAnalisado() == true) ? 'Sim':'Não'; ?></span>
                 </nav>
                 <nav>
                     <input type="hidden" name="congelado" value="<?php echo ($linhaOcorrencia->getCongelado() == true) ? "true":"false";  ?>">
-                    Congelado: <span><?php echo ($linhaOcorrencia->getCongelado() == true) ? 'Sim':'Não'; ?></span>
+                    <label>Congelado:</label> <span><?php echo ($linhaOcorrencia->getCongelado() == true) ? 'Sim':'Não'; ?></span>
                 </nav>
                 <nav>
                     <input type="hidden" name="encerrado" value="<?php echo ($linhaOcorrencia->getEncerrado() == true) ? "true":"false";  ?>">
-                    Encerrado: <span><?php echo ($linhaOcorrencia->getEncerrado() == true) ? 'Sim':'Não'; ?></span>
+                    <label>Encerrado:</label> <span><?php echo ($linhaOcorrencia->getEncerrado() == true) ? 'Sim':'Não'; ?></span>
                 </nav>
             <?php } ?>
             <br>
@@ -555,7 +568,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" id="btnFecharModalFoto" onclick="fecharModalFoto()">&times;</button>
-                    <h5 class="modal-title">Excluir foto</h5>
+                    <h4 class="modal-title">Excluir foto</h4>
                 </div>
                     <div class="modal-body">
                         <nav>
@@ -584,7 +597,7 @@ if($linhaOcorrencia->getPossuiFotos() == false){
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 class="modal-title">Cadastrar pessoa</h5>
+                    <h4 class="modal-title">Cadastrar pessoa</h4>
                 </div>
                 <form method="post">
                     <div class="modal-body">
@@ -592,37 +605,37 @@ if($linhaOcorrencia->getPossuiFotos() == false){
                             <input id="id_pessoa" type="hidden" value="">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    Nome: <span style="color:red;">*</span>
+                                    <label>Nome:</label> <span style="color:red;">*</span>
                                     <input id="nome_pessoa" name="nome_pessoa" type="text" class="form-control" onchange="verificaNome(this.value)">
                                 </div>
                             </div>   
                             <span id="erroNome" class="alertErro hide">Nome inválido.</span>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    CPF:
+                                   <label>CPF:</label>
                                     <input id="cpf_pessoa" name="cpf_pessoa" type="text" class="form-control" maxlength="11" onchange="verificaCpf(this.value)">
                                     <span id="erroCpf" class="alertErro hide">CPF inválido.</span>
                                 </div>
                                 <div class="col-sm-6">
-                                    Outros documentos:
+                                    <label>Outros documentos:</label>
                                     <input id="outros_documentos" name="outros_documentos" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    Celular: 
+                                    <label>Celular:</label> 
                                     <input id="celular_pessoa" name="celular_pessoa" type="text" class="form-control" pattern="\([0-9]{2}\)[\s][0-9]{4,5}-[0-9]{4}" title="(XX) XXXXX-XXXX" onchange="verificaCelular(this.value)">
                                     <span id="erroCelular" class="alertErro hide">Celular inválido.</span>
                                 </div>
                                 <div class="col-sm-6">
-                                    Telefone: 
+                                    <label>Telefone:</label>
                                     <input id="telefone_pessoa" name="telefone_pessoa" type="text" class="form-control" pattern="\([0-9]{2}\)\s[0-9]{4}\-[0-9]{4}" title="(XX) XXXX-XXXX" onchange="verificaTelefone(this.value)">
                                     <span id="erroTelefone" class="alertErro hide">Telefone inválido.</span>
                                 </div>
                             </div>
                             <span id="erroTelefone" class="alertErro hide">Telefone inválido.</span>
                             <div class="form-group">
-                                Email:
+                                <label>Email:</label>
                                 <input id="email_pessoa" name="email_pessoa" type="email" class="form-control" onchange="verificaEmail(this.value)">
                             </div>
                             <span id="erroEmail" class="alertErro hide">Email inválido.</span>

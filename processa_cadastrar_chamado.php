@@ -23,12 +23,12 @@ $cep = addslashes($_POST['cep']);
 $cidade = addslashes($_POST['cidade']);
 $bairro = addslashes($_POST['bairro']);
 $logradouro = addslashes($_POST['logradouro']);
-$numero = addslashes($_POST['complemento']);
+$numero = addslashes($_POST['numero']);
 $referencia = addslashes($_POST['referencia']);
 $descricao = addslashes($_POST['descricao']);
 $prioridade = addslashes($_POST['prioridade']);
 $distribuicao = addslashes($_POST['distribuicao']);
-
+$complemento = filter_input(INPUT_POST, 'complemento');
 
 if($origem == 'Outro'){
 	$origem = filter_input(INPUT_POST, 'origem_chamado2');
@@ -75,6 +75,7 @@ if($endereco_principal == "Logradouro"){
 		$e->setLogradouro($logradouro);
 		$e->setNumero($numero);
 		$e->setReferencia($referencia);
+		$e->setComplemento($complemento);
 
 		$logradouro_id = $enderecodao->adicionar($e);
 

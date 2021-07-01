@@ -47,10 +47,10 @@ class Interdicao{
     }
 
     public function getDescricao(){
-        return $this->descricao;
+        return trim($this->descricao);
     }
     public function setDescricao($descricao){
-        $this->descricao = $descricao;
+        $this->descricao = trim($descricao);
     }
 
     public function getDanos(){

@@ -10,6 +10,14 @@ class Endereco{
     private $longitude;
     private $latitude;
     private $referencia;
+    private $complemento;
+
+    public function setComplemento($complemento){
+        $this->complemento = trim($complemento);
+    }
+    public function getComplemento(){
+        return $this->complemento;
+    }
 
     public function getId(){
         return $this->id;

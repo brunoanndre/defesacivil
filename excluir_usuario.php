@@ -10,7 +10,8 @@
     $data = date('Y-m-d H:i:s');
 
     if($_SESSION['nivel_acesso'] == 1){
-        $usuariodao->delete($id_usuario_alterado);
+        $usuariodao->deleteDadosLogin($id_usuario_alterado);
+        $usuariodao->deleteUsuario($id_usuario_alterado);
         $usuariodao->alterarUsuarioExcluido($id_usuario_modificador,$id_usuario_alterado,$data);
             header('location:index.php?pagina=consultarUsuario&sucesso');
     }

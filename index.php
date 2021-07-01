@@ -45,6 +45,7 @@ if(isset($_SESSION['nivel_acesso'])){
             case 'cadastrarNotificacao' : include 'view/cadastrarNotificacao.php'; break;
             case 'exibirNotificacao' : include 'view/exibirNotificacao.php'; break;
             case 'consultarNotificacao' : include 'view/consultarNotificacao.php'; break;
+            case 'consultarDocumentos' : include 'view/consultarDocumentos.php'; break;
         }
     }else if($_SESSION['nivel_acesso'] == 2){
         switch($pagina){
@@ -71,6 +72,7 @@ if(isset($_SESSION['nivel_acesso'])){
             case 'cadastrarNotificacao' : include 'view/cadastrarNotificacao.php'; break;
             case 'exibirNotificacao' : include 'view/exibirNotificacao.php'; break;
             case 'consultarNotificacao' : include 'view/consultarNotificacao.php'; break;
+            case 'consultarDocumentos' : include 'view/consultarDocumentos.php'; break;
         }
     }else if($_SESSION['nivel_acesso'] == 3){
         switch($pagina){
@@ -97,6 +99,7 @@ if(isset($_SESSION['nivel_acesso'])){
             case 'cadastrarNotificacao' : include 'view/cadastrarNotificacao.php'; break;
             case 'exibirNotificacao' : include 'view/exibirNotificacao.php'; break;
             case 'consultarNotificacao' : include 'view/consultarNotificacao.php'; break;
+            case 'consultarDocumentos' : include 'view/consultarDocumentos.php'; break;
         }
     }else{
         include 'view/monitorarChamado.php';

@@ -211,11 +211,17 @@
             $sql->bindValue(":pessoa_atendida_2",$o->getPessoa2());
             $sql->bindValue(":usuario_editor", $o->getUsuarioEditor());
             $sql->bindValue(":id_ocorrencia", $o->getId());
-            if($sql->execute()){
-                return true;
-            }else{
-                return false;
+
+            try{
+                if($sql->execute()){
+                    return true;
+                }else{
+                    return false;
+                }
+            }catch(PDOException $e){
+                echo $e->getMessage();
             }
+
 
         }
 
@@ -270,7 +276,7 @@
 
         public function buscarConsulta($parametro){
             if($parametro == 'normal'){
-                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, 
+                $sql = $this->pdo->prepare("SELECT ocorrencia.ocorr_titulo, ocorrencia.ocorr_endereco_principal, ocorrencia.ocorr_logradouro_id, ocorrencia.id_coordenada,ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, 
                 TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY HH24:MI') as data_ocorrencia,
                 usuario.nome, cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao 
                 FROM ocorrencia 
@@ -290,6 +296,10 @@
                         $o->setCobrade($item['subgrupo']);
                         $o->setPessoa1($item['nome_pessoa1']);
                         $o->setDescricao($item['ocorr_descricao']);
+                        $o->setTitulo($item['ocorr_titulo']);
+                        $o->setEnderecoPrincipal($item['ocorr_endereco_principal']);
+                        $o->setLogradouroId($item['ocorr_logradouro_id']);
+                        $o->setIdCoordenada($item['id_coordenada']);
 
                         $array[] = $o;
                     }
@@ -300,7 +310,7 @@
             }
 
             if($parametro == 'encerrada_false'){
-                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, 
+                $sql = $this->pdo->prepare("SELECT ocorrencia.ocorr_titulo,ocorrencia.ocorr_endereco_principal, ocorrencia.ocorr_logradouro_id, ocorrencia.id_coordenada,ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, 
                 TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY HH24:MI') as data_ocorrencia,
                 usuario.nome, cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao
                 FROM ocorrencia 
@@ -320,6 +330,10 @@
                         $o->setCobrade($item['subgrupo']);
                         $o->setPessoa1($item['nome_pessoa1']);
                         $o->setDescricao($item['ocorr_descricao']);
+                        $o->setTitulo($item['ocorr_titulo']);
+                        $o->setEnderecoPrincipal($item['ocorr_endereco_principal']);
+                        $o->setLogradouroId($item['ocorr_logradouro_id']);
+                        $o->setIdCoordenada($item['id_coordenada']);
 
                         $array[] = $o;
                     }
@@ -329,7 +343,7 @@
                 }
             }
             if($parametro == 'ativo_true'){
-                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY') as data_ocorrencia,
+                $sql = $this->pdo->prepare("SELECT ocorrencia.ocorr_titulo,ocorrencia.id_ocorrencia,ocorrencia.ocorr_endereco_principal, ocorrencia.ocorr_logradouro_id, ocorrencia.id_coordenada,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY') as data_ocorrencia,
                 usuario.nome,cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao
                 FROM ocorrencia 
                 INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario 
@@ -349,6 +363,10 @@
                         $o->setCobrade($item['subgrupo']);
                         $o->setPessoa1($item['nome_pessoa1']);
                         $o->setDescricao($item['ocorr_descricao']);
+                        $o->setTitulo($item['ocorr_titulo']);
+                        $o->setEnderecoPrincipal($item['ocorr_endereco_principal']);
+                        $o->setLogradouroId($item['ocorr_logradouro_id']);
+                        $o->setIdCoordenada($item['id_coordenada']);
 
                         $array[] = $o;
                     }
@@ -359,7 +377,7 @@
             }
 
             if($parametro == 'ativo_encerrada_false'){
-                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY') as data_ocorrencia,
+                $sql = $this->pdo->prepare("SELECT ocorrencia.ocorr_titulo,ocorrencia.ocorr_endereco_principal, ocorrencia.ocorr_logradouro_id, ocorrencia.id_coordenada,ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY') as data_ocorrencia,
                 usuario.nome,cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao
                 FROM ocorrencia 
                 INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario 
@@ -379,6 +397,10 @@
                         $o->setCobrade($item['subgrupo']);
                         $o->setPessoa1($item['nome_pessoa1']);
                         $o->setDescricao($item['ocorr_descricao']);
+                        $o->setTitulo($item['ocorr_titulo']);
+                        $o->setEnderecoPrincipal($item['ocorr_endereco_principal']);
+                        $o->setLogradouroId($item['ocorr_logradouro_id']);
+                        $o->setIdCoordenada($item['id_coordenada']);
 
                         $array[] = $o;
                     }
@@ -388,7 +410,7 @@
                 }
             }
             if($parametro == 'ativo_encerrada_true'){
-                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY') as data_ocorrencia,
+                $sql = $this->pdo->prepare("SELECT ocorrencia.ocorr_titulo,ocorrencia.ocorr_endereco_principal, ocorrencia.ocorr_logradouro_id, ocorrencia.id_coordenada,ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY') as data_ocorrencia,
                 usuario.nome,cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao
                 FROM ocorrencia 
                 INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario 
@@ -408,6 +430,10 @@
                         $o->setCobrade($item['subgrupo']);
                         $o->setPessoa1($item['nome_pessoa1']);
                         $o->setDescricao($item['ocorr_descricao']);
+                        $o->setTitulo($item['ocorr_titulo']);
+                        $o->setEnderecoPrincipal($item['ocorr_endereco_principal']);
+                        $o->setLogradouroId($item['ocorr_logradouro_id']);
+                        $o->setIdCoordenada($item['id_coordenada']);
                         
                         $array[] = $o;
                     }
@@ -418,7 +444,7 @@
             }
 
             if($parametro == 'ativo_congelada_true'){
-                $sql = $this->pdo->prepare("SELECT ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY') as data_ocorrencia,
+                $sql = $this->pdo->prepare("SELECT ocorrencia.ocorr_titulo,ocorrencia.ocorr_endereco_principal, ocorrencia.ocorr_logradouro_id, ocorrencia.id_coordenada,ocorrencia.id_ocorrencia,ocorrencia.ocorr_prioridade, TO_CHAR(ocorrencia.data_ocorrencia, 'DD/MM/YYYY') as data_ocorrencia,
                 usuario.nome,cobrade.subgrupo, ocorrencia.nome_pessoa1, ocorr_descricao
                 FROM ocorrencia 
                 INNER JOIN usuario ON ocorrencia.agente_principal = usuario.id_usuario 
@@ -438,6 +464,10 @@
                         $o->setCobrade($item['subgrupo']);
                         $o->setPessoa1($item['nome_pessoa1']);
                         $o->setDescricao($item['ocorr_descricao']);
+                        $o->setTitulo($item['ocorr_titulo']);
+                        $o->setEnderecoPrincipal($item['ocorr_endereco_principal']);
+                        $o->setLogradouroId($item['ocorr_logradouro_id']);
+                        $o->setIdCoordenada($item['id_coordenada']);
                         
                         $array[] = $o;
                     }

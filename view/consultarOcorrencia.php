@@ -22,8 +22,10 @@ $(document).ready(function() {
 <?php
     include ('database.php');
     include 'dao/OcorrenciaDaoPgsql.php';
+    include 'dao/EnderecoDaoPgsql.php';
 
     $ocorrenciadao = new OcorrenciaDaoPgsql($pdo);
+    $enderecodao = new EnderecoDaoPgsql($pdo);
     
     $pesquisa_ocorrencia = addslashes($_POST['pesquisa_ocorrencia']);
 
@@ -46,9 +48,9 @@ $(document).ready(function() {
                 $parametro = 'ativo_encerrada_true';
             }
         }
-    
-
         $consulta_ocorrencias= $ocorrenciadao->buscarConsulta($parametro);
+
+
     }   
 ?>
 
@@ -70,8 +72,9 @@ $(document).ready(function() {
             <thead><tr>
                 <th><!--<span class="glyphicon glyphicon-fullscreen"></span>--></th>
                 <th>ID</th>
-                <th>Cobrade</th>
+                <th>Titulo</th>
                 <th>Descrição</th>
+                <th>Endereço</th>
                 <th>Solicitante</th>
                 <th>Agente</th>
                 <th>Data</th>
@@ -82,6 +85,12 @@ $(document).ready(function() {
                     echo '<tr><td colspan="5" class="text-center">Nenhuma ocorrência encontrada.</td></tr>';
                 }
                     foreach($consulta_ocorrencias as $item){
+
+                        if($item->getEnderecoPrincipal() == 'Logradouro'){
+                            $linhaEndereco = $enderecodao->buscarPeloId($item->getLogradouroid());
+                        }else{
+                            $linhaEndereco = $enderecodao->buscarIdCoordenada($item->getIdCoordenada());
+                        }
                     if($item->getPrioridade() == "Alta")
                         echo '<tr style="background-color:#ff5050;">';
                     else if($item->getPrioridade() == "Média")
@@ -90,8 +99,11 @@ $(document).ready(function() {
                         echo '<tr style="background-color: #88ff50;">';
                     echo '<td class="text-center"><a href="index.php?pagina=exibirOcorrencia&id='.$item->getId().'"><span class="glyphicon glyphicon-eye-open"></span></a></td>';
                     echo '<td>'.$item->getId().'</td>';
-                    echo '<td>'.$item->getCobrade().'</td>';
+                    echo '<td>' . $item->getTitulo() . '</td>';
                     echo '<td>' .$item->getDescricao(). '</td>';
+                    if($item->getEnderecoPrincipal() == 'Logradouro'){ 
+                        echo '<td>'. strtolower(ucwords($linhaEndereco->getLogradouro())) . ', ' . $linhaEndereco->getNumero() ;}
+                        else{echo 'Coordenada' .'</td>';}
                     echo '<td>'.$item->getPessoa1().'</td>';
                     echo '<td class="elimina-tabela">'.$item->getNomeAgentePrincipal().'</td>';
                     echo '<td>'.$item->getData().'</td></tr>';

@@ -45,7 +45,9 @@
     </form>
     <form action="excluir_usuario.php" method="post" onsubmit="return confirm('Você realmente deseja excluir o usuário?');">
         <input type="hidden" name="id" value="<?php echo $id_usuario; ?>">
+        <?php if(strcmp($id_usuario,$_SESSION['id_usuario']) != 0){ ?> 
         <input type="submit" value="Excluir" class="btn btn-default">
+        <?php } ?>
     </form>
     <?php }?>
     </div>

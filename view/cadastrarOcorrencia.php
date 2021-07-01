@@ -46,14 +46,14 @@
         <?php if(isset($_POST['id_chamado'])){ ?>
         <hr>
             <div>
-                Número do chamado:
+                <label>Número do chamado:</label>
                 <input name="id_chamado" type="hidden" class="form-control" style="width:25%;" value="<?php echo $_POST['id_chamado']; ?>" pattern="[0-9]+" title="Apenas números">
                 <span><?php echo $_POST['id_chamado']; ?></span>
             </div>
             <?php } ?>
         <hr>
             <div>
-                Localizar por: <span style="color:red;">*</span>
+                <label>Localizar por:</label> <span style="color:red;">*</span>
                 <br>
                 <label for="endereco_principal"></label>
                 <select name="endereco_principal" class="form-control endereco-principal" ng-model="sel_endereco" ng-init="sel_endereco='<?php if(isset($_POST['endereco_principal'])){echo $_POST['endereco_principal'];}else{echo 'Logradouro';} ?>'" required>
@@ -64,11 +64,11 @@
             <div ng-show="sel_endereco == 'Coordenada'">
                 <div class="row">
                     <div class="col-sm-4">
-                        <span>Latitude: <span style="color:red;">*</span>
+                       <label>Latitude:</label> <span style="color:red;">*</span>
                         <input id="latitude" name="latitude" type="text" class="form-control" value="<?php echo $_POST['latitude']; ?>" pattern="[-+]?\d*\.?\d*" title="Apenas números, separados por ponto" ng-required="sel_endereco=='Coordenada'">
                     </div>
                     <div class="col-sm-4">
-                        <span>Longitude: <span style="color:red;">*</span>
+                        <label>Longitude:</label> <span style="color:red;">*</span>
                         <input id="longitude" name="longitude" type="text" class="form-control" value="<?php echo $_POST['longitude']; ?>" pattern="[-+]?\d*\.?\d*" title="Apenas números, separados por ponto" ng-required="sel_endereco=='Coordenada'">
                     </div>
                     <div class="col-sm-4">
@@ -80,12 +80,12 @@
             <div ng-show="sel_endereco == 'Logradouro'">
                 <div class="row">
                     <div class="col-sm-4">
-                        <span>CEP:</span>
+                        <label>CEP:</label>
                         <input id="cep" name="cep" type="text" autocomplete="off" class="form-control" ng-model="cep" maxlength="8" onchange="verificaCep(this.value)" <?php if($_POST['id_chamado']> 0){ ?> value=" <?php echo $_POST['cep']; } ?>">
                         <span id="erroCep" class="alertErro hide">CEP inválido.</span>
                     </div>
                     <div class="col-sm-8">
-                        <span>Cidade: </span><span style="color:red;">*</span>
+                        <label>Cidade:</label><span style="color:red;">*</span>
                         <!--<input id="cidade" name="cidade" type="text" class="form-control">-->
                         <select id="cidade" name="cidade" class="form-control">
                             <option value="Balneário Camboriú">Balneário Camboriú</option>
@@ -95,7 +95,7 @@
 
                 <div class="row">
                     <div class="col-sm-4">
-                        <span>Bairro: <span style="color:red;">*</span>
+                        <label>Bairro:</label> <span style="color:red;">*</span>
                         <!--<input id="bairro" name="bairro" type="text" class="form-control">-->
                         <select id="bairro" name="bairro" class="form-control" selec>
                             <option <?php if($_POST['bairro'] == 'Centro'){ echo 'selected';} ?> value="Centro">Centro</option>
@@ -120,7 +120,7 @@
                         </select>
                     </div>
                     <div class="col-sm-8">
-                        Logradouro: <span style="color:red;">*</span>
+                        <label>Logradouro:</label> <span style="color:red;">*</span>
                         <input id="logradouro" name="logradouro" type="text" class="form-control" ng-required="sel_endereco=='Logradouro'" <?php if($_POST['id_chamado'] > 0){ ?> value=" <?php echo $_POST['logradouro']; } ?>">
                         <?php if(isset($_GET['logradouro'])){ ?>
                             <span class="alertErro">Erro ao cadastrar logradouro.</span>
@@ -129,12 +129,18 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
-                        <span>Número: </span><span style="color:red;">*</span>
-                        <input id="complemento" name="complemento" type="text" class="form-control" ng-required="sel_endereco=='Logradouro'" <?php if($_POST['id_chamado'] > 0){ ?> value=" <?php echo $_POST['numero']; } ?>">
+                        <label>Número:</label><span style="color:red;">*</span>
+                        <input id="numero" name="numero" type="text" class="form-control" ng-required="sel_endereco=='Logradouro'" <?php if($_POST['id_chamado'] > 0){ ?> value=" <?php echo $_POST['numero']; } ?>">
                     </div>
                     <div class="col-sm-8">
-                        <span>Referência: </span>
-                        <input name="referencia" type="text" class="form-control" <?php if($_POST['id_chamado' != '']){ ?> value=" <?php echo $_POST['referencia']; } ?>">
+                        <label>Referência:</label>
+                        <input name="referencia" type="text" class="form-control" <?php if($_POST['id_chamado'] != ''){ ?> value="<?php echo $_POST['referencia']; } ?>">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                    <label>Complemento:</label>
+                    <input id="complemento" name="complemento" class="form-control" autocomplete="off" <?php if($_POST['id_chamado'] != ''){ ?> value="<?php echo $_POST['complemento']; } ?>">
                     </div>
                 </div>
             </div>
@@ -152,7 +158,7 @@
                 <span style="font-weight: bold;">Agente Principal:</span> <span><?php  echo $agente_principal->getNome();   ?></span>
             </div>
             <div>
-                Agente de apoio 1:
+                <label>Agente de apoio 1:</label>
                 <input id="agente_apoio_1" name="agente_apoio_1" autocomplete="off" type="text" class="form-control" onkeyup="showResult(this.value,this.id)">
                 <div class="autocomplete" id="livesearchagente_apoio_1"></div>
             </div>
@@ -160,7 +166,7 @@
                 <span class="alertErro">Agente não encontrado.</span>
             <?php } ?>
             <div>
-                Agente de apoio 2:
+                <label>Agente de apoio 2:</label>
                 <input id="agente_apoio_2" name="agente_apoio_2" autocomplete="off" type="text" class="form-control" onkeyup="showResult(this.value,this.id)">
                 <div class="autocomplete" id="livesearchagente_apoio_2"></div>
             </div>
@@ -169,24 +175,25 @@
             <?php } ?>
         <hr>
             <div>
-                <span>Data de ocorrência: </span><span style="color:red;">*</span>
+                <label>Data de ocorrência:</label><span style="color:red;">*</span>
                 <br>
                 <input id="data_ocorrencia" name="data_ocorrencia"  type="date" class="form-control data" value="<?php if($_POST['data_ocorrencia']==""){echo date("Y-m-d");}else{echo $_POST['data_ocorrencia'];} ?>" max="<?php echo date('Y-m-d'); ?>" required>
             </div>
             <div>
-                Título: <span style="color:red;">*</span>
+                <label>Título:</label> <span style="color:red;">*</span>
                 <textarea id="titulo" name="titulo" autocomplete="off" class="form-control titulobox" cols="30" rows="2" maxlength="120" ng-model="tituloVal" ng-init="tituloVal='<?php echo $_POST['titulo']; ?>'" required></textarea>
                 <span class="char-count">{{tituloVal.length || 0}}/100</span>
             </div>
             <div>
-                Descrição: <span style="color:red;">*</span>
+                <label>Descrição:</label> <span style="color:red;">*</span>
                 <textarea id="descricao" name="descricao"  autocomplete="off" class="form-control" cols="30" rows="15" required><?php echo $_POST['descricao']; ?></textarea>
             </div>
             <div>
                 <?php if($_POST['ocorr_origem'] == ""){ ?>
-                    Origem: <span style="color:red;">*</span>
+                   <label>Origem:</label> <span style="color:red;">*</span>
                     <select name="ocorr_origem" class="form-control" ng-model="sel_origem" ng-init="sel_origem='Telefone Base'" required>
                     <option value="Telefone Base">Telefone Base</option>
+                    <option value="Base">Base</option>
                     <option value="Ouvidoria">Ouvidoria</option>
                     <option value="199">199</option>
                     <option value="Secretaria de Obras">Secretaria de Obras</option>
@@ -196,7 +203,7 @@
                     </select>
 
                     <div ng-show="sel_origem == 'Outro'">
-                    Descrição Origem:
+                    <label>Descrição Origem:</label>
                     <input type="text" name="ocorr_origem2" class="form-control">
                     </div>
                 <?php } else { ?>
@@ -206,7 +213,7 @@
         <hr>
             <div class="row">
                 <div class="col-sm-12">
-                    <span>Solicitante 1:</span>
+                    <label>Solicitante 1:</label>
                     <span id="alertpessoasucesso" class="alert-sucess" style="color: greenyellow;"></span>
                     <input id="pessoa_atendida_1" name="pessoa_atendida_1" autocomplete="off" type="text" class="form-control inline" style="width:93%;" value="<?php echo $_POST['pessoa1']; echo $pessoa_atendida_1; echo $_POST['pessoa_atendida_1']; ?>" onkeyup="showResult(this.value,this.id)" >
                     <button type="button" class="btn-default btn-small inline" data-toggle="modal" data-target="#pessoasModal"><span class="glyphicon glyphicon-plus"></span></button>
@@ -226,7 +233,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <span>Solicitante 2:</span>
+                    <label>Solicitante 2:</label>
                     <input id="pessoa_atendida_2" name="pessoa_atendida_2" autocomplete="off" type="text" class="form-control inline" style="width:93%;" value="<?php echo $_POST['pessoa1']; echo $pessoa_atendida_1; ?>" onkeyup="showResult(this.value,this.id)">
                     <button type="button" class="btn-default btn-small inline" data-toggle="modal" data-target="#pessoasModal"><span class="glyphicon glyphicon-plus"></span></button>
                     <div class="autocomplete" id="livesearchpessoa_atendida_2"></div>
@@ -245,20 +252,20 @@
             </div>
         <hr>
             <div>
-                Cobrade: <span style="color:red;">*</span>
+                <label>Cobrade:</label> <span style="color:red;">*</span>
                 <?php if(isset($_GET['cobrade'])){ ?>
                     <br><span class="alertErro">
                         Cobrade incorreto.
                     </span>
                 <?php } ?>
                 <div class="cobrade">
-                    Categoria: <br>
+                    <label>Categoria:</label> <br>
                     <select name="cobrade_categoria" class="form-control cobrade-sub" ng-model="categoria">
                         <option value="1">Naturais</option>
                         <option value="2">Tecnológicos</option>
                         <option value="0">Sem Cobrade</option>
                     </select>
-                    Grupo: <br>
+                    <label>Grupo:</label> <br>
                     <select name="cobrade_grupo" class="form-control cobrade-sub" ng-model="grupo" ng-disabled="categoria == 0">
                         <option ng-if="categoria==1" value="1">Geológico</option>
                         <option ng-if="categoria==1" value="2">Hidrológico</option>
@@ -271,7 +278,7 @@
                         <option ng-if="categoria==2" value="4">Desastres relacionados a obras civis</option>
                         <option ng-if="categoria==2" value="5">Desastres relacionados a transporte de passageiros e cargas não perigosas</option>
                     </select>
-                    Subgrupo: <br>
+                    <label>Subgrupo:</label> <br>
                     <select name="cobrade_subgrupo" class="form-control cobrade-sub" ng-model="subgrupo" ng-disabled="grupo == 0 || categoria == 0">
                         <option ng-if="grupo==1&&categoria==1" value="1">Terremoto</option>
                         <option ng-if="grupo==1&&categoria==1" value="2">Emanação vulcânica</option>
@@ -302,7 +309,7 @@
                         <option ng-if="grupo==5&&categoria==2" value="4">Transporte marítimo</option>
                         <option ng-if="grupo==5&&categoria==2" value="5">Transporte aquaviário</option>
                     </select>
-                    Tipo: <br>
+                    <label>Tipo:</label> <br>
                     <select name="cobrade_tipo" class="form-control cobrade-sub" ng-model="tipo" ng-disabled="subgrupo==0 || categoria == 0">
                         <option ng-if="subgrupo==1&&grupo==1&&categoria==1" value="1">Tremor de terra</option>
                         <option ng-if="subgrupo==1&&grupo==1&&categoria==1" value="2">Tsunami</option>
@@ -349,7 +356,7 @@
                         <option ng-if="grupo==4&&categoria==2" value="0"></option>
                         <option ng-if="grupo==5&&categoria==2" value="0"></option>
                     </select>
-                    Subtipo: <br>
+                    <label>Subtipo:</label> <br>
                     <select name="cobrade_subtipo" class="form-control cobrade-sub" ng-model="subtipo" ng-disabled="tipo==0 || categoria==2 || categoria == 0">
                         <option ng-if="subgrupo==1&&grupo==1&&categoria==1" value="0"></option>
                         <option ng-if="subgrupo==2&&grupo==1&&categoria==1" value="0"></option>
@@ -394,13 +401,13 @@
             </div>
             <br>
             <div>
-                Fotos:
+                <label>Fotos:</label>
                 <input id="imgInp" name="files[]" type="file" multiple="multiple" accept="image/png,image/jpeg">
             </div>
             <div class="gallery"></div>
         <hr>
             <div>
-                Prioridade: <span style="color:red;">*</span>
+                <label>Prioridade:</label> <span style="color:red;">*</span>
                 <label for="prioridade"></label>
                 <select name="prioridade" class="form-control" style="width:30%;" required>
                     <option value="Baixa">Baixa</option>
@@ -420,7 +427,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 class="modal-title">Cadastrar pessoa</h5>
+                    <h4 class="modal-title">Cadastrar pessoa</h4>
                 </div>
                 <form method="post">
                     <div class="modal-body">
@@ -428,36 +435,36 @@
                             <input id="id_pessoa" type="hidden" value="">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    Nome: <span style="color:red;">*</span>
+                                    <label>Nome:</label> <span style="color:red;">*</span>
                                     <input id="nome_pessoa" name="nome_pessoa" type="text" class="form-control" onchange="verificaNome(this.value)">
                                 </div>
                             </div>   
                             <span id="erroNome" class="alertErro hide">Nome inválido.</span>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    CPF:
+                                    <label>CPF:</label>
                                     <input id="cpf_pessoa" name="cpf_pessoa" type="text" class="form-control" onchange="verificaCpf(this.value)">
                                     <span id="erroCpf" class="alertErro hide">CPF inválido.</span>
                                 </div>
                                 <div class="col-sm-6">
-                                    Outros documentos:
+                                    <label>Outros documentos:</label>
                                     <input id="outros_documentos" name="outros_documentos" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    Celular: 
+                                    <label>Celular: </label>
                                     <input id="celular_pessoa" name="celular_pessoa" type="text" class="form-control" pattern="\([0-9]{2}\)[\s][0-9]{4,5}-[0-9]{4}" title="(XX) XXXXX-XXXX" onchange="verificaCelular(this.value)">
                                     <span id="erroCelular" class="alertErro hide">Celular inválido.</span>
                                 </div>
                                 <div class="col-sm-6">
-                                    Fixo: 
+                                    <label>Fixo:</label> 
                                     <input id="telefone_pessoa" name="telefone_pessoa" type="text" class="form-control" pattern="\([0-9]{2}\)\s[0-9]{4}\-[0-9]{4}" title="(XX) XXXX-XXXX" onchange="verificaTelefone(this.value)">
                                     <span id="erroTelefone" class="alertErro hide">Telefone inválido.</span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                Email:
+                                <label>Email:</label>
                                 <input id="email_pessoa" name="email_pessoa" type="email" class="form-control" onchange="verificaEmail(this.value)">
                             </div>
                             <span id="erroEmail" class="alertErro hide">Email inválido.</span>

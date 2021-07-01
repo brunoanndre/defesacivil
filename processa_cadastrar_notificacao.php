@@ -18,6 +18,7 @@
     $data_emissao = filter_input(INPUT_POST, 'data_emissao');
     $notificado = filter_input(INPUT_POST, 'notificado');
     $notificante = filter_input(INPUT_POST, "notificante");
+    $dataVencimento = filter_input(INPUT_POST, 'data_vencimento');
 
 
     $linhaEndereco = $enderecodao->buscarPeloId($id_endereco);
@@ -56,6 +57,7 @@
         $n->setDataEmissao($data_emissao);
         $n->setNotificado($notificado);
         $n->setRepresentante($notificante);
+        $n->setDataVencimento($dataVencimento);
 
 
         $id_notificacao = $notificacaodao->adicionar($n);

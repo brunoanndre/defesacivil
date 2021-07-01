@@ -36,41 +36,81 @@
             </div>
             <h3 class="text-center">Registro de interdição</h3>
         </div>
-    <div class="box">
+        <div class="box">
         <nav>
-        <h4>Dados ocorrência:</h4>
+        <h4>Dados da ocorrência:</h4>
         </nav>
         <div class="row">
-            <div class="col-sm-4"><span class="titulo">Nº ocorrência: </span><span><?php echo $linhaOcorrencia->getId(); ?></span></div>
-            <div class="col-sm-8"><span class="titulo">Título: </span><span><?php echo $linhaOcorrencia->getTitulo(); ?></span></div>
-        </div><hr>
-        <div>
-            <span class="titulo">Endereço principal: </span><span ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?>'"><?php echo $_POST['endereco_principal']; ?></span>
+            <div class="col-sm-6">
+                <label>Nº da ocorrência:</label>
+                <a href="index.php?pagina=exibirOcorrencia&id=<?php echo $id_ocorrencia; ?> "><?php echo  $id_ocorrencia ?></a>                
+            </div>
+            <div class="col-sm-6">
+                <label>Data da ocorrência: </label><span><?php echo ' ' . date('d/m/Y',strtotime($linhaOcorrencia->getData())) ?></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <label>Titulo da ocorrência:</label>
+                <input class="form-control" readonly value="<?php echo $linhaOcorrencia->getTitulo(); ?>">
+            </div>
+        </div>
+        <div class="hidden">
+            <span class="titulo">Localizar por: </span>
+            <span ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?>'"><?php echo $linhaOcorrencia->getEnderecoPrincipal(); ?></span>
             <br>
         </div>
+    </div>
+    <div class="box">
+        <h4>Endereço</h4>
         <div ng-show="sel_endereco == 'Coordenada'">
             <div class="row">
-                <div class="col-sm-6">
-                    <span class="titulo">Latitude: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Coordenada'){ echo $linhaCoordenada->getLatitude();} ?></span>
+                <div class="col-sm-5">
+                    <span class="titulo">Latitude: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Coordenada'){ echo $linhaCoordenada->getLatitude(); } ?></span>
                 </div>
-                <div class="col-sm-6">
-                    <span class="titulo">Longitude: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Coordenada'){ echo $linhaCoordenada->getLatitude();} ?></span>
+                <div class="col-sm-5">
+                    <span class="titulo">Longitude: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Coordenada'){ echo $linhaCoordenada->getLongitude(); } ?></span>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn-default btn-small inline open-AddBookDialog" data-toggle="modal" data-id="map"><span class="glyphicon glyphicon-map-marker"></span></button>
                 </div>
             </div>
         </div>
         <div ng-show="sel_endereco == 'Logradouro'">
             <div class="row">
-                <div class="col-sm-3"><span class="titulo">CEP: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getCep();} ?></span></div>
-                <div class="col-sm-6"><span class="titulo">Logradouro: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getLogradouro();} ?></span></div>
-                <div class="col-sm-3"><span class="titulo">Número: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getNumero();} ?></span></div>
+                <div class="col-sm-6">
+                    <label>Cidade:</label><input class="form-control " readonly value="<?php echo $linhaLogradouro->getCidade(); ?>"> 
+
+                </div>
+                <div class="col-sm-6">
+                    <label >Bairro:</label><input class="form-control " readonly value="<?php echo $linhaLogradouro->getBairro(); ?>">
+                </div>
             </div>
             <div class="row">
-                <div class="col-sm-3"><span class="titulo">Bairro: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getBairro();} ?></span> </div>
-                <div class="col-sm-6"><span class="titulo">Cidade: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getCidade();} ?></span></div>
+                <div class="col-sm-6">
+                <label >CEP:</label><input class="form-control " readonly value="<?php echo $linhaLogradouro->getCep(); ?>">
+                </div>
+                <div class="col-sm-6">
+                <label>Endereço:</label>
+                <input class="form-control " readonly value="<?php echo $linhaLogradouro->getLogradouro(); ?>">
+                </div>
             </div>
-            <div>
-                <span class="titulo">Referência: </span><span><?php if($linhaOcorrencia->getEnderecoPrincipal() == 'Logradouro'){echo $linhaLogradouro->getReferencia();} ?></span>
-            </div><br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>Número:</label>
+                    <input class="form-control" readonly value="<?php echo $linhaLogradouro->getNumero(); ?>">
+                </div>
+                <div class="col-sm-6">
+                    <label>Referência:</label>
+                    <input class="form-control" readonly value="<?php echo $linhaLogradouro->getReferencia(); ?>">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label>Complemento:</label>
+                    <input class="form-control" readonly value="<?php echo $linhaLogradouro->getComplemento(); ?>">
+                </div>
+            </div>
         </div>
     </div>
     <form method="post" action="processa_cadastrar_interdicao.php" onsubmit="return validarFormCadastroInterdicao()">
@@ -101,11 +141,11 @@
             </div>
             <div>
                 Descrição da interdição: <span style="color:red;">*</span>
-                <textarea name="descricao_interdicao" class="form-control" cols="30" rows="2" maxlength="120" required></textarea>
+                <textarea name="descricao_interdicao" class="form-control" cols="30"  required></textarea>
             </div>
             <div>
                 Danos aparentes: <span style="color:red;">*</span>
-                <textarea name="danos_aparentes" class="form-control" cols="30" rows="2" maxlength="120" required></textarea>
+                <textarea name="danos_aparentes" class="form-control" cols="30" required></textarea>
             </div>
             <div class="row">
                 <div class="col-sm-4">

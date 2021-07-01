@@ -14,32 +14,33 @@ $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
 $enderecodao = new EnderecoDaoPgsql($pdo);
 
 //recebe dados do $_POST
-$chamado_id = addslashes($_POST['id_chamado']);
-$endereco_principal = addslashes($_POST['endereco_principal']);
-$longitude = addslashes($_POST['longitude']);
-$latitude = addslashes($_POST['latitude']);
-$cep = addslashes($_POST['cep']);
-$cidade = addslashes($_POST['cidade']);
-$bairro = addslashes($_POST['bairro']);
-$logradouro = addslashes($_POST['logradouro']);
-$numero = addslashes($_POST['complemento']);
-$referencia = addslashes($_POST['referencia']);
+$chamado_id = filter_input(INPUT_POST, 'id_chamado');
+$endereco_principal = filter_input(INPUT_POST, 'endereco_principal');
+$longitude = filter_input(INPUT_POST, 'longitude');
+$latitude = filter_input(INPUT_POST, 'latitude');
+$cep = filter_input(INPUT_POST, 'cep');
+$cidade = filter_input(INPUT_POST, 'cidade');
+$bairro = filter_input(INPUT_POST, 'bairro');
+$logradouro = filter_input(INPUT_POST, 'logradouro');
+$numero = filter_input(INPUT_POST, 'numero');
+$complemento = filter_input(INPUT_POST, 'complemento');
+$referencia = filter_input(INPUT_POST, 'referencia');
 //$agente_principal = addslashes($_POST['agente_principal']);
-$agente_apoio_1 = addslashes($_POST['agente_apoio_1']);
-$agente_apoio_2 = addslashes($_POST['agente_apoio_2']);
-$data_ocorrencia = addslashes($_POST['data_ocorrencia']);
-$titulo = addslashes($_POST['titulo']);
-$descricao = addslashes($_POST['descricao']);
-$ocorr_origem = addslashes($_POST['ocorr_origem']);
-$nome_pessoa1 = addslashes($_POST['pessoa_atendida_1']);
-$nome_pessoa2 = addslashes($_POST['pessoa_atendida_2']);
-$cobrade_categoria = $_POST['cobrade_categoria'];
-$cobrade_grupo = $_POST['cobrade_grupo'];
-$cobrade_subgrupo = $_POST['cobrade_subgrupo'];
-$cobrade_tipo = $_POST['cobrade_tipo'];
-$cobrade_subtipo = $_POST['cobrade_subtipo'];
-$prioridade = addslashes($_POST['prioridade']);
-$id_coordenada = $_POST['id_coordenada'];
+$agente_apoio_1 = filter_input(INPUT_POST, 'agente_apoio_1');
+$agente_apoio_2 = filter_input(INPUT_POST, 'agente_apoio_2');
+$data_ocorrencia = filter_input(INPUT_POST, 'data_ocorrencia');
+$titulo = filter_input(INPUT_POST, 'titulo');
+$descricao = filter_input(INPUT_POST, 'descricao');
+$ocorr_origem = filter_input(INPUT_POST, 'ocorr_origem');
+$nome_pessoa1 = filter_input(INPUT_POST, 'pessoa_atendida_1');
+$nome_pessoa2 = filter_input(INPUT_POST, 'pessoa_atendida_2');
+$cobrade_categoria = filter_input(INPUT_POST, 'cobrade_categoria');
+$cobrade_grupo = filter_input(INPUT_POST, 'cobrade_grupo');
+$cobrade_subgrupo = filter_input(INPUT_POST, 'cobrade_subgrupo');
+$cobrade_tipo = filter_input(INPUT_POST, 'cobrade_tipo');
+$cobrade_subtipo = filter_input(INPUT_POST, 'cobrade_subtipo');
+$prioridade = filter_input(INPUT_POST, 'prioridade');
+$id_coordenada = filter_input(INPUT_POST, 'id_coordenada');
 
 $ativo = true;
 if($ocorr_origem == 'Outro'){
@@ -123,6 +124,7 @@ if ($endereco_principal == "Logradouro") {
 		$novoEndereco->setLogradouro($logradouro);
 		$novoEndereco->setNumero($numero);
 		$novoEndereco->setReferencia($referencia);
+		$novoEndereco->setComplemento($complemento);
 
 		$logradouro_id = $enderecodao->adicionar($novoEndereco);
 

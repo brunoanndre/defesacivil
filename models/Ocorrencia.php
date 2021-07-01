@@ -180,7 +180,7 @@ class Ocorrencia{
         return $this->origem;
     }
     public function setOrigem($o){
-        $this->origem = trim($o);
+        $this->origem = ucwords(trim($o));
     }
 
     public function getIdPessoa1(){

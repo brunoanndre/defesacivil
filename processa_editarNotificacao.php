@@ -19,11 +19,28 @@
     $representante = filter_input(INPUT_POST, 'representante');
     $notificado = filter_input(INPUT_POST, 'notificado');
     $descricao = filter_input(INPUT_POST, 'descricao');
+    $data_vencimento = filter_input(INPUT_POST, 'data_vencimento');
+    $complemento = filter_input(INPUT_POST, 'complemento');
+    
+    $base64_array = array();
 
+    foreach ($_FILES["files"]["tmp_name"] as $key => $tmp_name) {
+        $temp = $_FILES["files"]["tmp_name"][$key];
+
+        if (empty($temp))
+            break;
+
+        $binary = file_get_contents($temp);
+        $base64 = base64_encode($binary);
+        array_push($base64_array, $base64);
+    }
+
+    $pg_array = '{' . join(',', $base64_array) . '}';
+
+    
     $linhaEndereco = $enderecodao->buscarPeloId($id_endereco);
 
     $id_representante = $usuariodao->buscarPeloNome($representante)->getId();
-
 
     if($cidade && $bairro && $logradouro && $numero && $descricao){
         if($linhaEndereco->getCidade() == $cidade && $linhaEndereco->getBairro() == $bairro && $linhaEndereco->getLogradouro() == $logradouro && $linhaEndereco->getNumero() == $numero){
@@ -32,7 +49,6 @@
             $novoEndereco = true;
         }
 
-        
         if($novoEndereco == true){
             $e = New Endereco;
             $e->setCidade($cidade);
@@ -40,23 +56,29 @@
             $e->setLogradouro($logradouro);
             $e->setNumero($numero);
             $e->setReferencia($referencia);
+            $e->setComplemento($complemento);
 
            $id_endereco =  $enderecodao->adicionar($e);
+           
+
         }
     }else{
         $erros = '&campos';
     }
 
+
     if(strlen($erros) > 0){
         header('Location:index.php?pagina=exibirNotificacao&id='.$id_notificacao.$erros);
     }else{
         $n = New Notificacao;
-        $n->setId($id_notificacao);
+        $n->setId($id_notificacao);   
         $n->setIdEndereco($id_endereco);
         $n->setDescricao($descricao);
-        $n->setDataEmissao($data_emissao);
+        $n->setDataEmissao($data_emissao); 
         $n->setRepresentante($id_representante);
         $n->setNotificado($notificado);
+        $n->setDataVencimento($data_vencimento);
+        $n->setDocumentoAssinado($pg_array);
 
         if($notificacaodao->editar($n)){
             header('Location:index.php?pagina=exibirNotificacao&id='. $id_notificacao . '&sucessoEdit');

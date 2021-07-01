@@ -8,8 +8,11 @@
     $ocorrenciadao = New OcorrenciaDaoPgsql($pdo);
     $interdicaodao = New IntedicaoDaoPgsql($pdo);
     $id_interdicao = $_GET['id'];
-
-    $linha = $interdicaodao->buscarInterdicaoEOcorrencia($id_interdicao);
+    try{
+        $linha = $interdicaodao->buscarInterdicaoEOcorrencia($id_interdicao);
+    }catch(PDOException $e){
+        echo $e->getMessage();
+    }
 
     if($linha['ocorr_endereco_principal'] == 'Logradouro'){
         $id_logradouro = $linha['ocorr_logradouro_id'];
@@ -18,9 +21,104 @@
         $id_coordenada = $ocorrenciadao->buscarPeloId($linha['id_coordenada']);
         $linhaCoordenada = $enderecodao->buscarIdCoordenada($id_coordenada);
     }
+
 ?>
 
-<div class="container positioning">
+<div class="printAreaInterdicao printShow">
+    <div class="printHeaderNotificacao row">
+        <div class="divHeaderNotificacaoTexto">
+            <p class="pMarg">Estado de Santa Catarina</p>
+            <p class="pMarg">Prefeitura de Balneário Camboriú</p>
+            <p class="pMarg">Defesa Civil</p>
+        </div>
+        <div></div>
+        <div class="imgPrintAreaNotificacao">
+            <img src="images/logo_bc.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho" style="width: 180px;">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 borderPrint100 text-center">
+            <h3 class=""><?php echo 'Interdição Nº ' . $id_interdicao . '/' . date('Y'); ?></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 borderPrint">
+            <h5><strong>Rua:</strong></h5>
+            <?php echo $linhaLogradouro->getLogradouro() ?>
+        </div>
+        <div class="col-sm-10 borderPrint">
+            <h5><strong>Número:</strong></h5>
+            <?php echo $linhaLogradouro->getNumero(); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 borderPrint">
+            <h5><strong>Bairro:</strong></h5> <?php echo $linhaLogradouro->getBairro();?>
+        </div>
+        <div class="col-sm-10 borderPrint">
+            <h5><strong>Localidade:</strong></h5> <?php echo $linhaLogradouro->getCidade(); ?>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-10 borderPrint100">
+            <h5><strong>Ocorrência:</strong></h5>
+            <?php echo $linha['id_ocorrencia'] . ' - ' . $linha['ocorr_titulo'];  ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 borderPrint">
+            <h5><strong>Data:</strong></h5>
+            <?php echo date('d/m/Y', strtotime($linha['data_hora'])); ?>
+        </div>
+        <div class="col-sm-10 borderPrint">
+            <h5><strong>Tipo de interdição:</strong></h5>
+            <?php echo $linha['tipo']; ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 borderPrint">
+            <h5><strong>Motivo:</strong></h5>
+            <?php echo $linha['motivo']; ?>
+        </div>
+        <div class="col-sm-10 borderPrint">
+            <h5><strong>Bens afetados:</strong></h5>
+            <?php echo $linha['bens_afetados']; ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 borderPrint100 text-center">
+            <h4><strong>Descrição da Ocorrência </strong></h4>
+        </div>
+    </div>
+    <div class="row divDescricaoArea">
+        <p align="justify"><?php echo $linha['descricao_interdicao']; ?></p>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 borderPrint100 text-center">
+            <h4><strong>Danos aparentes</strong></h4>
+        </div>
+    </div>
+    <div class="row divDescricaoArea">
+        <p align="justify"><?php echo $linha['danos_aparentes']; ?></p>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 borderPrint100 text-center">
+            <h4><strong>Termo de Interdição</strong></h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 borderPrint">
+            <label><strong>Representante da Defesa Civil:</strong></label><br>
+        </div>
+        <div class="col-sm-10 borderPrint"><br>
+            <label><strong>Ass:</strong></label>
+        </div>
+    </div>
+</div>
+
+
+<div class="container positioning printHide">
 <div class="jumbotron campo_cadastro">
 <?php if(isset($_GET['sucesso'])){ ?>
             <div class="alert alert-success" role="alert">
@@ -32,33 +130,46 @@
                 Interdição alterada com sucesso.
             </div>
     <?php } ?>
-    <div class="box">
             <div class="row cabecalho">
-                <div class="col-sm-6 printHide">
+                <div class="col-sm-6">
                     <nav class="texto-cabecalho">Estado de Santa Catarina</nav>
                     <nav class="texto-cabecalho">Prefeitura de Balneário Camboriú</nav>
                     <nav class="texto-cabecalho">Secretaria de segurança</nav>
                     <nav class="texto-cabecalho">Defesa Civil</nav>
                 </div>
-                <div class="col-sm-6 print-interdicao-img">
-                    <img src="images/balneario-camboriu.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho">
+                <div class="col-sm-6">
+                    <img src="images/logo_bc.png" alt="prefeitura-balneario-camboriu" class="img-cabecalho">
                 </div>
             </div>
             <h3 class="text-center"><?php echo 'Interdição Nº ' . $id_interdicao . '/' . date('Y'); ?></h3>
-            <button class="printHide" style="background-color: white; border:none;" onclick="print()"><img src="images/print.png" style="width: 50px; height:auto"></button>
-        </div>
+            <button style="border:none;" onclick="print()"><img src="images/print.png" style="width: 50px; height:auto"></button>
     <div class="box">
         <nav>
-        <h4>Dados ocorrência:</h4>
+        <h4>Dados da ocorrência:</h4>
         </nav>
         <div class="row">
-            <div class="col-sm-4"><span class="titulo">Nº ocorrência: </span><span><?php echo $linha['id_ocorrencia']; ?></span></div>
-            <div class="col-sm-8"><span class="titulo">Título: </span><span><?php echo $linha['ocorr_titulo']; ?></span></div>
-        </div><hr>
-        <div>
-            <span class="titulo">Endereço principal: </span><span ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linha['ocorr_endereco_principal']; ?>'"><?php echo $linha['ocorr_endereco_principal']; ?></span>
+            <div class="col-sm-6">
+                <label>Nº da ocorrência:</label>
+                <a href="index.php?pagina=exibirOcorrencia&id= <?php echo $linha['id_ocorrencia']; ?> "><?php echo  $linha['id_ocorrencia'] ?></a>                
+            </div>
+            <div class="col-sm-6">
+                <label>Data da ocorrência:</label><span><?php echo $linha['data_ocorrencia']; ?></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <label>Titulo da ocorrência:</label>
+                <input class="form-control" readonly value="<?php echo $linha['ocorr_titulo']; ?>">
+            </div>
+        </div>
+        <div class="hidden">
+            <span class="titulo">Localizar por: </span>
+            <span ng-model="sel_endereco" ng-init="sel_endereco='<?php echo $linha['ocorr_endereco_principal']; ?>'"><?php echo $linha['ocorr_endereco_principal']; ?></span>
             <br>
         </div>
+    </div>
+    <div class="box">
+        <h4>Endereço</h4>
         <div ng-show="sel_endereco == 'Coordenada'">
             <div class="row">
                 <div class="col-sm-5">
@@ -74,40 +185,80 @@
         </div>
         <div ng-show="sel_endereco == 'Logradouro'">
             <div class="row">
-                <div class="col-sm-3"><span class="titulo">CEP: </span><span><?php echo $linhaLogradouro->getCep(); ?></span></div>
-                <div class="col-sm-6"><span class="titulo">Logradouro: </span><span><?php echo $linhaLogradouro->getLogradouro(); ?></span></div>
-                <div class="col-sm-3"><span class="titulo">Número: </span><span><?php echo $linhaLogradouro->getNumero(); ?></span></div>
+                <div class="col-sm-6">
+                    <label>Cidade:</label><input class="form-control " readonly value="<?php echo $linhaLogradouro->getCidade(); ?>"> 
+
+                </div>
+                <div class="col-sm-6">
+                    <label >Bairro:</label><input class="form-control " readonly value="<?php echo $linhaLogradouro->getBairro(); ?>">
+                </div>
             </div>
             <div class="row">
-                <div class="col-sm-5"><span class="titulo">Bairro: </span><span><?php echo $linhaLogradouro->getBairro(); ?></span> </div>
-                <div class="col-sm-5"><span class="titulo">Cidade: </span><span><?php echo $linhaLogradouro->getCidade(); ?></span></div>
+                <div class="col-sm-6">
+                <label >CEP:</label><input class="form-control " readonly value="<?php echo $linhaLogradouro->getCep(); ?>">
+                </div>
+                <div class="col-sm-6">
+                <label>Endereço:</label>
+                <input class="form-control " readonly value="<?php echo $linhaLogradouro->getLogradouro(); ?>">
+                </div>
             </div>
-            <div>
-                <span class="titulo">Referência: </span><span><?php echo $linhaLogradouro->getReferencia(); ?></span>
-            </div><br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>Número:</label>
+                    <input class="form-control" readonly value="<?php echo $linhaLogradouro->getNumero(); ?>">
+                </div>
+                <div class="col-sm-6">
+                    <label>Referência:</label>
+                    <input class="form-control" readonly value="<?php echo $linhaLogradouro->getReferencia(); ?>">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label>Complemento:</label>
+                    <input class="form-control" readonly value="<?php echo $linhaLogradouro->getComplemento(); ?>">
+                </div>
+            </div>
         </div>
     </div>
     <div class="box">
-        <nav>
-            <h4>Dados interdição:</h4>
-        </nav>
-        <div>
-            <span class="titulo">Nº interdição: </span><span><?php echo $linha['id_interdicao']; ?></span>
-        </div><hr>
-        <div>
-            <span class="titulo">Data e hora: </span>
-            <span><?php echo date("d/m/Y H:i", strtotime($linha['data_hora'])); ?></span><br>
-            <span class="titulo">Motivo: </span><span><?php echo $linha['motivo']; ?></span><br>
-            <span class="titulo">Descrição da interdição: </span><br>
-            <textarea name="descricao" rows="5" readonly class="readtextarea"><?php echo $linha['descricao_interdicao']; ?></textarea><br>
-            <span class="titulo">Danos aparentes: </span><br>
-            <textarea name="descricao" rows="5" readonly class="readtextarea"><?php echo $linha['danos_aparentes']; ?></textarea><br>
-            <span class="titulo">Bens afetados: </span><span><?php echo $linha['bens_afetados']; ?></span><br>
-            <span class="titulo">Tipo de interdição: </span><span><?php echo $linha['tipo']; ?></span><br>
-        </div><hr>
-        <div>
-            <span class="titulo">Status: </span><span><?php echo ($linha['interdicao_ativa'] == 't') ? 'Interditado':'Desinterditado'; ?></span>
+        <h4>Dados interdição:</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <label>Data e hora:</label>
+                <input class="form-control" readonly value="<?php echo date("d/m/Y H:i", strtotime($linha['data_hora'])); ?>">
+            </div>
+            <div class="col-sm-6">
+                <label>Motivo:</label>
+                <input class="form-control" readonly value="<?php echo $linha['motivo']; ?>">
+            </div>
         </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <label>Bens afetados:</label>
+                <input class="form-control" readonly value="<?php echo $linha['bens_afetados']; ?>">
+            </div>
+            <div class="col-sm-6">
+                <label>Tipo de interdição:</label>
+                <input class="form-control" readonly value="<?php echo $linha['tipo']; ?>">
+            </div>
+        </div>
+        <h4 class="text-center">Descrição da interdição</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <textarea id="descricao" name="descricao" readonly class="form-control " style="resize:none;" rows="10">
+                    <?php echo $linha['descricao_interdicao'];  ?>
+                </textarea>
+            </div>
+        </div><hr>
+        <h4 class="text-center">Danos aparentes</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <textarea id="descricao" name="descricao" readonly class="form-control " style="resize:none;" rows="10">
+                   <?php echo $linha['danos_aparentes'];?>
+                </textarea>
+            </div>
+        </div><hr>
+            <span class="titulo">Status: </span><span><?php echo ($linha['interdicao_ativa'] == 't') ? 'Interditado':'Desinterditado'; ?></span>
         <br>
     </div>
     <div class="modal fade" id="map" role="dialog">

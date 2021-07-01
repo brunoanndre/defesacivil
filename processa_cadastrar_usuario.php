@@ -6,13 +6,13 @@ require_once 'dao/UsuarioDaoPgsql.php';
 $usuarioDao = new UsuarioDaoPgsql($pdo);
 
 
-$nome = addslashes($_POST['nome']);
-$cpf = addslashes($_POST['cpf']);
-$telefone = addslashes($_POST['telefone']);
-$nivel_acesso = addslashes($_POST['nivel_acesso']);
+$nome = filter_input(INPUT_POST, 'nome');
+$cpf = filter_input(INPUT_POST, 'cpf');
+$telefone = filter_input(INPUT_POST, 'telefone');
+$nivel_acesso = filter_input(INPUT_POST, 'nivel_acesso');
 $email = filter_input(INPUT_POST, 'email_cadastro', FILTER_VALIDATE_EMAIL);
-$senha = ($_POST['senha_cadastro']);
-$senha_confirma = ($_POST['senha_cadastro_confirma']);
+$senha = filter_input(INPUT_POST, 'senha_cadastro'); 
+$senha_confirma = filter_input(INPUT_POST, 'senha_cadastro_confirma');
 $foto = $_FILES["foto"]["tmp_name"];
 
 if($foto != ''){

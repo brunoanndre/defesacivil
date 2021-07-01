@@ -18,6 +18,7 @@
         <th></th>
         <th>ID</th>
         <th>Data de emissão</th>
+        <th>Data de vencimento</th>
         <th>Notificado</th>
         <th>Endereço</th>
         </tr>
@@ -29,7 +30,8 @@
             echo '<tr>';
             echo '<td class="text-center"><a href="index.php?pagina=exibirNotificacao&id=' . $item->getId() .'"><span class="glyphicon glyphicon-eye-open"></span></a></td>';
             echo '<td> ' . $item->getId()  . ' </td>';
-            echo '<td> ' . $item->getDataEmissao()  . ' </td>';
+            echo '<td> ' .  date("d/m/Y", strtotime($item->getDataEmissao()))   . ' </td>';
+           if($item->getDataVencimento())  echo '<td>' . date("d/m/Y", strtotime($item->getDataVencimento())). '</td>'; else echo '<td></td>';
             echo '<td> ' . $item->getNotificado()  . ' </td>';
             echo '<td> ' . $endereco->getLogradouro() . ', ' . $endereco->getNumero() . ', ' .  $endereco->getBairro() . ' </td>';
             echo'</tr>';

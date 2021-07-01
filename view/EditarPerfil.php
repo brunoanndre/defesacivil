@@ -14,7 +14,8 @@ session_start();
         $sql->execute();
 
         $linha = $sql->fetch(); 
-    }?>
+    }
+    ?>
 
     <form method="post" action="processa_editar_perfil.php" enctype="multipart/form-data">
         <div class="box">

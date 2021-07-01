@@ -325,13 +325,12 @@ function SubmitFormData() {
     }
     xmlhttp.onreadystatechange=function() {
         if (this.readyState==4 && this.status==200) {
+            document.getElementById('pessoa_nome').value = nome_pessoa;
             this.responseText = 'Pessoa cadastrada com sucesso'
             document.getElementById('alertpessoasucesso').innerHTML=this.responseText;
-            if(this.responseText == 'Pessoa cadastrada com sucesso'){
-                document.getElementById(id).style.color="#00FF00";
-                document.getElementById(id_input).value = nome_pessoa;
-            }else
-                document.getElementById(id).style.color="#FF0000";
+            document.getElementById(id).style.color="#00FF00";
+
+
         }
     }
     xmlhttp.open("GET","processa_cadastrar_pessoa.php?nome_pessoa="+nome_pessoa+"&email_pessoa="+email_pessoa+"&celular_pessoa="+celular_pessoa+"&telefone_pessoa="+telefone_pessoa+"&cpf_pessoa="+cpf_pessoa+"&outros_documento="+outros_documentos,true);
@@ -736,4 +735,8 @@ function habilitarEdicaoNotificacao(){
     document.querySelector('#descricao').removeAttribute('readonly')
     document.querySelector('#representante').removeAttribute('disabled')
     document.querySelector('#notificado').removeAttribute('readonly')
+    document.querySelector('#data_vencimento').removeAttribute('readonly')
+    document.querySelector('#complemento').removeAttribute('readonly')
+    document.querySelector('#areaDocumentoAssinado').classList.remove('hidden');
 }
+

@@ -4,12 +4,12 @@
 
     $pessoadao = new PessoaDaoPgsql($pdo);
 
-    $nome = addslashes($_GET['nome_pessoa']);
-    $cpf = addslashes($_GET['cpf_pessoa']);
-    $outros_documentos = addslashes($_GET['outros_documentos']);
-    $celular = addslashes($_GET['celular_pessoa']);
-    $telefone = addslashes($_GET['telefone_pessoa']);
-    $email = addslashes($_GET['email_pessoa']);
+    $nome = filter_input(INPUT_GET, 'nome_pessoa');
+    $cpf = filter_input(INPUT_GET, 'cpf_pessoa');
+    $outros_documentos = filter_input(INPUT_GET, 'outros_documentos');
+    $celular = filter_input(INPUT_GET, 'celular_pessoa');
+    $telefone = filter_input(INPUT_GET, 'telefone_pessoa');
+    $email = filter_input(INPUT_GET, 'email_pessoa');
 
     if($nome != null){
         $response = 'Pessoa cadastrada com sucesso';

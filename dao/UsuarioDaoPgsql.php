@@ -30,8 +30,8 @@ class UsuarioDaoPgsql implements UsuarioDAO {
 
     public function addUsuario(Usuario $u){
         
-        $sql = $this->pdo->prepare("INSERT INTO usuario (id_usuario, nome, cpf, telefone, nivel_acesso,foto) 
-		VALUES (:id, :nome, :cpf, :telefone, :acesso, :foto)");
+        $sql = $this->pdo->prepare("INSERT INTO usuario (id_usuario, nome, cpf, telefone, nivel_acesso,foto,ativo) 
+		VALUES (:id, :nome, :cpf, :telefone, :acesso, :foto, 'true')");
         $sql->bindValue(":id", $u->getId());
         $sql->bindValue(":nome", $u->getNome());
         if($u->getCPF() != null || $u->getCPF() != '' ){
@@ -62,15 +62,14 @@ class UsuarioDaoPgsql implements UsuarioDAO {
     public function findAll(){
         $array = [];
 
-        $sql = $this->pdo->query("SELECT dl.id_usuario,dl.email,u.nome,u.telefone FROM dados_login dl
-        INNER JOIN usuario U ON dl.id_usuario = u.id_usuario WHERE ativo = true
-        ORDER BY id_usuario");
+        $sql = $this->pdo->query("SELECT *, u.id_usuario as id FROM usuario u 
+        INNER JOIN dados_login dl ON u.id_usuario = dl.id_usuario WHERE u.ativo = true ORDER BY id");
         if($sql->rowCount() > 0){
             $lista = $sql->fetchAll(PDO::FETCH_ASSOC);
 
             foreach($lista as $item){
                 $u = new Usuario();
-                $u->setId($item['id_usuario']);
+                $u->setId($item['id']);
                 $u->setNome($item['nome']);
                 $u->setEmail($item['email']);
                 $u->setTelefone($item['telefone']);
@@ -110,7 +109,7 @@ class UsuarioDaoPgsql implements UsuarioDAO {
 
     public function findById($id){
         $sql = $this->pdo->prepare("SELECT * FROM usuario u
-        INNER JOIN dados_login dl ON u.id_usuario = dl.id_usuario WHERE u.id_usuario = :id");
+        INNER JOIN dados_login dl ON u.id_usuario = dl.id_usuario WHERE u.id_usuario = :id AND u.ativo = true");
         $sql->bindValue(":id", $id);
         $sql->execute();
 
@@ -179,12 +178,26 @@ class UsuarioDaoPgsql implements UsuarioDAO {
         return true;
     }
 
-    public function delete($id){
+    public function deleteDadosLogin($id){
         $sql = $this->pdo->prepare("UPDATE dados_login SET ativo = false WHERE id_usuario = :id_usuario_alterado");
         $sql->bindValue(":id_usuario_alterado", $id);
-        $sql->execute();
+
+        if($sql->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function deleteUsuario($id){
+        $sql = $this->pdo->prepare("UPDATE usuario SET ativo = false WHERE id_usuario = :id");
+        $sql->bindValue(":id", $id);
         
-        return true;
+        if($sql->execute()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function alterarUsuarioExcluido($im, $ia, $d){
@@ -217,7 +230,7 @@ class UsuarioDaoPgsql implements UsuarioDAO {
     }
 
     public function buscarPeloNome($n){
-        $sql = $this->pdo->prepare("SELECT * FROM usuario WHERE nome = :nome");
+        $sql = $this->pdo->prepare("SELECT * FROM usuario WHERE nome = :nome AND ativo = true");
         $sql->bindValue(":nome", $n);
         $sql->execute();
 
@@ -240,7 +253,7 @@ class UsuarioDaoPgsql implements UsuarioDAO {
     }
 
     public function buscarUsuariosAtivos(){
-        $sql = $this->pdo->prepare("SELECT * FROM usuario u INNER JOIN dados_login dl ON u.id_usuario = dl.id_usuario WHERE dl.ativo = true AND u.nivel_acesso != '4'");
+        $sql = $this->pdo->prepare("SELECT * FROM usuario WHERE ativo = true");
         $sql->execute();
 
         if($sql->rowCount() > 0){

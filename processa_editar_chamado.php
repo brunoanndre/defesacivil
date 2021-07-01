@@ -31,6 +31,7 @@
     $possui_fotos = filter_input(INPUT_POST, 'possui_fotos');
     $encerrado = filter_input(INPUT_POST, 'encerrado');
     $dataAtendimento = date("d/m/Y", strtotime( filter_input(INPUT_POST,'dataAtendimento')));
+    $complemento = filter_input(INPUT_POST, 'complemento');
 
     if($dataAtendimento == '31/12/1969'){
         $dataAtendimento = '';
@@ -98,6 +99,7 @@ if(count($base64_array) > 0){
                     $e->setLogradouro($logradouro);
                     $e->setNumero($numero);
                     $e->setReferencia($referencia);
+                    $e->setComplemento($complemento);
     
                     if($enderecodao->editarLogradouro($e) == true){
                         $erros = "";
@@ -109,10 +111,11 @@ if(count($base64_array) > 0){
                     $e = New Endereco();
                     $e->setCidade($cidade);
                     $e->setCep($cep);
-                    $e->setBairro($bairro);
+                    $e->setBairro($bairro); 
                     $e->setLogradouro($logradouro);
                     $e->setNumero($numero);
                     $e->setReferencia($referencia);
+                    $e->setComplemento($complemento);
                     $idLogradouro = $enderecodao->adicionar($e);
                     if($idLogradouro > 0){
                         $erros .= "";
